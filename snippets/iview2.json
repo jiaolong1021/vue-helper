@@ -1,0 +1,166 @@
+{
+  "message-info": {
+    "prefix": "message-info",
+    "body": [
+      "this.\\$Message.info({",
+      "\tcontent: '${1}',",
+      "\tduration: '${2:1.5}'",
+      "\trender: '${3}'",
+      "\tonClose: '${4}'",
+      "\tclosable: '${5:false}'",
+      "});"
+    ],
+    "description": "消息提示"
+  },
+  "message-success": {
+    "prefix": "message-success",
+    "body": [
+      "this.\\$Message.success({",
+      "\tcontent: '${1}',",
+      "\tduration: '${2:1.5}'",
+      "\trender: '${3}'",
+      "\tonClose: '${4}'",
+      "\tclosable: '${5:false}'",
+      "});"
+    ],
+    "description": "消息提示"
+  },
+  "message-warning": {
+    "prefix": "message-warning",
+    "body": [
+      "this.\\$Message.warning({",
+      "\tcontent: '${1}',",
+      "\tduration: '${2:1.5}'",
+      "\trender: '${3}'",
+      "\tonClose: '${4}'",
+      "\tclosable: '${5:false}'",
+      "});"
+    ],
+    "description": "消息提示"
+  },
+  "message-error": {
+    "prefix": "message-error",
+    "body": [
+      "this.\\$Message.error({",
+      "\tcontent: '${1}',",
+      "\tduration: '${2:1.5}'",
+      "\trender: '${3}'",
+      "\tonClose: '${4}'",
+      "\tclosable: '${5:false}'",
+      "});"
+    ],
+    "description": "消息提示"
+  },
+  "message-loading": {
+    "prefix": "message-loading",
+    "body": [
+      "this.\\$Message.loading({",
+      "\tcontent: '${1}',",
+      "\tduration: '${2:1.5}'",
+      "\trender: '${3}'",
+      "\tonClose: '${4}'",
+      "\tclosable: '${5:false}'",
+      "});"
+    ],
+    "description": "消息提示"
+  },
+  "message-config": {
+    "prefix": "message-config",
+    "body": [
+      "this.\\$Message.config({",
+      "\ttop: '${1}',",
+      "\tduration: '${2:1.5}'",
+      "});"
+    ],
+    "description": "消息配置"
+  },
+  "message-destroy": {
+    "prefix": "message-destroy",
+    "body": [
+      "this.\\$Message.destroy()"
+    ],
+    "description": "消息销毁"
+  },
+  "notice-open": {
+    "prefix": "notice-open",
+    "body": [
+      "this.\\$Notice.open({",
+      "\tcontent: '${1}',",
+      "\tduration: '${2:1.5}'",
+      "\trender: '${3}'",
+      "\tonClose: '${4}'",
+      "\tclosable: '${5:false}'",
+      "});"
+    ],
+    "description": "打开通知提示"
+  },
+  "notice-info": {
+    "prefix": "notice-info",
+    "body": [
+      "this.\\$Notice.info({",
+      "\tcontent: '${1}',",
+      "\tduration: '${2:1.5}'",
+      "\trender: '${3}'",
+      "\tonClose: '${4}'",
+      "\tclosable: '${5:false}'",
+      "});"
+    ],
+    "description": "通知提示信息"
+  },
+  "notice-success": {
+    "prefix": "notice-success",
+    "body": [
+      "this.\\$Notice.success({",
+      "\tcontent: '${1}',",
+      "\tduration: '${2:1.5}'",
+      "\trender: '${3}'",
+      "\tonClose: '${4}'",
+      "\tclosable: '${5:false}'",
+      "});"
+    ],
+    "description": "成功通知"
+  },
+  "notice-warning": {
+    "prefix": "notice-warning",
+    "body": [
+      "this.\\$Notice.warning({",
+      "\tcontent: '${1}',",
+      "\tduration: '${2:1.5}'",
+      "\trender: '${3}'",
+      "\tonClose: '${4}'",
+      "\tclosable: '${5:false}'",
+      "});"
+    ],
+    "description": "警告通知"
+  },
+  "notice-error": {
+    "prefix": "notice-error",
+    "body": [
+      "this.\\$Notice.error({",
+      "\tcontent: '${1}',",
+      "\tduration: '${2:1.5}'",
+      "\trender: '${3}'",
+      "\tonClose: '${4}'",
+      "\tclosable: '${5:false}'",
+      "});"
+    ],
+    "description": "错误通知"
+  },
+  "notice-config": {
+    "prefix": "notice-config",
+    "body": [
+      "this.\\$Notice.config({",
+      "\ttop: '${1}',",
+      "\tduration: '${2}',",
+      "});"
+    ],
+    "description": "配置通知"
+  },
+  "notice-destroy": {
+    "prefix": "notice-destroy",
+    "body": [
+      "this.\\$Notice.destroy()"
+    ],
+    "description": "销毁通知"
+  }
+}

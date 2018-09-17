@@ -1,0 +1,122 @@
+{
+    "name": "vue-helper",
+    "displayName": "vue-helper",
+    "description": "extension for Element-UI, VUX, IVIEW2",
+    "version": "1.0.1",
+    "publisher": "shenjiaolong",
+    "repository": {
+        "url": "https://github.com/jiaolong1021/vue-helper"
+    },
+    "engines": {
+        "vscode": "^1.25.0"
+    },
+    "categories": [
+        "Snippets",
+        "Other"
+    ],
+    "activationEvents": [
+        "onLanguage:html",
+        "onLanguage:vue",
+        "onCommand:vue-helper.searchUnderCursor"
+    ],
+    "main": "./out/src/extension",
+    "icon": "logo.png",
+    "contributes": {
+        "commands": [
+            {
+                "command": "vue-helper.searchUnderCursor",
+                "title": "vue-helper.search"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "vue-helper.searchUnderCursor",
+                "key": "ctrl+alt+z",
+                "when": "editorTextFocus"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "javascript",
+                "path": "./snippets/element.json"
+            },
+            {
+                "language": "javascript",
+                "path": "./snippets/iview2.json"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "ELement Helper Configuration",
+            "properties": {
+                "element-helper.language": {
+                    "type": "string",
+                    "default": "zh-CN",
+                    "description": "Document Language of Element UI",
+                    "enum": [
+                        "zh-CN",
+                        "en-US",
+                        "es"
+                    ]
+                },
+                "element-helper.version": {
+                    "type": "string",
+                    "default": "2.3",
+                    "description": "Document version of Element UI",
+                    "enum": [
+                        "1.4",
+                        "2.0",
+                        "2.1",
+                        "2.2",
+                        "2.3"
+                    ]
+                },
+                "element-helper.indent-size": {
+                    "type": "number",
+                    "default": 2,
+                    "description": "Indentation size of snippets"
+                },
+                "element-helper.quotes": {
+                    "type": "string",
+                    "default": "double",
+                    "description": "Normal quotes of autocomplete",
+                    "enum": [
+                        "single",
+                        "double"
+                    ]
+                },
+                "element-helper.pug-quotes": {
+                    "type": "string",
+                    "default": "single",
+                    "description": "Pug quotes of autocomplete",
+                    "enum": [
+                        "single",
+                        "double"
+                    ]
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^7.0.43",
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6"
+    },
+    "dependencies": {
+        "cheerio": "^1.0.0-rc.1",
+        "element-gh-pages": "^1.0.24",
+        "element-helper-json": "^2.0.5",
+        "hoek": "^5.0.3",
+        "jquery": "^3.2.1",
+        "pretty": "^2.0.0",
+        "shelljs": "^0.8.2"
+    }
+}
