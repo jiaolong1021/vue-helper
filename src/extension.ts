@@ -1,6 +1,6 @@
 'use strict';
 import * as vscode from 'vscode';
-import {App, ElementDocsContentProvider, SCHEME, ElementCompletionItemProvider} from './app';
+import {App, ElementDocsContentProvider, SCHEME, ElementCompletionItemProvider, DocumentHoverProvider} from './app';
 import Library from './library';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -9,7 +9,8 @@ export function activate(context: vscode.ExtensionContext) {
     app.setConfig();
     let docs = new ElementDocsContentProvider();
     let completionItemProvider = new ElementCompletionItemProvider();
-    let registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, docs);
+    // let registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, docs);
+    let registration = vscode.languages.registerHoverProvider('vue', new DocumentHoverProvider)
 
     // 为标签、属性提示提供自动完成功能
     let completion = vscode.languages.registerCompletionItemProvider(['vue', 'html'], completionItemProvider, '', ' ', ':', '<', '"', "'", '/', '@', '(');

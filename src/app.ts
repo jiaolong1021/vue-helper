@@ -3,11 +3,12 @@ import {
   Event, Uri, CancellationToken, TextDocumentContentProvider,
   EventEmitter, workspace, CompletionItemProvider, ProviderResult,
   TextDocument, Position, CompletionItem, CompletionList, CompletionItemKind,
-  SnippetString, Range
+  SnippetString, Range, HoverProvider, Hover
 } from 'vscode';
 import Resource from './resource';
 import TAGS from './vue-tags'
 import ATTRS from './vue-attributes'
+import Documents from './documents'
 
 const prettyHTML = require('pretty');
 const Path = require('path');
@@ -440,5 +441,33 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
           return this.getTagSuggestion();
       }
     } else { return []; }
+  }
+}
+
+// 文档通过 hover 形式查看
+export class DocumentHoverProvider implements HoverProvider {
+  provideHover(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<import("vscode").Hover> {
+    const line = document.lineAt(position.line)
+    const textSplite = [' ', '<', '>', '"', '\'', '.', '\\']
+    // 通过前后字符串拼接成选择文本
+    let posIndex = position.character
+    let textMeta = line.text.substr(posIndex, 1)
+    let selectText = ''
+    // 前向获取符合要求的字符串
+    while(textSplite.indexOf(textMeta) === -1 && posIndex <= line.text.length) {
+      selectText += textMeta
+      textMeta = line.text.substr(++posIndex, 1)
+    }
+    // 往后获取符合要求的字符串
+    posIndex = position.character - 1
+    textMeta = line.text.substr(posIndex, 1)
+    while(textSplite.indexOf(textMeta) === -1 && posIndex > 0) {
+      selectText = textMeta + selectText
+      textMeta = line.text.substr(--posIndex, 1)
+    }
+    if(Documents[selectText]) {
+      return new Hover(Documents[selectText].desc)
+    }
+    return null
   }
 }
