@@ -162,5 +162,47 @@
       "this.\\$Notice.destroy()"
     ],
     "description": "销毁通知"
+  },
+  "loading-start": {
+    "prefix": "loading-start",
+    "body": [
+      "this.\\$Loading.start()"
+    ],
+    "description": "开始加载"
+  },
+  "loading-finish": {
+    "prefix": "loading-finish",
+    "body": [
+      "this.\\$Loading.finish()"
+    ],
+    "description": "完成加载"
+  },
+  "loading-error": {
+    "prefix": "loading-error",
+    "body": [
+      "this.\\$Loading.error()"
+    ],
+    "description": "加载错误"
+  },
+  "loading-update": {
+    "prefix": "loading-update",
+    "body": [
+      "this.\\$Loading.update(${1:percent})"
+    ],
+    "description": "更新加载"
+  },
+  "loading-config": {
+    "prefix": "loading-config",
+    "body": [
+      "this.\\$Loading.config(${1:options})"
+    ],
+    "description": "配置加载"
+  },
+  "loading-destroy": {
+    "prefix": "loading-destroy",
+    "body": [
+      "this.\\$Loading.destroy()"
+    ],
+    "description": "摧毁加载"
   }
 }
