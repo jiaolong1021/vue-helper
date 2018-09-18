@@ -27,12 +27,14 @@ export default {
     "attributes": ["size", "fill", "text-color", "change"],
     "defaults": ["v-model"],
     "subtags": ["el-radio"],
-    "framework": "element-ui"
+    "framework": "element-ui",
+    "description": "radio group"
   },
   "el-radio-button": {
     "attributes": ["label", "disabled"],
     "defaults": ["label"],
-    "framework": "element-ui"
+    "framework": "element-ui",
+    "description": "radio button"
   },
   "el-checkbox": {
     "attributes": ["label", "true-label", "false-label", "border", "size", "name", "checked", "indeterminate", "disabled"],

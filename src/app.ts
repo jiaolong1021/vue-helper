@@ -252,10 +252,12 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     let suggestions = [];
 
     let id = 100;
+    console.log('in suggestion');
     for (let tag in TAGS) {
       suggestions.push(this.buildTagSuggestion(tag, TAGS[tag], id));
       id++;
     }
+    console.log('object', suggestions);
     return suggestions;
   }
 
@@ -327,7 +329,7 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
       sortText: `0${id}${tag}`,
       insertText: new SnippetString(prettyHTML('<' + snippets.join(''), { indent_size: this.size }).substr(1)),
       kind: CompletionItemKind.Snippet,
-      detail: `vue component ${tagVal.version ? `(version: ${tagVal.version})` : ''}`,
+      detail: `vue component`,
       documentation: tagVal.description
     };
   }
