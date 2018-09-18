@@ -419,7 +419,6 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
   provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<CompletionItem[] | CompletionList> {
     this._document = document;
     this._position = position;
-    console.log(this._document);
 
     const config = workspace.getConfiguration('element-helper');
     this.size = config.get('indent-size');
@@ -466,7 +465,7 @@ export class DocumentHoverProvider implements HoverProvider {
       textMeta = line.text.substr(--posIndex, 1)
     }
     if(Documents[selectText]) {
-      return new Hover(Documents[selectText].desc)
+      return new Hover(Documents[selectText])
     }
     return null
   }
