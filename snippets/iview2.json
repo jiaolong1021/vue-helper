@@ -1,6 +1,6 @@
 {
   "message-info": {
-    "prefix": "message-info",
+    "prefix": "iv-message-info",
     "body": [
       "this.\\$Message.info({",
       "\tcontent: '${1}',",
@@ -13,7 +13,7 @@
     "description": "消息提示"
   },
   "message-success": {
-    "prefix": "message-success",
+    "prefix": "iv-message-success",
     "body": [
       "this.\\$Message.success({",
       "\tcontent: '${1}',",
@@ -26,7 +26,7 @@
     "description": "消息提示"
   },
   "message-warning": {
-    "prefix": "message-warning",
+    "prefix": "iv-message-warning",
     "body": [
       "this.\\$Message.warning({",
       "\tcontent: '${1}',",
@@ -39,7 +39,7 @@
     "description": "消息提示"
   },
   "message-error": {
-    "prefix": "message-error",
+    "prefix": "iv-message-error",
     "body": [
       "this.\\$Message.error({",
       "\tcontent: '${1}',",
@@ -52,7 +52,7 @@
     "description": "消息提示"
   },
   "message-loading": {
-    "prefix": "message-loading",
+    "prefix": "iv-message-loading",
     "body": [
       "this.\\$Message.loading({",
       "\tcontent: '${1}',",
@@ -65,7 +65,7 @@
     "description": "消息提示"
   },
   "message-config": {
-    "prefix": "message-config",
+    "prefix": "iv-message-config",
     "body": [
       "this.\\$Message.config({",
       "\ttop: '${1}',",
@@ -75,14 +75,14 @@
     "description": "消息配置"
   },
   "message-destroy": {
-    "prefix": "message-destroy",
+    "prefix": "iv-message-destroy",
     "body": [
       "this.\\$Message.destroy()"
     ],
     "description": "消息销毁"
   },
   "notice-open": {
-    "prefix": "notice-open",
+    "prefix": "iv-notice-open",
     "body": [
       "this.\\$Notice.open({",
       "\tcontent: '${1}',",
@@ -95,7 +95,7 @@
     "description": "打开通知提示"
   },
   "notice-info": {
-    "prefix": "notice-info",
+    "prefix": "iv-notice-info",
     "body": [
       "this.\\$Notice.info({",
       "\tcontent: '${1}',",
@@ -108,7 +108,7 @@
     "description": "通知提示信息"
   },
   "notice-success": {
-    "prefix": "notice-success",
+    "prefix": "iv-notice-success",
     "body": [
       "this.\\$Notice.success({",
       "\tcontent: '${1}',",
@@ -121,7 +121,7 @@
     "description": "成功通知"
   },
   "notice-warning": {
-    "prefix": "notice-warning",
+    "prefix": "iv-notice-warning",
     "body": [
       "this.\\$Notice.warning({",
       "\tcontent: '${1}',",
@@ -134,7 +134,7 @@
     "description": "警告通知"
   },
   "notice-error": {
-    "prefix": "notice-error",
+    "prefix": "iv-notice-error",
     "body": [
       "this.\\$Notice.error({",
       "\tcontent: '${1}',",
@@ -147,7 +147,7 @@
     "description": "错误通知"
   },
   "notice-config": {
-    "prefix": "notice-config",
+    "prefix": "iv-notice-config",
     "body": [
       "this.\\$Notice.config({",
       "\ttop: '${1}',",
@@ -157,49 +157,49 @@
     "description": "配置通知"
   },
   "notice-destroy": {
-    "prefix": "notice-destroy",
+    "prefix": "iv-notice-destroy",
     "body": [
       "this.\\$Notice.destroy()"
     ],
     "description": "销毁通知"
   },
   "loading-start": {
-    "prefix": "loading-start",
+    "prefix": "iv-loading-start",
     "body": [
       "this.\\$Loading.start()"
     ],
     "description": "开始加载"
   },
   "loading-finish": {
-    "prefix": "loading-finish",
+    "prefix": "iv-loading-finish",
     "body": [
       "this.\\$Loading.finish()"
     ],
     "description": "完成加载"
   },
   "loading-error": {
-    "prefix": "loading-error",
+    "prefix": "iv-loading-error",
     "body": [
       "this.\\$Loading.error()"
     ],
     "description": "加载错误"
   },
   "loading-update": {
-    "prefix": "loading-update",
+    "prefix": "iv-loading-update",
     "body": [
       "this.\\$Loading.update(${1:percent})"
     ],
     "description": "更新加载"
   },
   "loading-config": {
-    "prefix": "loading-config",
+    "prefix": "iv-loading-config",
     "body": [
       "this.\\$Loading.config(${1:options})"
     ],
     "description": "配置加载"
   },
   "loading-destroy": {
-    "prefix": "loading-destroy",
+    "prefix": "iv-loading-destroy",
     "body": [
       "this.\\$Loading.destroy()"
     ],
