@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
     let docs = new ElementDocsContentProvider();
     let completionItemProvider = new ElementCompletionItemProvider();
     let registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, docs);
-    // let registrationHover = vscode.languages.registerHoverProvider('vue', new DocumentHoverProvider)
+    let registrationHover = vscode.languages.registerHoverProvider('vue', new DocumentHoverProvider)
 
     // 为标签、属性提示提供自动完成功能
     let completion = vscode.languages.registerCompletionItemProvider(['vue', 'html'], completionItemProvider, '', ' ', ':', '<', '"', "'", '/', '@', '(');
@@ -48,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
         })
     });
 
-    context.subscriptions.push(app, disposable, registration, completion, vueLanguageConfig);
+    context.subscriptions.push(app, disposable, registration, completion, vueLanguageConfig, registrationHover);
 }
 
 // this method is called when your extension is deactivated

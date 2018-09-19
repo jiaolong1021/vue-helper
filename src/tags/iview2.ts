@@ -313,7 +313,7 @@ export default {
   },
   "Steps": { 
     "attributes": ["current", "status", "size", "direction"], 
-    "subtags": ["step"],
+    "subtags": ["Step"],
     "framework": "iview2" 
   }, 
   "Step": { 
