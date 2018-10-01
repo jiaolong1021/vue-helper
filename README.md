@@ -1,5 +1,15 @@
 # vue-helper
 this plugin main extend for element-ui, vux, iview2
+### release 1.1.2 notes
+#### 1. vue hook function tip
+![](./examples/hook-function.gif)
+#### 2. method completion snippets (keyboard shortcut: alt + shift + enter)
+![](./examples/methods.gif)
+#### 3. autoclose html tag
+![](./examples/autoclose.gif)
+#### 4. {{}} completion in vue template
+![](./examples/{{}}.gif)
+
 ## basic functions introduce
 ---
 ### 1. see document detail through hover tag (**now only support iview**)
