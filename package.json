@@ -17,7 +17,8 @@
     "activationEvents": [
         "onLanguage:html",
         "onLanguage:vue",
-        "onCommand:vue-helper.searchUnderCursor"
+        "onCommand:vue-helper.searchUnderCursor",
+        "onCommand:vue-helper.functionCompletion"
     ],
     "main": "./out/src/extension",
     "icon": "logo.png",
@@ -33,6 +34,11 @@
                 "command": "vue-helper.searchUnderCursor",
                 "key": "ctrl+alt+z",
                 "when": "editorTextFocus"
+            },
+            {
+                "command": "vue-helper.functionCompletion",
+                "key": "shift+alt+enter",
+                "when": "editorTextFocus"
             }
         ],
         "snippets": [
@@ -43,6 +49,10 @@
             {
                 "language": "javascript",
                 "path": "./snippets/iview2.json"
+            },
+            {
+                "language": "javascript",
+                "path": "./snippets/vue.json"
             }
         ],
         "configuration": {

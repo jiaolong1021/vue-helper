@@ -1,0 +1,188 @@
+{
+  "mounted": {
+    "prefix": "mounted",
+    "body": [
+      "mounted () {",
+      "\t$1",
+      "},"
+    ],
+    "description": "mounted"
+  },
+  "beforeMount": {
+    "prefix": "beforeMount",
+    "body": [
+      "beforeMount () {",
+      "\t$1",
+      "},"
+    ],
+    "description": "beforeMount"
+  },
+  "created": {
+    "prefix": "created",
+    "body": [
+      "created () {",
+      "\t$1",
+      "},"
+    ],
+    "description": "created"
+  },
+  "beforeCreate": {
+    "prefix": "beforeCreate",
+    "body": [
+      "beforeCreate () {",
+      "\t$1",
+      "},"
+    ],
+    "description": "beforeCreate"
+  },
+  "updated": {
+    "prefix": "updated",
+    "body": [
+      "updated () {",
+      "\t$1",
+      "},"
+    ],
+    "description": "updated"
+  },
+  "beforeUpdate": {
+    "prefix": "beforeUpdate",
+    "body": [
+      "beforeUpdate () {",
+      "\t$1",
+      "},"
+    ],
+    "description": "beforeUpdate"
+  },
+  "activated": {
+    "prefix": "activated",
+    "body": [
+      "activated () {",
+      "\t$1",
+      "},"
+    ],
+    "description": "activated"
+  },
+  "deactivated": {
+    "prefix": "deactivated",
+    "body": [
+      "deactivated () {",
+      "\t$1",
+      "},"
+    ],
+    "description": "deactivated"
+  },
+  "beforeDestroy": {
+    "prefix": "beforeDestroy",
+    "body": [
+      "beforeDestroy () {",
+      "\t$1",
+      "},"
+    ],
+    "description": "beforeDestroy"
+  },
+  "destroyed": {
+    "prefix": "destroyed",
+    "body": [
+      "destroyed () {",
+      "\t$1",
+      "},"
+    ],
+    "description": "destroyed"
+  },
+  "props": {
+    "prefix": "props",
+    "body": [
+      "props: {",
+      "\t$1",
+      "},"
+    ],
+    "description": "props"
+  },
+  "computed": {
+    "prefix": "computed",
+    "body": [
+      "computed: {",
+      "\t$1",
+      "},"
+    ],
+    "description": "computed"
+  },
+  "methods": {
+    "prefix": "methods",
+    "body": [
+      "methods: {",
+      "\t$1",
+      "},"
+    ],
+    "description": "methods"
+  },
+  "watch": {
+    "prefix": "watch",
+    "body": [
+      "watch: {",
+      "\t$1",
+      "},"
+    ],
+    "description": "watch"
+  },
+  "directives": {
+    "prefix": "directives",
+    "body": [
+      "directives: {",
+      "\t$1",
+      "},"
+    ],
+    "description": "directives"
+  },
+  "filters": {
+    "prefix": "filters",
+    "body": [
+      "filters: {",
+      "\t$1",
+      "},"
+    ],
+    "description": "filters"
+  },
+  "components": {
+    "prefix": "components",
+    "body": [
+      "components: {",
+      "\t$1",
+      "},"
+    ],
+    "description": "components"
+  },
+  "mixins": {
+    "prefix": "mixins",
+    "body": [
+      "mixins:[$1],"
+    ],
+    "description": "mixins"
+  },
+  "provide": {
+    "prefix": "provide",
+    "body": [
+      "provide: {",
+      "\t$1",
+      "},"
+    ],
+    "description": "provide"
+  },
+  "inject": {
+    "prefix": "inject",
+    "body": [
+      "inject: [$1],"
+    ],
+    "description": "inject"
+  },
+  "model": {
+    "prefix": "model",
+    "body": [
+      "model: {",
+      "\tprop: $1,",
+      "\tevent: $2",
+      "},"
+    ],
+    "description": "model"
+  }
+}

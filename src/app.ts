@@ -3,7 +3,7 @@ import {
   Event, Uri, CancellationToken, TextDocumentContentProvider,
   EventEmitter, workspace, CompletionItemProvider, ProviderResult,
   TextDocument, Position, CompletionItem, CompletionList, CompletionItemKind,
-  SnippetString, Range, HoverProvider, Hover
+  SnippetString, Range, HoverProvider, Hover, Selection
 } from 'vscode';
 import Resource from './resource';
 import TAGS from './vue-tags'
@@ -37,7 +37,7 @@ export class App {
   private _disposable: Disposable;
   public WORD_REG: RegExp = /(-?\d*\.\d\w*)|([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)/gi;
 
-
+  // 获取光标选中范围内容
   getSeletedText() {
     let editor = window.activeTextEditor;
 
@@ -53,6 +53,31 @@ export class App {
     } else {
       return editor.document.getText(selection);
     }
+  }
+
+  // 获取本行内容
+  getLineText() {
+    let editor = window.activeTextEditor;
+    if (!editor) { return; }
+    let txt = editor.document.lineAt(editor.selection.anchor.line).text
+    let nextLineTxt = editor.document.lineAt(editor.selection.anchor.line + 1).text
+    let baseEmpty = txt.replace(/(\s)\S.*/gi, '$1')
+    let replaceTxt = ' {\n' + baseEmpty + '\t\n' + baseEmpty +  '}'
+    // 本行全是空
+    if(/^\s*$/gi.test(txt) || txt === '') {
+      replaceTxt = 'name (params)' + replaceTxt
+    } else if(txt.indexOf(')') === -1) {
+      replaceTxt = ' (params)' + replaceTxt
+    }
+    // 下一行是一个函数
+    if (/.*{.*/gi.test(nextLineTxt)) {
+      replaceTxt += ','
+    }
+    editor.edit((editBuilder) => {
+      editBuilder.insert(new Position(editor.selection.anchor.line, txt.length + 1), replaceTxt);
+    });
+    let newPosition = editor.selection.active.translate(1, (baseEmpty + '\t').length)
+    editor.selection = new Selection(newPosition, newPosition);
   }
 
   setConfig() {
@@ -185,6 +210,7 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
   // private attrReg: RegExp = /(?:\(|\s*)(\w+)=['"][^'"]*/;
   private attrReg: RegExp = /(?:\(|\s*)((\w(-)?)*)=['"][^'"]*/;  // 能够匹配 left-right 属性
   private tagStartReg: RegExp = /<([\w-]*)$/;
+  private tagCloseReg: RegExp = /<\w.*>$/;
   private size: number;
   private quotes: string;
 
@@ -252,12 +278,10 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     let suggestions = [];
 
     let id = 100;
-    console.log('in suggestion');
     for (let tag in TAGS) {
       suggestions.push(this.buildTagSuggestion(tag, TAGS[tag], id));
       id++;
     }
-    console.log('object', suggestions);
     return suggestions;
   }
 
@@ -399,6 +423,12 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     return this.tagStartReg.test(txt);
   }
 
+  // 是否是关闭标签
+  isCloseTag() {
+    let txt = this.getTextBeforePosition(this._position)
+    return this.tagCloseReg.test(txt.trim())
+  }
+
   firstCharsEqual(str1: string, str2: string) {
     if (str2 && str1) {
       return str1[0].toLowerCase() === str2[0].toLowerCase();
@@ -417,10 +447,44 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     return false;
   }
 
+  // 自动补全关闭标签
+  getCloseTagSuggestion() {
+    let txt = this.getTextBeforePosition(this._position)
+    window.activeTextEditor.edit((editBuilder) => {
+      editBuilder.insert(this._position, '</' + txt.trim().split(' ')[0].replace(/<|>/gi, '') + '>');
+    });
+    let newPosition = window.activeTextEditor.selection.active.translate(0, 0)
+    window.activeTextEditor.selection = new Selection(newPosition, newPosition);
+  }
+
+  // 判断是否是{}括号开始
+  isBrace() {
+    let startPosition = new Position(this._position.line, this._position.character - 2)
+    return  /[^{]{/gi.test(this._document.getText(new Range(startPosition, this._position)))
+  }
+
+  // {}括号自动补全，只有行内html标签的地方需要补全
+  braceSuggestion() {
+    let txt = this.getTextBeforePosition(this._position)
+    if(/<\w.*$/.test(txt)) {
+      window.activeTextEditor.edit((editBuilder) => {
+        editBuilder.insert(this._position, '}');
+      });
+      let newPosition = window.activeTextEditor.selection.active.translate(0, 0)
+      window.activeTextEditor.selection = new Selection(newPosition, newPosition);
+    }
+  }
+
   // 提供完成项(提示入口)
   provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<CompletionItem[] | CompletionList> {
     this._document = document;
     this._position = position;
+
+    // {}补全处理
+    if(this.isBrace()) {
+      this.braceSuggestion()
+      return
+    }
 
     const config = workspace.getConfiguration('element-helper');
     this.size = config.get('indent-size');
@@ -433,6 +497,8 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
       return this.getAttrValueSuggestion(tag.text, attr);
     } else if (this.isAttrStart(tag)) { // 属性开始
       return this.getAttrSuggestion(tag.text);
+    } else if (this.isCloseTag()) { // 标签关闭标签
+      this.getCloseTagSuggestion()
     } else if (this.isTagStart()) { // 标签开始
       switch (document.languageId) {
         case 'vue':

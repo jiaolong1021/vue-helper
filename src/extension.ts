@@ -12,8 +12,8 @@ export function activate(context: vscode.ExtensionContext) {
     let registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, docs);
     let registrationHover = vscode.languages.registerHoverProvider('vue', new DocumentHoverProvider)
 
-    // 为标签、属性提示提供自动完成功能
-    let completion = vscode.languages.registerCompletionItemProvider(['vue', 'html'], completionItemProvider, '', ' ', ':', '<', '"', "'", '/', '@', '(');
+    // 为标签、属性提示提供自动完成功能, 关闭标签功能
+    let completion = vscode.languages.registerCompletionItemProvider(['vue', 'html'], completionItemProvider, '', ' ', ':', '<', '"', "'", '/', '@', '(', '>', '{');
     let vueLanguageConfig = vscode.languages.setLanguageConfiguration('vue', {wordPattern: app.WORD_REG});
 
     // 注册文档搜索命令
@@ -48,7 +48,11 @@ export function activate(context: vscode.ExtensionContext) {
         })
     });
 
-    context.subscriptions.push(app, disposable, registration, completion, vueLanguageConfig, registrationHover);
+    let functionCompletionDisposable = vscode.commands.registerCommand('vue-helper.functionCompletion', () => {
+        app.getLineText()
+    })
+
+    context.subscriptions.push(app, disposable, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable);
 }
 
 // this method is called when your extension is deactivated
