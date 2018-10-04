@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
     let registrationHover = vscode.languages.registerHoverProvider('vue', new DocumentHoverProvider)
 
     // 为标签、属性提示提供自动完成功能, 关闭标签功能
-    let completion = vscode.languages.registerCompletionItemProvider(['vue', 'html'], completionItemProvider, '', ' ', ':', '<', '"', "'", '/', '@', '(', '>', '{');
+    let completion = vscode.languages.registerCompletionItemProvider(['vue', 'html'], completionItemProvider, '' ,':', '<', '"', "'", '/', '@', '(', '>', '{');
     let vueLanguageConfig = vscode.languages.setLanguageConfiguration('vue', {wordPattern: app.WORD_REG});
 
     // 注册文档搜索命令

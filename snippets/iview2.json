@@ -204,5 +204,28 @@
       "this.\\$Loading.destroy()"
     ],
     "description": "摧毁加载"
+  },
+  "iv-columns": {
+    "prefix": "iv-columns",
+    "body": [
+      "{",
+      "\ttitle: $1,",
+      "\tkey: $2",
+      "}"
+    ],
+    "description": "columns"
+  },
+  "iv-columns-render": {
+    "prefix": "iv-columns-render",
+    "body": [
+      "{",
+      "\ttitle: $1,",
+      "\tkey: $2,",
+      "\trender: (h, params) => {",
+      "\t\t$3",
+      "\t}",
+      "}"
+    ],
+    "description": "columns"
   }
 }

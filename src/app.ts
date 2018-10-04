@@ -3,12 +3,13 @@ import {
   Event, Uri, CancellationToken, TextDocumentContentProvider,
   EventEmitter, workspace, CompletionItemProvider, ProviderResult,
   TextDocument, Position, CompletionItem, CompletionList, CompletionItemKind,
-  SnippetString, Range, HoverProvider, Hover, Selection
+  SnippetString, Range, HoverProvider, Hover, Selection, TextLine
 } from 'vscode';
 import Resource from './resource';
 import TAGS from './vue-tags'
 import ATTRS from './vue-attributes'
 import Documents from './documents'
+import DocumentsAttr from './documents-attr'
 
 const prettyHTML = require('pretty');
 const Path = require('path');
@@ -210,7 +211,7 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
   // private attrReg: RegExp = /(?:\(|\s*)(\w+)=['"][^'"]*/;
   private attrReg: RegExp = /(?:\(|\s*)((\w(-)?)*)=['"][^'"]*/;  // 能够匹配 left-right 属性
   private tagStartReg: RegExp = /<([\w-]*)$/;
-  private tagCloseReg: RegExp = /<\w.*>$/;
+  private tagCloseReg: RegExp = /<(\w+)(\s*|\s+[\w-_]+=("[^"]+"|'[^']+'))\s*>$/gi;
   private size: number;
   private quotes: string;
 
@@ -425,8 +426,16 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
 
   // 是否是关闭标签
   isCloseTag() {
-    let txt = this.getTextBeforePosition(this._position)
-    return this.tagCloseReg.test(txt.trim())
+    let txt = this._document.getText(new Range(new Position(this._position.line, 0), this._position)).trim()
+    if(!txt.endsWith('>') || /.*=("[^"]*>|'[^']*>)$/gi.test(txt)) {
+      return false
+    }
+    let txtArr = txt.match(/<(\w+)(\s*|\s+[\w-_]+=("[^"]+"|'[^']+'))\s*>/gim)
+    if(Array.isArray(txtArr) && txtArr.length > 0) {
+      let txtStr = txtArr[txtArr.length - 1]
+      return /<(\w+)(\s*|\s+[\w-_]+=("[^"]+"|'[^']+'))\s*>$/gi.test(txtStr)
+    }
+    return false
   }
 
   firstCharsEqual(str1: string, str2: string) {
@@ -449,9 +458,16 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
 
   // 自动补全关闭标签
   getCloseTagSuggestion() {
-    let txt = this.getTextBeforePosition(this._position)
+    console.log('text');
+    let txtInfo = this._document.lineAt(this._position.line)
+    let txtArr = txtInfo.text.match(/<(\w+)(\s*|\s+[\w-_]+=("[^"]+"|'[^']+'))\s*>/gim)
+    let tag = 'div'
+    if(txtArr) {
+      tag = txtArr[txtArr.length - 1].replace(/<(\w+)(\s*|\s+[\w-_]+=("[^"]+"|'[^']+'))\s*>/gim, '$1')
+      console.log('tag: ' + tag);
+    }
     window.activeTextEditor.edit((editBuilder) => {
-      editBuilder.insert(this._position, '</' + txt.trim().split(' ')[0].replace(/<|>/gi, '') + '>');
+      editBuilder.insert(this._position, '</' + tag + '>');
     });
     let newPosition = window.activeTextEditor.selection.active.translate(0, 0)
     window.activeTextEditor.selection = new Selection(newPosition, newPosition);
@@ -460,7 +476,7 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
   // 判断是否是{}括号开始
   isBrace() {
     let startPosition = new Position(this._position.line, this._position.character - 2)
-    return  /[^{]{/gi.test(this._document.getText(new Range(startPosition, this._position)))
+    return /[^{]{/gi.test(this._document.getText(new Range(startPosition, this._position)))
   }
 
   // {}括号自动补全，只有行内html标签的地方需要补全
@@ -483,9 +499,14 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     // {}补全处理
     if(this.isBrace()) {
       this.braceSuggestion()
-      return
+      return null
     }
-
+    if (this.isCloseTag()) { // 标签关闭标签
+      console.log('handle close');
+      this.getCloseTagSuggestion()
+      return null
+    }
+    console.log('continue');
     const config = workspace.getConfiguration('element-helper');
     this.size = config.get('indent-size');
     this.quotes = config.get('quotes') === 'double' ? '"' : "'";
@@ -497,8 +518,6 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
       return this.getAttrValueSuggestion(tag.text, attr);
     } else if (this.isAttrStart(tag)) { // 属性开始
       return this.getAttrSuggestion(tag.text);
-    } else if (this.isCloseTag()) { // 标签关闭标签
-      this.getCloseTagSuggestion()
     } else if (this.isTagStart()) { // 标签开始
       switch (document.languageId) {
         case 'vue':
@@ -513,9 +532,38 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
 
 // 文档通过 hover 形式查看
 export class DocumentHoverProvider implements HoverProvider {
+  // 获取属性所属标签
+  static getTag(document, position): String {
+    let line = position.line
+    let tagName = ''
+
+    while(line > 0 && !tagName) {
+      let lineInfo: TextLine = document.lineAt(line)
+      let text = lineInfo.text.trim()
+      // 本行则获取光标位置前文本
+      if(line === position.line) {
+        text = text.substring(0, position.character)
+      }
+      let txtArr = text.match(/<[^(>/)]+/gim)
+      if(txtArr) {
+        for (let i = (txtArr.length - 1); i >= 0; i--) {
+          if(txtArr[i][0] === '<' && txtArr[i][1] !== '/') {
+            if(txtArr[i].indexOf(' ') !== -1) {
+              tagName = txtArr[i].replace(/^<(.*)\s.*/gi, '$1');
+            } else {
+              tagName = txtArr[i].replace(/^<(.*)/gi, '$1');
+            }
+            break
+          }
+        }
+      }
+      --line
+    }
+    return tagName
+  }
   provideHover(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<import("vscode").Hover> {
     const line = document.lineAt(position.line)
-    const textSplite = [' ', '<', '>', '"', '\'', '.', '\\']
+    const textSplite = [' ', '<', '>', '"', '\'', '.', '\\', "="]
     // 通过前后字符串拼接成选择文本
     let posIndex = position.character
     let textMeta = line.text.substr(posIndex, 1)
@@ -532,9 +580,21 @@ export class DocumentHoverProvider implements HoverProvider {
       selectText = textMeta + selectText
       textMeta = line.text.substr(--posIndex, 1)
     }
+    textMeta = line.text.substr(posIndex, 1)
+
+    // tag标签便利
     if(Documents[selectText]) {
       return new Hover(Documents[selectText])
     }
+
+    // 在不是标签元素情况下才获取标签名称
+    if(textMeta !== "<") {
+      let tagName = DocumentHoverProvider.getTag(document, position)
+      if(tagName && DocumentsAttr[tagName + '/' + selectText]) {
+        return new Hover(DocumentsAttr[tagName + '/' + selectText])
+      }
+    }
+
     return null
   }
 }

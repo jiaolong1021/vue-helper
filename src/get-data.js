@@ -95,3 +95,25 @@ setTimeout(function(){
   console.log('vue-tags: ', JSON.stringify(vueTags))
   console.log('vue-attributes: ', JSON.stringify(vueAttributes))
 }, 500)
+
+// 表格转markdown
+(function(){
+  let ret = ''
+  let headList = document.querySelectorAll('#get tr th')
+  for (let i = 0; i < headList.length; i++) {
+    const h = headList[i];
+    ret += '| ' + h.innerText + ' '
+  }
+  ret += '|\n'
+  ret += '| :--- | :--- | :--- | :--- |\n'
+  let tdList = document.querySelectorAll('#get tr td')
+  for (let i = 0; i < tdList.length; i++) {
+    const td = tdList[i];
+    ret += '| ' + td.innerText + ' '
+    if(i % 4 === 3) {
+      ret += '|\n'
+    }
+  }
+
+  console.log(ret)
+})()
