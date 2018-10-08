@@ -1,8 +1,7 @@
 # vue-helper
 this plugin main extend for element-ui, vux, iview2
-### release 1.1.3 notes
-![](./examples/columns.gif)
-![](./examples/columns2.gif)
+### release 1.1.4 notes
+optimize columns tip and message snippet show
 
 ## basic functions introduce
 ---
