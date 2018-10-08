@@ -4,10 +4,7 @@
     "body": [
       "this.\\$Message.info({",
       "\tcontent: '${1}',",
-      "\tduration: '${2:1.5}'",
-      "\trender: '${3}'",
-      "\tonClose: '${4}'",
-      "\tclosable: '${5:false}'",
+      "\tduration: ${2:1.5}",
       "});"
     ],
     "description": "消息提示"
@@ -17,10 +14,7 @@
     "body": [
       "this.\\$Message.success({",
       "\tcontent: '${1}',",
-      "\tduration: '${2:1.5}'",
-      "\trender: '${3}'",
-      "\tonClose: '${4}'",
-      "\tclosable: '${5:false}'",
+      "\tduration: ${2:1.5}",
       "});"
     ],
     "description": "消息提示"
@@ -30,10 +24,7 @@
     "body": [
       "this.\\$Message.warning({",
       "\tcontent: '${1}',",
-      "\tduration: '${2:1.5}'",
-      "\trender: '${3}'",
-      "\tonClose: '${4}'",
-      "\tclosable: '${5:false}'",
+      "\tduration: ${2:1.5}",
       "});"
     ],
     "description": "消息提示"
@@ -43,10 +34,7 @@
     "body": [
       "this.\\$Message.error({",
       "\tcontent: '${1}',",
-      "\tduration: '${2:1.5}'",
-      "\trender: '${3}'",
-      "\tonClose: '${4}'",
-      "\tclosable: '${5:false}'",
+      "\tduration: ${2:1.5}",
       "});"
     ],
     "description": "消息提示"
@@ -56,10 +44,7 @@
     "body": [
       "this.\\$Message.loading({",
       "\tcontent: '${1}',",
-      "\tduration: '${2:1.5}'",
-      "\trender: '${3}'",
-      "\tonClose: '${4}'",
-      "\tclosable: '${5:false}'",
+      "\tduration: ${2:1.5}",
       "});"
     ],
     "description": "消息提示"
@@ -86,10 +71,7 @@
     "body": [
       "this.\\$Notice.open({",
       "\tcontent: '${1}',",
-      "\tduration: '${2:1.5}'",
-      "\trender: '${3}'",
-      "\tonClose: '${4}'",
-      "\tclosable: '${5:false}'",
+      "\tduration: ${2:1.5}",
       "});"
     ],
     "description": "打开通知提示"
@@ -99,10 +81,7 @@
     "body": [
       "this.\\$Notice.info({",
       "\tcontent: '${1}',",
-      "\tduration: '${2:1.5}'",
-      "\trender: '${3}'",
-      "\tonClose: '${4}'",
-      "\tclosable: '${5:false}'",
+      "\tduration: ${2:1.5}",
       "});"
     ],
     "description": "通知提示信息"
@@ -112,10 +91,7 @@
     "body": [
       "this.\\$Notice.success({",
       "\tcontent: '${1}',",
-      "\tduration: '${2:1.5}'",
-      "\trender: '${3}'",
-      "\tonClose: '${4}'",
-      "\tclosable: '${5:false}'",
+      "\tduration: ${2:1.5}",
       "});"
     ],
     "description": "成功通知"
@@ -125,10 +101,7 @@
     "body": [
       "this.\\$Notice.warning({",
       "\tcontent: '${1}',",
-      "\tduration: '${2:1.5}'",
-      "\trender: '${3}'",
-      "\tonClose: '${4}'",
-      "\tclosable: '${5:false}'",
+      "\tduration: ${2:1.5}",
       "});"
     ],
     "description": "警告通知"
@@ -138,10 +111,7 @@
     "body": [
       "this.\\$Notice.error({",
       "\tcontent: '${1}',",
-      "\tduration: '${2:1.5}'",
-      "\trender: '${3}'",
-      "\tonClose: '${4}'",
-      "\tclosable: '${5:false}'",
+      "\tduration: ${2:1.5}",
       "});"
     ],
     "description": "错误通知"
@@ -211,6 +181,17 @@
       "{",
       "\ttitle: $1,",
       "\tkey: $2",
+      "}"
+    ],
+    "description": "columns"
+  },
+  "iv-columns-center": {
+    "prefix": "iv-columns",
+    "body": [
+      "{",
+      "\ttitle: $1,",
+      "\tkey: $2,",
+      "\talign: 'center'",
       "}"
     ],
     "description": "columns"

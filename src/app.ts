@@ -563,7 +563,7 @@ export class DocumentHoverProvider implements HoverProvider {
   }
   provideHover(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<import("vscode").Hover> {
     const line = document.lineAt(position.line)
-    const textSplite = [' ', '<', '>', '"', '\'', '.', '\\', "="]
+    const textSplite = [' ', '<', '>', '"', '\'', '.', '\\', "=", ":"]
     // 通过前后字符串拼接成选择文本
     let posIndex = position.character
     let textMeta = line.text.substr(posIndex, 1)
