@@ -430,10 +430,10 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     if(!txt.endsWith('>') || /.*=("[^"]*>|'[^']*>)$/gi.test(txt)) {
       return false
     }
-    let txtArr = txt.match(/<(\w+)(\s*|\s+[\w-_]+=("[^"]+"|'[^']+'))\s*>/gim)
+    let txtArr = txt.match(/<(\w+)(\s*|(\s+[\w-_]+=("[^"]+"|'[^']+'))+)\s*>/gim)
     if(Array.isArray(txtArr) && txtArr.length > 0) {
       let txtStr = txtArr[txtArr.length - 1]
-      return /<(\w+)(\s*|\s+[\w-_]+=("[^"]+"|'[^']+'))\s*>$/gi.test(txtStr)
+      return /<(\w+)(\s*|(\s+[\w-_]+=("[^"]+"|'[^']+'))+)\s*>$/gi.test(txtStr)
     }
     return false
   }
@@ -458,13 +458,11 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
 
   // 自动补全关闭标签
   getCloseTagSuggestion() {
-    console.log('text');
     let txtInfo = this._document.lineAt(this._position.line)
     let txtArr = txtInfo.text.match(/<(\w+)(\s*|\s+[\w-_]+=("[^"]+"|'[^']+'))\s*>/gim)
     let tag = 'div'
     if(txtArr) {
       tag = txtArr[txtArr.length - 1].replace(/<(\w+)(\s*|\s+[\w-_]+=("[^"]+"|'[^']+'))\s*>/gim, '$1')
-      console.log('tag: ' + tag);
     }
     window.activeTextEditor.edit((editBuilder) => {
       editBuilder.insert(this._position, '</' + tag + '>');
@@ -481,8 +479,9 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
 
   // {}括号自动补全，只有行内html标签的地方需要补全
   braceSuggestion() {
-    let txt = this.getTextBeforePosition(this._position)
-    if(/<\w.*$/.test(txt)) {
+    let txt = this.getTextBeforePosition(this._position).trim()
+    let lineTxt = this._document.lineAt(this._position.line).text.trim()
+    if(/<\w.*$/.test(txt) && lineTxt !== (txt + '}')) {
       window.activeTextEditor.edit((editBuilder) => {
         editBuilder.insert(this._position, '}');
       });
@@ -502,11 +501,9 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
       return null
     }
     if (this.isCloseTag()) { // 标签关闭标签
-      console.log('handle close');
       this.getCloseTagSuggestion()
       return null
     }
-    console.log('continue');
     const config = workspace.getConfiguration('element-helper');
     this.size = config.get('indent-size');
     this.quotes = config.get('quotes') === 'double' ? '"' : "'";

@@ -1,7 +1,7 @@
 # vue-helper
 this plugin main extend for element-ui, vux, iview2
-### release 1.1.4 notes
-optimize columns tip and message snippet show
+### release 1.1.5 notes
+optimize close tag function、 {{}} function, add change log.
 
 ## basic functions introduce
 ---
