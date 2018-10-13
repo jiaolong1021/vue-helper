@@ -108,7 +108,8 @@ export class App {
         })
       } else {
         let startPosition
-        if(editor.selection.anchor.character === 0) {
+        let preLineText = editor.document.getText(new Range(new Position(editor.selection.anchor.line, 0), editor.selection.anchor))
+        if(editor.selection.anchor.character === 0 || preLineText.trim() === '') {
           startPosition = new Position(editor.selection.anchor.line - 1, editor.document.lineAt(editor.selection.anchor.line - 1).text.length)
         } else {
           startPosition = new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1)
