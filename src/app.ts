@@ -10,6 +10,7 @@ import TAGS from './vue-tags'
 import ATTRS from './vue-attributes'
 import Documents from './documents'
 import DocumentsAttr from './documents-attr'
+import { activate } from './extension';
 
 const prettyHTML = require('pretty');
 const Path = require('path');
@@ -79,6 +80,44 @@ export class App {
     });
     let newPosition = editor.selection.active.translate(1, (baseEmpty + '\t').length)
     editor.selection = new Selection(newPosition, newPosition);
+  }
+
+  // backspace删除处理
+  deleteComplete() {
+    let editor = window.activeTextEditor;
+    if(!editor) { return; }
+    // 首行
+    if(editor.selection.anchor.line === 0) {
+      if(editor.selection.anchor.character > 0) {
+         editor.edit((editBuilder) => {
+          editBuilder.delete(new Selection(new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1), editor.selection.anchor))
+        })
+      }
+    } else {
+      let isLineEmpty = editor.document.lineAt(editor.selection.anchor.line).text.trim() === ''
+      // 整行都是空格
+      if(isLineEmpty) {
+        let preText = ''
+        let line = editor.selection.anchor.line
+        while(preText.trim() === '' && line >= 0) {
+          line -= 1
+          preText = editor.document.lineAt(line).text
+        }
+        editor.edit((editBuilder) => {
+          editBuilder.delete(new Selection(new Position(line, preText.length), editor.selection.anchor))
+        })
+      } else {
+        let startPosition
+        if(editor.selection.anchor.character === 0) {
+          startPosition = new Position(editor.selection.anchor.line - 1, editor.document.lineAt(editor.selection.anchor.line - 1).text.length)
+        } else {
+          startPosition = new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1)
+        }
+        editor.edit((editBuilder) => {
+          editBuilder.delete(new Selection(startPosition, editor.selection.anchor))
+        })
+      }
+    }
   }
 
   setConfig() {
@@ -546,7 +585,7 @@ export class DocumentHoverProvider implements HoverProvider {
         for (let i = (txtArr.length - 1); i >= 0; i--) {
           if(txtArr[i][0] === '<' && txtArr[i][1] !== '/') {
             if(txtArr[i].indexOf(' ') !== -1) {
-              tagName = txtArr[i].replace(/^<(.*)\s.*/gi, '$1');
+              tagName = txtArr[i].replace(/^<(\S*)(\s.*|\s*)/gi, '$1');
             } else {
               tagName = txtArr[i].replace(/^<(.*)/gi, '$1');
             }

@@ -52,7 +52,11 @@ export function activate(context: vscode.ExtensionContext) {
         app.getLineText()
     })
 
-    context.subscriptions.push(app, disposable, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable);
+    let deleteCompleteDisposable = vscode.commands.registerCommand('vue-helper.deleteComplete', () => {
+        app.deleteComplete()
+    })
+
+    context.subscriptions.push(app, disposable, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable);
 }
 
 // this method is called when your extension is deactivated

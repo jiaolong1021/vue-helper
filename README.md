@@ -1,7 +1,10 @@
 # vue-helper
 this plugin main extend for element-ui, vux, iview2
-### release 1.1.5 notes
-optimize close tag function、 {{}} function, add change log.
+### release 1.1.6 notes
+optimize attribute hover and add line empty delete funciton(enter backspace key).
+![](./examples/line-delete.gif)
+
+### detail info see change log.
 
 ## basic functions introduce
 ---
