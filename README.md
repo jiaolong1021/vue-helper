@@ -1,6 +1,6 @@
 # vue-helper
 this plugin main extend for element-ui, vux, iview2
-### release 1.1.6 notes
+### release 1.1.8 notes
 1. optimize attribute hover
 2. add line empty delete funciton(enter backspace key).
 ![](./examples/line-delete.gif)

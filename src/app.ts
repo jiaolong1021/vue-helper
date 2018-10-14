@@ -86,38 +86,46 @@ export class App {
   deleteComplete() {
     let editor = window.activeTextEditor;
     if(!editor) { return; }
-    // 首行
-    if(editor.selection.anchor.line === 0) {
-      if(editor.selection.anchor.character > 0) {
-         editor.edit((editBuilder) => {
-          editBuilder.delete(new Selection(new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1), editor.selection.anchor))
-        })
+    if(window.activeTextEditor.selection.start.line === window.activeTextEditor.selection.end.line 
+      && window.activeTextEditor.selection.start.character === window.activeTextEditor.selection.end.character) {
+      // 首行
+      if(editor.selection.anchor.line === 0) {
+        if(editor.selection.anchor.character > 0) {
+          editor.edit((editBuilder) => {
+            editBuilder.delete(new Selection(new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1), editor.selection.anchor))
+          })
+        }
+      } else {
+        let isLineEmpty = editor.document.lineAt(editor.selection.anchor.line).text.trim() === ''
+        // 整行都是空格
+        if(isLineEmpty) {
+          let preText = ''
+          let line = editor.selection.anchor.line
+          while(preText.trim() === '' && line >= 0) {
+            line -= 1
+            preText = editor.document.lineAt(line).text
+          }
+          editor.edit((editBuilder) => {
+            editBuilder.delete(new Selection(new Position(line, preText.length), editor.selection.anchor))
+          })
+        } else {
+          let startPosition
+          let preLineText = editor.document.getText(new Range(new Position(editor.selection.anchor.line, 0), editor.selection.anchor))
+          if(editor.selection.anchor.character === 0 || preLineText.trim() === '') {
+            startPosition = new Position(editor.selection.anchor.line - 1, editor.document.lineAt(editor.selection.anchor.line - 1).text.length)
+          } else {
+            startPosition = new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1)
+          }
+          editor.edit((editBuilder) => {
+            editBuilder.delete(new Selection(startPosition, editor.selection.anchor))
+          })
+        }
       }
     } else {
-      let isLineEmpty = editor.document.lineAt(editor.selection.anchor.line).text.trim() === ''
-      // 整行都是空格
-      if(isLineEmpty) {
-        let preText = ''
-        let line = editor.selection.anchor.line
-        while(preText.trim() === '' && line >= 0) {
-          line -= 1
-          preText = editor.document.lineAt(line).text
-        }
-        editor.edit((editBuilder) => {
-          editBuilder.delete(new Selection(new Position(line, preText.length), editor.selection.anchor))
-        })
-      } else {
-        let startPosition
-        let preLineText = editor.document.getText(new Range(new Position(editor.selection.anchor.line, 0), editor.selection.anchor))
-        if(editor.selection.anchor.character === 0 || preLineText.trim() === '') {
-          startPosition = new Position(editor.selection.anchor.line - 1, editor.document.lineAt(editor.selection.anchor.line - 1).text.length)
-        } else {
-          startPosition = new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1)
-        }
-        editor.edit((editBuilder) => {
-          editBuilder.delete(new Selection(startPosition, editor.selection.anchor))
-        })
-      }
+      // 多选
+      editor.edit((editBuilder) => {
+        editBuilder.delete(window.activeTextEditor.selection)
+      })
     }
   }
 
