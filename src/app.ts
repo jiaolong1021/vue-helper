@@ -86,6 +86,26 @@ export class App {
   deleteComplete() {
     let editor = window.activeTextEditor;
     if(!editor) { return; }
+    // 多选择点删除处理
+    if(window.activeTextEditor.selections.length > 1) {
+      let selections = window.activeTextEditor.selections
+      let selectionList: Array<Selection> = []
+      for (let index = 0; index < selections.length; index++) {
+        const selection = selections[index];
+        if(selection.anchor.character > 0) {
+          selectionList.push(new Selection(new Position(selection.anchor.line, selection.anchor.character - 1), selection.anchor))
+        } else if (selection.anchor.line > 0) {
+          let len = editor.document.lineAt(selection.anchor.line - 1).text.length
+          selectionList.push(new Selection(new Position(selection.anchor.line - 1, len), selection.anchor))
+        }
+      }
+      editor.edit((editBuilder) => {
+        for (let i = 0; i < selectionList.length; i++) {
+          editBuilder.delete(selectionList[i]) 
+        }
+      })
+      return
+    }
     if(window.activeTextEditor.selection.start.line === window.activeTextEditor.selection.end.line 
       && window.activeTextEditor.selection.start.character === window.activeTextEditor.selection.end.character) {
       // 首行
@@ -122,7 +142,7 @@ export class App {
         }
       }
     } else {
-      // 多选
+      // 选择块
       editor.edit((editBuilder) => {
         editBuilder.delete(window.activeTextEditor.selection)
       })

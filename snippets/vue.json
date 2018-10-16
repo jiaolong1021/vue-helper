@@ -4,7 +4,7 @@
     "body": [
       "mounted () {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "mounted"
   },
@@ -13,7 +13,7 @@
     "body": [
       "beforeMount () {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "beforeMount"
   },
@@ -22,7 +22,7 @@
     "body": [
       "created () {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "created"
   },
@@ -31,7 +31,7 @@
     "body": [
       "beforeCreate () {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "beforeCreate"
   },
@@ -40,7 +40,7 @@
     "body": [
       "updated () {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "updated"
   },
@@ -49,7 +49,7 @@
     "body": [
       "beforeUpdate () {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "beforeUpdate"
   },
@@ -58,7 +58,7 @@
     "body": [
       "activated () {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "activated"
   },
@@ -67,7 +67,7 @@
     "body": [
       "deactivated () {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "deactivated"
   },
@@ -76,7 +76,7 @@
     "body": [
       "beforeDestroy () {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "beforeDestroy"
   },
@@ -85,7 +85,7 @@
     "body": [
       "destroyed () {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "destroyed"
   },
@@ -94,7 +94,7 @@
     "body": [
       "props: {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "props"
   },
@@ -103,7 +103,7 @@
     "body": [
       "computed: {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "computed"
   },
@@ -112,7 +112,7 @@
     "body": [
       "methods: {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "methods"
   },
@@ -121,7 +121,7 @@
     "body": [
       "watch: {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "watch"
   },
@@ -130,7 +130,7 @@
     "body": [
       "directives: {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "directives"
   },
@@ -139,7 +139,7 @@
     "body": [
       "filters: {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "filters"
   },
@@ -148,7 +148,7 @@
     "body": [
       "components: {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "components"
   },
@@ -164,7 +164,7 @@
     "body": [
       "provide: {",
       "\t$1",
-      "},"
+      "}"
     ],
     "description": "provide"
   },
@@ -181,7 +181,7 @@
       "model: {",
       "\tprop: $1,",
       "\tevent: $2",
-      "},"
+      "}"
     ],
     "description": "model"
   }

@@ -117,3 +117,42 @@ setTimeout(function(){
 
   console.log(ret)
 })()
+
+(function(){
+  let elementInfo = {}
+  let tables = document.querySelectorAll(".table")
+  let nowTag = ''
+  let path = location.href
+  for (let index = 0; index < tables.length; index++) {
+    let ret = ''
+    const table = tables[index];
+    let name = document.querySelectorAll(".table")[index].previousSibling.innerText.split(' ')[1]
+    if(nowTag !== ('el-' + name)) {
+      nowTag = 'el-' + name
+      elementInfo[nowTag] = '[element：' + path + '](' + path + ') \n'
+    } else {
+      elementInfo[nowTag] + '\n'
+    }
+    
+    let headList = table.querySelectorAll('tr th')
+    let gap = ''
+    for (let i = 0; i < headList.length; i++) {
+      const h = headList[i];
+      ret += '| ' + h.innerText + ' '
+      gap += '| :--- '
+    }
+    ret += '|\n'
+    gap += '|\n'
+    ret += gap
+    let tdList = table.querySelectorAll('tr td')
+    for (let i = 0; i < tdList.length; i++) {
+      const td = tdList[i];
+      ret += '| ' + td.innerText + ' '
+      if(i % headList.length === (headList.length - 1)) {
+        ret += '|\n'
+      }
+    }
+    elementInfo[nowTag] += ret
+  }
+  console.log(JSON.stringify(elementInfo))
+})()
