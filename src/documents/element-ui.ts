@@ -1,5 +1,5 @@
 export default {
-  "el-row": `[element：http://element-cn.eleme.io/#/zh-CN/component/layout](http://element-cn.eleme.io/#/zh-CN/component/layout) \n
+"el-row": `[element：http://element-cn.eleme.io/#/zh-CN/component/layout](http://element-cn.eleme.io/#/zh-CN/component/layout) \n
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 | :--- | :--- | :--- | :--- | :--- |
 | gutter | 栅格间隔 | number | — | 0 |
@@ -674,5 +674,243 @@ export default {
   | popper-class | 每页显示个数选择器的下拉框类名 | string | — | — |
   | prev-text | 替代图标显示的上一页文字 | string | — | — |
   | next-text | 替代图标显示的下一页文字 | string | — | — |
-  | disabled | 是否禁用 | boolean | — | false |`
+  | disabled | 是否禁用 | boolean | — | false |`,
+  "el-badge": `[element：http://element-cn.eleme.io/#/zh-CN/component/badge](http://element-cn.eleme.io/#/zh-CN/component/badge) \n
+  | 参数 | 说明 | 类型 | 可选值 | 默认值 |\n| :--- | :--- | :--- | :--- | :--- |
+  | value | 显示值 | string, number | — | — |
+  | max | 最大值，超过最大值会显示 '{max}+'，要求 value 是 Number 类型 | number | — | — |
+  | is-dot | 小圆点 | boolean | — | false |
+  | hidden | 隐藏 badge | boolean | — | false |`,
+  "el-alert": `[element：http://element-cn.eleme.io/#/zh-CN/component/alert](http://element-cn.eleme.io/#/zh-CN/component/alert) \n
+  | 参数 | 说明 | 类型 | 可选值 | 默认值 |
+  | :--- | :--- | :--- | :--- | :--- |
+  | title | 标题，必选参数 | string | — | — |
+  | type | 主题 | string | success/warning/info/error | info |
+  | description | 辅助性文字。也可通过默认 slot 传入 | string | — | — |
+  | closable | 是否可关闭 | boolean | — | true |
+  | center | 文字是否居中 | boolean | — | true |
+  | close-text | 关闭按钮自定义文本 | string | — | — |
+  | show-icon | 是否显示图标 | boolean | — | false |\n
+  | 事件名称 | 说明 | 回调参数 |
+  | :--- | :--- | :--- |
+  | close | 关闭alert时触发的事件 | — |`,
+  "el-menu": `[element：http://element-cn.eleme.io/#/zh-CN/component/menu](http://element-cn.eleme.io/#/zh-CN/component/menu) \n
+  | 参数 | 说明 | 类型 | 可选值 | 默认值 |
+  | :--- | :--- | :--- | :--- | :--- |
+  | mode | 模式 | string | horizontal / vertical | vertical |
+  | collapse | 是否水平折叠收起菜单（仅在 mode 为 vertical 时可用） | boolean | — | false |
+  | background-color | 菜单的背景色（仅支持 hex 格式） | string | — | #ffffff |
+  | text-color | 菜单的文字颜色（仅支持 hex 格式） | string | — | #303133 |
+  | active-text-color | 当前激活菜单的文字颜色（仅支持 hex 格式） | string | — | #409EFF |
+  | default-active | 当前激活菜单的 index | string | — | — |
+  | default-openeds | 当前打开的 sub-menu 的 index 的数组 | Array | — | — |
+  | unique-opened | 是否只保持一个子菜单的展开 | boolean | — | false |
+  | menu-trigger | 子菜单打开的触发方式(只在 mode 为 horizontal 时有效) | string | hover / click | hover |
+  | router | 是否使用 vue-router 的模式，启用该模式会在激活导航时以 index 作为 path 进行路由跳转 | boolean | — | false |
+  | collapse-transition | 是否开启折叠动画 | boolean | — | true |\n
+  | 事件名称 | 说明 | 参数 |
+  | :--- | :--- | :--- |
+  | open | 展开指定的 sub-menu | index: 需要打开的 sub-menu 的 index |
+  | close | 收起指定的 sub-menu | index: 需要收起的 sub-menu 的 index |\n
+  | 事件名称 | 说明 | 回调参数 |
+  | :--- | :--- | :--- |
+  | select | 菜单激活回调 | index: 选中菜单项的 index, indexPath: 选中菜单项的 index path |
+  | open | sub-menu 展开的回调 | index: 打开的 sub-menu 的 index， indexPath: 打开的 sub-menu 的 index path |
+  | close | sub-menu 收起的回调 | index: 收起的 sub-menu 的 index， indexPath: 收起的 sub-menu 的 index path |`,
+"el-submenu": `[element：http://element-cn.eleme.io/#/zh-CN/component/menu](http://element-cn.eleme.io/#/zh-CN/component/menu) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| index | 唯一标志 | string | — | — |
+| popper-class | 弹出菜单的自定义类名 | string | — | — |
+| show-timeout | 展开 sub-menu 的延时 | number | — | 300 |
+| hide-timeout | 收起 sub-menu 的延时 | number | — | 300 |
+| disabled | 是否禁用 | boolean | — | false |
+| popper-append-to-body | 是否将弹出菜单插入至 body 元素。在菜单的定位出现问题时，可尝试修改该属性 | boolean | — | 一级子菜单：true / 非一级子菜单：false |`,
+"el-menu-item": `[element：http://element-cn.eleme.io/#/zh-CN/component/menu](http://element-cn.eleme.io/#/zh-CN/component/menu) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| index | 唯一标志 | string | — | — |
+| route | Vue Router 路径对象 | Object | — | — |
+| disabled | 是否禁用 | boolean | — | false |`,
+"el-menu-group": `[element：http://element-cn.eleme.io/#/zh-CN/component/menu](http://element-cn.eleme.io/#/zh-CN/component/menu) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| title | 分组标题 | string | — | — |`,
+"el-tabs": `[element：http://element-cn.eleme.io/#/zh-CN/component/tabs](http://element-cn.eleme.io/#/zh-CN/component/tabs) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| type | 风格类型 | string | card/border-card | — |
+| closable | 标签是否可关闭 | boolean | — | false |
+| addable | 标签是否可增加 | boolean | — | false |
+| editable | 标签是否同时可增加和关闭 | boolean | — | false |
+| value | 绑定值，选中选项卡的 name | string | — | 第一个选项卡的 name |
+| tab-position | 选项卡所在位置 | string | top/right/bottom/left | top |
+| stretch | 标签的宽度是否自撑开 | boolean | - | false |
+| before-leave | 切换标签之前的钩子，若返回 false 或者返回 Promise 且被 reject，则阻止切换。 | Function(activeName, oldActiveName) | — | — |\n
+| 事件名称 | 说明 | 回调参数 |
+| :--- | :--- | :--- |
+| tab-click | tab 被选中时触发 | 被选中的标签 tab 实例 |
+| tab-remove | 点击 tab 移除按钮后触发 | 被删除的标签的 name |
+| tab-add | 点击 tabs 的新增按钮后触发 | — |
+| edit | 点击 tabs 的新增按钮或 tab 被关闭后触发 | (targetName, action) |`,
+"el-tab-pane": `[element：http://element-cn.eleme.io/#/zh-CN/component/tabs](http://element-cn.eleme.io/#/zh-CN/component/tabs) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| label | 选项卡标题 | string | — | — |
+| disabled | 是否禁用 | boolean | — | false |
+| name | 与选项卡 activeName 对应的标识符，表示选项卡别名 | string | — | 该选项卡在选项卡列表中的顺序值，如第一个选项卡则为'1' |
+| closable | 标签是否可关闭 | boolean | — | false |
+| lazy | 标签是否延迟渲染 | boolean | — | false |`,
+"el-breadcrumb": `[element：http://element-cn.eleme.io/#/zh-CN/component/breadcrumb](http://element-cn.eleme.io/#/zh-CN/component/breadcrumb) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| separator | 分隔符 | string | — | 斜杠'/' |
+| separator-class | 图标分隔符 class | string | — | - |
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| to | 路由跳转对象，同 vue-router 的 to | string/object | — | — |
+| replace | 在使用 to 进行路由跳转时，启用 replace 将不会向 history 添加新记录 | boolean | — | false |`,
+"el-dropdown": `[element：http://element-cn.eleme.io/#/zh-CN/component/dropdown](http://element-cn.eleme.io/#/zh-CN/component/dropdown) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| type | 菜单按钮类型，同 Button 组件(只在split-button为 true 的情况下有效) | string | — | — |
+| size | 菜单尺寸，在split-button为 true 的情况下也对触发按钮生效 | string | medium / small / mini | — |
+| split-button | 下拉触发元素呈现为按钮组 | boolean | — | false |
+| placement | 菜单弹出位置 | string | top/top-start/top-end/bottom/bottom-start/bottom-end | bottom-end |
+| trigger | 触发下拉的行为 | string | hover, click | hover |
+| hide-on-click | 是否在点击菜单项后隐藏菜单 | boolean | — | true |
+| show-timeout | 展开下拉菜单的延时（仅在 trigger 为 hover 时有效） | number | — | 250 |
+| hide-timeout | 收起下拉菜单的延时（仅在 trigger 为 hover 时有效） | number | — | 150 |\n
+| 事件名称 | 说明 | 回调参数 |
+| :--- | :--- | :--- |
+| click | split-button 为 true 时，点击左侧按钮的回调 | — |
+| command | 点击菜单项触发的事件回调 | dropdown-item 的指令 |
+| visible-change | 下拉框出现/隐藏时触发 | 出现则为 true，隐藏则为 false |\n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| command | 指令 | string/number/object | — | — |
+| disabled | 禁用 | boolean | — | false |
+| divided | 显示分割线 | boolean | — | false |`,
+"el-steps": `[element：http://element-cn.eleme.io/#/zh-CN/component/steps](http://element-cn.eleme.io/#/zh-CN/component/steps) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| space | 每个 step 的间距，不填写将自适应间距。支持百分比。 | number / string | — | — |
+| direction | 显示方向 | string | vertical/horizontal | horizontal |
+| active | 设置当前激活步骤 | number | — | 0 |
+| process-status | 设置当前步骤的状态 | string | wait / process / finish / error / success | process |
+| finish-status | 设置结束步骤的状态 | string | wait / process / finish / error / success | finish |
+| align-center | 进行居中对齐 | boolean | - | false |
+| simple | 是否应用简洁风格 | boolean | - | false |`,
+"el-step": `[element：http://element-cn.eleme.io/#/zh-CN/component/steps](http://element-cn.eleme.io/#/zh-CN/component/steps) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| title | 标题 | string | — | — |
+| description | 描述性文字 | string | — | — |
+| icon | 图标 | 传入 icon 的 class 全名来自定义 icon，也支持 slot 方式写入 | string | — |
+| status | 设置当前步骤的状态，不设置则根据 steps 确定状态 | wait / process / finish / error / success | - | - |\n
+| name | 说明 |
+| :--- | :--- |
+| icon | 图标 |
+| title | 标题 |
+| description | 描述性文字 |`,
+"el-dialog": `[element：http://element-cn.eleme.io/#/zh-CN/component/dialog](http://element-cn.eleme.io/#/zh-CN/component/dialog) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| visible | 是否显示 Dialog，支持 .sync 修饰符 | boolean | — | false |
+| title | Dialog 的标题，也可通过具名 slot （见下表）传入 | string | — | — |
+| width | Dialog 的宽度 | string | — | 50% |
+| fullscreen | 是否为全屏 Dialog | boolean | — | false |
+| top | Dialog CSS 中的 margin-top 值 | string | — | 15vh |
+| modal | 是否需要遮罩层 | boolean | — | true |
+| modal-append-to-body | 遮罩层是否插入至 body 元素上，若为 false，则遮罩层会插入至 Dialog 的父元素上 | boolean | — | true |
+| append-to-body | Dialog 自身是否插入至 body 元素上。嵌套的 Dialog 必须指定该属性并赋值为 true | boolean | — | false |
+| lock-scroll | 是否在 Dialog 出现时将 body 滚动锁定 | boolean | — | true |
+| custom-class | Dialog 的自定义类名 | string | — | — |
+| close-on-click-modal | 是否可以通过点击 modal 关闭 Dialog | boolean | — | true |
+| close-on-press-escape | 是否可以通过按下 ESC 关闭 Dialog | boolean | — | true |
+| show-close | 是否显示关闭按钮 | boolean | — | true |
+| before-close | 关闭前的回调，会暂停 Dialog 的关闭 | function(done)，done 用于关闭 Dialog | — | — |
+| center | 是否对头部和底部采用居中布局 | boolean | — | false |\n
+| name | 说明 |
+| :--- | :--- |
+| — | Dialog 的内容 |
+| title | Dialog 标题区的内容 |
+| footer | Dialog 按钮操作区的内容 |\n
+| 事件名称 | 说明 | 回调参数 |
+| :--- | :--- | :--- |
+| open | Dialog 打开的回调 | — |
+| opened | Dialog 打开动画结束时的回调 | — |
+| close | Dialog 关闭的回调 | — |
+| closed | Dialog 关闭动画结束时的回调 | — |`,
+"el-tooltip": `[element：http://element-cn.eleme.io/#/zh-CN/component/tooltip](http://element-cn.eleme.io/#/zh-CN/component/tooltip) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| effect | 默认提供的主题 | String | dark/light | dark |
+| content | 显示的内容，也可以通过 slot#content 传入 DOM | String | — | — |
+| placement | Tooltip 的出现位置 | String | top/top-start/top-end/bottom/bottom-start/bottom-end/left/left-start/left-end/right/right-start/right-end | bottom |
+| value(v-model) | 状态是否可见 | Boolean | — | false |
+| disabled | Tooltip 是否可用 | Boolean | — | false |
+| offset | 出现位置的偏移量 | Number | — | 0 |
+| transition | 定义渐变动画 | String | — | el-fade-in-linear |
+| visible-arrow | 是否显示 Tooltip 箭头，更多参数可见Vue-popper | Boolean | — | true |
+| popper-options | popper.js 的参数 | Object | 参考 popper.js 文档 | { boundariesElement: 'body', gpuAcceleration: false } |
+| open-delay | 延迟出现，单位毫秒 | Number | — | 0 |
+| manual | 手动控制模式，设置为 true 后，mouseenter 和 mouseleave 事件将不会生效 | Boolean | — | false |
+| popper-class | 为 Tooltip 的 popper 添加类名 | String | — | — |
+| enterable | 鼠标是否可进入到 tooltip 中 | Boolean | — | true |
+| hide-after | Tooltip 出现后自动隐藏延时，单位毫秒，为 0 则不会自动隐藏 | number | — | 0 |`,
+"el-popover": `[element：http://element-cn.eleme.io/#/zh-CN/component/popover](http://element-cn.eleme.io/#/zh-CN/component/popover) \n| 参数 | 说明 | 类型 | 可选值 | 默认值 |\n| :--- | :--- | :--- | :--- | :--- |\n| trigger | 触发方式 | String | click/focus/hover/manual | click |\n| title | 标题 | String | — | — |\n| content | 显示的内容，也可以通过 slot 传入 DOM | String | — | — |\n| width | 宽度 | String, Number | — | 最小宽度 150px |\n| placement | 出现位置 | String | top/top-start/top-end/bottom/bottom-start/bottom-end/left/left-start/left-end/right/right-start/right-end | bottom |\n| disabled | Popover 是否可用 | Boolean | — | false |\n| value(v-model) | 状态是否可见 | Boolean | — | false |\n| offset | 出现位置的偏移量 | Number | — | 0 |\n| transition | 定义渐变动画 | String | — | fade-in-linear |\n| visible-arrow | 是否显示 Tooltip 箭头，更多参数可见Vue-popper | Boolean | — | true |\n| popper-options | popper.js 的参数 | Object | 参考 popper.js 文档 | { boundariesElement: 'body', gpuAcceleration: false } |\n| popper-class | 为 popper 添加类名 | String | — | — |\n| open-delay | 触发方式为 hover 时的显示延迟，单位为毫秒 | Number | — | — |\n",
+"el-Slot": "[element：http://element-cn.eleme.io/#/zh-CN/component/popover](http://element-cn.eleme.io/#/zh-CN/component/popover) \n
+| 参数 | 说明 |
+| :--- | :--- |
+| — | Popover 内嵌 HTML 文本 |
+| reference | 触发 Popover 显示的 HTML 元素 |\n
+| 事件名称 | 说明 | 回调参数 |
+| :--- | :--- | :--- |
+| show | 显示时触发 | — |
+| after-enter | 显示动画播放完毕后触发 | — |
+| hide | 隐藏时触发 | — |
+| after-leave | 隐藏动画播放完毕后触发 | — |`,
+"el-card": `[element：http://element-cn.eleme.io/#/zh-CN/component/card](http://element-cn.eleme.io/#/zh-CN/component/card) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| header | 设置 header，也可以通过 slot#header 传入 DOM | string | — | — |
+| body-style | 设置 body 的样式 | object | — | { padding: '20px' } |
+| shadow | 设置阴影显示时机 | string | always / hover / never | always |`,
+"el-carousel": `[element：http://element-cn.eleme.io/#/zh-CN/component/carousel](http://element-cn.eleme.io/#/zh-CN/component/carousel) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| height | 走马灯的高度 | string | — | — |
+| initial-index | 初始状态激活的幻灯片的索引，从 0 开始 | number | — | 0 |
+| trigger | 指示器的触发方式 | string | click | — |
+| autoplay | 是否自动切换 | boolean | — | true |
+| interval | 自动切换的时间间隔，单位为毫秒 | number | — | 3000 |
+| indicator-position | 指示器的位置 | string | outside/none | — |
+| arrow | 切换箭头的显示时机 | string | always/hover/never | hover |
+| type | 走马灯的类型 | string | card | — |\n
+| 事件名称 | 说明 | 回调参数 |
+| :--- | :--- | :--- |
+| change | 幻灯片切换时触发 | 目前激活的幻灯片的索引，原幻灯片的索引 |
+| 方法名 | 说明 | 参数 |
+| :--- | :--- | :--- |
+| setActiveItem | 手动切换幻灯片 | 需要切换的幻灯片的索引，从 0 开始；或相应 el-carousel-item 的 name 属性值 |
+| prev | 切换至上一张幻灯片 | — |
+| next | 切换至下一张幻灯片 | — |`,
+"el-carousel-item": `[element：http://element-cn.eleme.io/#/zh-CN/component/carousel](http://element-cn.eleme.io/#/zh-CN/component/carousel) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| name | 幻灯片的名字，可用作 setActiveItem 的参数 | string | — | — |
+| label | 该幻灯片所对应指示器的文本 | string | — | — |`,
+"el-collapse": `[element：http://element-cn.eleme.io/#/zh-CN/component/collapse](http://element-cn.eleme.io/#/zh-CN/component/collapse) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| accordion | 是否手风琴模式 | boolean | — | false |
+| value | 当前激活的面板(如果是手风琴模式，绑定值类型需要为string，否则为array) | string/array | — | — |\n
+| 事件名称 | 说明 | 回调参数 |
+| :--- | :--- | :--- |
+| change | 当前激活面板改变时触发(如果是手风琴模式，参数 activeNames 类型为string，否则为array) | (activeNames: array|string) |\n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| name | 唯一标志符 | string/number | — | — |
+| title | 面板标题 | string | — | — |`
 }
