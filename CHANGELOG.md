@@ -1,5 +1,13 @@
-### release 1.1.6 notes
-optimize attribute hover and add line empty delete funciton(enter backspace key).
+### release 1.2.0 notes
+1. now support element tag see document through hover.
+![](./examples/element-tag.gif)
+2. enhance tag close function
+![](./examples/tag-slip.gif)
+3. fix bugs
+
+### release 1.1.8 notes
+1. optimize attribute hover
+2. add line empty delete funciton(enter backspace key).
 ![](./examples/line-delete.gif)
 
 ### release 1.1.5 notes
