@@ -130,14 +130,28 @@ export class App {
           })
         } else {
           let startPosition
+          let endPosition: Position = editor.selection.anchor
           let preLineText = editor.document.getText(new Range(new Position(editor.selection.anchor.line, 0), editor.selection.anchor))
           if(editor.selection.anchor.character === 0 || preLineText.trim() === '') {
             startPosition = new Position(editor.selection.anchor.line - 1, editor.document.lineAt(editor.selection.anchor.line - 1).text.length)
           } else {
             startPosition = new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1)
+            // 对{}, (), [], '', "", <>进行成对删除处理
+            let txt = editor.document.getText(new Range(new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1), editor.selection.anchor))
+            if(editor.document.lineAt(editor.selection.anchor.line).text.length > editor.selection.anchor.character) {
+              let nextTxt = editor.document.getText(new Range(editor.selection.anchor, new Position(editor.selection.anchor.line, editor.selection.anchor.character + 1)))
+              if((txt === '{' && nextTxt === '}') 
+              || (txt === '(' && nextTxt === ')') 
+              || (txt === '\'' && nextTxt === '\'') 
+              || (txt === '"' && nextTxt === '"') 
+              || (txt === '[' && nextTxt === ']') 
+              || (txt === '<' && nextTxt === '>')) {
+                endPosition = new Position(editor.selection.anchor.line, editor.selection.anchor.character + 1)
+              }
+            }
           }
           editor.edit((editBuilder) => {
-            editBuilder.delete(new Selection(startPosition, editor.selection.anchor))
+            editBuilder.delete(new Selection(startPosition, endPosition))
           })
         }
       }

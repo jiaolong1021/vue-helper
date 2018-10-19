@@ -2,6 +2,9 @@
 this plugin main extend for element-ui, vux, iview2
 ## detail function can see change log.
 
+### release 1.2.1 notes
+optimize backspace handle
+
 ### release 1.2.0 notes
 1. now support element tag see document through hover.
 ![](./examples/element-tag.gif)
