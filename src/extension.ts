@@ -1,6 +1,6 @@
 'use strict';
 import * as vscode from 'vscode';
-import {App, ElementDocsContentProvider, SCHEME, ElementCompletionItemProvider, DocumentHoverProvider} from './app';
+import {App, ElementDocsContentProvider, SCHEME, ElementCompletionItemProvider, DocumentHoverProvider, vueHelperDefinitionProvider} from './app';
 import Library from './library';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -48,15 +48,20 @@ export function activate(context: vscode.ExtensionContext) {
         })
     });
 
+    // 函数补全函数
     let functionCompletionDisposable = vscode.commands.registerCommand('vue-helper.functionCompletion', () => {
         app.getLineText()
     })
 
+    // 删除处理函数
     let deleteCompleteDisposable = vscode.commands.registerCommand('vue-helper.deleteComplete', () => {
         app.deleteComplete()
     })
 
-    context.subscriptions.push(app, disposable, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable);
+    // 到达定义函数
+    let vueHelperDefinition = vscode.languages.registerDefinitionProvider(['vue', 'html'], new vueHelperDefinitionProvider())
+
+    context.subscriptions.push(app, disposable, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition);
 }
 
 // this method is called when your extension is deactivated

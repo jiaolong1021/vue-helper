@@ -1,3 +1,7 @@
+### release 1.3.0 notes
+property or method go to definiton in current page (keyword: cmd(mac) | ctrl(win))
+![](./examples/go-to-define.gif)
+
 ### release 1.2.1 notes
 optimize backspace handle
 
