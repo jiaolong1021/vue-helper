@@ -3,11 +3,12 @@ export default {
     "attributes": ["gutter", "type", "align", "justify", "class-name"],
     "subtags": ["Col"],
     "description": "栅格行",
+    "defaults": [":gutter"],
     "framework": "iview2"
   },
   "Col": {
     "attributes": ["span", "order", "offset", "push", "pull", "class-name", "xs", "sm", "md", "lg"],
-    "defaults": ["span"],
+    "defaults": [":span"],
     "description": "栅格列",
     "framework": "iview2"
   },
@@ -89,7 +90,7 @@ export default {
     "attributes": ["data", "columns", "stripe", "border", "show-header", "width", "height", "loading", "disabled-hover", "highlight-row", "row-class-name", "size", 
     "no-data-text", "no-filtered-data-text", "on-current-change", "on-select", "on-select-cancel", "on-select-all", "on-selection-change", "on-sort-change", 
     "on-filter-change", "on-row-click", "on-row-dblclick", "on-expand", "exportCsv", "clearCurrentRow"], 
-    "defaults": ["columns", "data"],
+    "defaults": [":columns", ":data"],
     "framework": "iview2", 
     "description": "表格，slot：header（表头） footer（页脚） loading（加载中） " 
   },
@@ -102,8 +103,8 @@ export default {
     "framework": "iview2" 
   }, 
   "Option": { 
-    "attributes": ["v-model", "label", "disabled", "key"], 
-    "defaults": ["v-model", "key"],
+    "attributes": ["value", "label", "disabled", "key"], 
+    "defaults": ["value", "key"],
     "framework": "iview2" 
   }, 
   "OptionGroup": {
@@ -148,7 +149,7 @@ export default {
   },
   "InputNumber": { 
     "attributes": ["max", "min", "v-model", "step", "size", "disabled", "placeholder", "formatter", "parser", "readonly", "editable", "precision", "element-id", "on-change", "on-focus", "on-blur"], 
-    "defaults": ["v-model", "min", "max"],
+    "defaults": ["v-model", ":min", ":max"],
     "framework": "iview2" 
   },
   "Rate": { 
@@ -158,7 +159,7 @@ export default {
   },
   "Upload": { 
     "attributes": ["action", "headers", "multiple", "data", "name", "with-credentials", "show-upload-list", "type", "accept", "format", "max-size", "before-upload", "on-progress", "on-success", "on-error", "on-preview", "on-remove", "on-format-error", "on-exceeded-size", "default-file-list", "clearFiles"], 
-    "defaults": ["action"],
+    "defaults": [":action"],
     "framework": "iview2", 
     "description": "slot：无（触发上传组件的控件） tip（辅助提示内容） " 
   },
@@ -174,7 +175,7 @@ export default {
   }, 
   "FormItem": { 
     "attributes": ["prop", "label", "label-width", "label-for", "required", "rules", "error", "show-message"], 
-    "defaults": ["label"],
+    "defaults": [":label"],
     "framework": "iview2", 
     "description": "slot：无（内容） label（label 内容） " 
   },
@@ -276,11 +277,13 @@ export default {
   "Tabs": { 
     "attributes": ["value", "type", "size", "closable", "animated", "capture-focus", "on-click", "on-tab-remove"], 
     "framework": "iview2", 
+    "defaults": ["v-model"],
+    "subtags": ["TabPane"],
     "description": "slot：extra（附加内容） " 
   }, 
   "TabPane": { 
     "attributes": ["name", "label", "icon", "disabled", "closable"], 
-    "defaults": ["label"],
+    "defaults": ["label", "name"],
     "framework": "iview2" 
   },
   "Dropdown": { 
@@ -299,7 +302,7 @@ export default {
   },
   "Page": { 
     "attributes": ["current", "total", "page-size", "page-size-opts", "placement", "size", "simple", "show-total", "show-elevator", "show-sizer", "class-name", "styles", "transfer", "on-change", "on-page-size-change"], 
-    "defaults": ["total"],
+    "defaults": [":total"],
     "framework": "iview2", "description": "slot：无（自定义显示总数的内容） " 
   },
   "Breadcrumb": { 

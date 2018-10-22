@@ -1,0 +1,56 @@
+{
+  "iv-form-input": {
+    "prefix": "iv-form-input",
+    "body": [
+      "<FormItem label=\"$1\">",
+      "\t<Input v-model=\"$2\" placeholder=\"$3\"></Input>",
+      "</FormItem>"
+    ]
+  },
+  "iv-form-select": {
+    "prefix": "iv-form-select",
+    "body": [
+      "<FormItem label=\"$1\">",
+      "\t<Select v-model=\"$2\">",
+      "\t\t<Option value=\"$3\">$4</Option>",
+      "\t</Select>",
+      "</FormItem>"
+    ]
+  },
+  "iv-form-radio": {
+    "prefix": "iv-form-radio",
+    "body":[
+      "<FormItem label=\"$1\">",
+      "\t<RadioGroup v-model=\"$2\">",
+      "\t\t<Radio label=\"$3\">$4</Radio>",
+      "\t</RadioGroup>",
+      "</FormItem>"
+    ]
+  },
+  "iv-form-checkbox": {
+    "prefix": "iv-form-checkbox",
+    "body":[
+      "<FormItem label=\"$1\">",
+      "\t<CheckboxGroup v-model=\"$2\">",
+      "\t\t<Checkbox label=\"$3\">$4</Checkbox>",
+      "\t</CheckboxGroup>",
+      "</FormItem>"
+    ]
+  },
+  "iv-form-textarea": {
+    "prefix": "iv-form-textarea",
+    "body": [
+      "<FormItem label=\"$1\">",
+      "\t<Input type=\"textarea\" v-model=\"$2\" placeholder=\"$3\"></Input>",
+      "</FormItem>"
+    ]
+  },
+  "iv-form": {
+    "prefix": "iv-form",
+    "body":[
+      "<Form :model=\"$1\" :label-width=\"${2:80}\">",
+      "\t$3",
+      "</Form>"
+    ]
+  }
+}

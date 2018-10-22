@@ -72,8 +72,13 @@ export class App {
     } else if(txt.indexOf(')') === -1) {
       replaceTxt = ' (params)' + replaceTxt
     }
+    // 判断下一行是否是单行注释
+    if(/\s*\/\/\s+.*/gi.test(nextLineTxt)) {
+      if(editor.document.lineCount <= editor.selection.anchor.line + 2) { return; }
+      nextLineTxt = editor.document.lineAt(editor.selection.anchor.line + 2).text
+    }
     // 下一行是一个函数
-    if (/.*{.*/gi.test(nextLineTxt)) {
+    if (/.*(.*).*{.*/gi.test(nextLineTxt)) {
       replaceTxt += ','
     }
     editor.edit((editBuilder) => {
@@ -93,11 +98,15 @@ export class App {
       let selectionList: Array<Selection> = []
       for (let index = 0; index < selections.length; index++) {
         const selection = selections[index];
-        if(selection.anchor.character > 0) {
-          selectionList.push(new Selection(new Position(selection.anchor.line, selection.anchor.character - 1), selection.anchor))
-        } else if (selection.anchor.line > 0) {
-          let len = editor.document.lineAt(selection.anchor.line - 1).text.length
-          selectionList.push(new Selection(new Position(selection.anchor.line - 1, len), selection.anchor))
+        if(selection.start.line === selection.end.line && selection.start.character === selection.end.character) {
+          if(selection.anchor.character > 0) {
+            selectionList.push(new Selection(new Position(selection.anchor.line, selection.anchor.character - 1), selection.anchor))
+          } else if (selection.anchor.line > 0) {
+            let len = editor.document.lineAt(selection.anchor.line - 1).text.length
+            selectionList.push(new Selection(new Position(selection.anchor.line - 1, len), selection.anchor))
+          }
+        } else {
+          selectionList.push(selection)
         }
       }
       editor.edit((editBuilder) => {
@@ -739,7 +748,8 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
       }
       // 判断现在正在哪个属性进行遍历
       let keyWord = lineText.replace(/\s*(\w*)\s*(\(\s*\)|:)\s*{\s*/gi, '$1')
-      if(vueAttr[keyWord] !== undefined) {
+      // braceLeftCount <= 3 用于去除data属性中包含vue其他属性从而不能定义问题
+      if(vueAttr[keyWord] !== undefined && braceLeftCount <= 3) {
         attr = keyWord
         braceLeftCount = 0
       }
