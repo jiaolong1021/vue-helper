@@ -59,7 +59,7 @@ export default {
   "Radio": { 
     "attributes": ["v-model", "label", "disabled", "size", "true-value", "false-value", "on-change"], 
     "framework": "iview2",
-    "defaults": ["label"],
+    "defaults": ["v-model", "label"],
     "description": "单选框",
   }, 
   "RadioGroup": { 
@@ -71,7 +71,7 @@ export default {
   "Checkbox": { 
     "attributes": ["v-model", "label", "disabled", "indeterminate", "size", "true-value", "false-value", "on-change"], 
     "framework": "iview2",
-    "defaults": ["label"],
+    "defaults": ["v-model", "label"],
     "description": "多选框",
   }, 
   "CheckboxGroup": { 

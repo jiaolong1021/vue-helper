@@ -1,3 +1,6 @@
+### release 1.3.3 notes
+add iview form, rules snippets
+
 ### release 1.3.2 notes
 1. optimize go to definition method
 2. add iview form code snippets.

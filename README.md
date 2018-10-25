@@ -2,10 +2,8 @@
 this plugin main extend for element-ui, vux, iview2
 ## detail function can see change log.
 
-### release 1.3.2 notes
-1. optimize go to definition method
-2. add iview form code snippets.
-![](./examples/iv-form.gif)
+### release 1.3.3 notes
+add iview form, rules snippets
 
 ### release 1.3.1 notes
 property or method go to definiton in current page (keyword: cmd(mac) | ctrl(win))

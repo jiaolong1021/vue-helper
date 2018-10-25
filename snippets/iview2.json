@@ -5,7 +5,7 @@
       "this.\\$Message.info({",
       "\tcontent: '${1}',",
       "\tduration: ${2:1.5}",
-      "});"
+      "})"
     ],
     "description": "消息提示"
   },
@@ -15,7 +15,7 @@
       "this.\\$Message.success({",
       "\tcontent: '${1}',",
       "\tduration: ${2:1.5}",
-      "});"
+      "})"
     ],
     "description": "消息提示"
   },
@@ -25,7 +25,7 @@
       "this.\\$Message.warning({",
       "\tcontent: '${1}',",
       "\tduration: ${2:1.5}",
-      "});"
+      "})"
     ],
     "description": "消息提示"
   },
@@ -35,7 +35,7 @@
       "this.\\$Message.error({",
       "\tcontent: '${1}',",
       "\tduration: ${2:1.5}",
-      "});"
+      "})"
     ],
     "description": "消息提示"
   },
@@ -45,7 +45,7 @@
       "this.\\$Message.loading({",
       "\tcontent: '${1}',",
       "\tduration: ${2:1.5}",
-      "});"
+      "})"
     ],
     "description": "消息提示"
   },
@@ -55,7 +55,7 @@
       "this.\\$Message.config({",
       "\ttop: '${1}',",
       "\tduration: '${2:1.5}'",
-      "});"
+      "})"
     ],
     "description": "消息配置"
   },
@@ -72,7 +72,7 @@
       "this.\\$Notice.open({",
       "\tcontent: '${1}',",
       "\tduration: ${2:1.5}",
-      "});"
+      "})"
     ],
     "description": "打开通知提示"
   },
@@ -82,7 +82,7 @@
       "this.\\$Notice.info({",
       "\tcontent: '${1}',",
       "\tduration: ${2:1.5}",
-      "});"
+      "})"
     ],
     "description": "通知提示信息"
   },
@@ -92,7 +92,7 @@
       "this.\\$Notice.success({",
       "\tcontent: '${1}',",
       "\tduration: ${2:1.5}",
-      "});"
+      "})"
     ],
     "description": "成功通知"
   },
@@ -102,7 +102,7 @@
       "this.\\$Notice.warning({",
       "\tcontent: '${1}',",
       "\tduration: ${2:1.5}",
-      "});"
+      "})"
     ],
     "description": "警告通知"
   },
@@ -112,7 +112,7 @@
       "this.\\$Notice.error({",
       "\tcontent: '${1}',",
       "\tduration: ${2:1.5}",
-      "});"
+      "})"
     ],
     "description": "错误通知"
   },
@@ -122,7 +122,7 @@
       "this.\\$Notice.config({",
       "\ttop: '${1}',",
       "\tduration: '${2}',",
-      "});"
+      "})"
     ],
     "description": "配置通知"
   },
@@ -208,5 +208,39 @@
       "}"
     ],
     "description": "columns"
+  },
+  "iv-form-validate-clear": {
+    "prefix":"iv-form-validate-clear",
+    "body":[
+      "this.\\$refs['${1:form}'].resetFields()"
+    ]
+  },
+  "iv-form-validate": {
+    "prefix":"iv-form-validate",
+    "body":[
+      "this.\\$refs['${1:form}'].validate((valid) => {",
+      "\tif (valid) {",
+      "\t\t$2",
+      "\t}",
+      "})"
+    ]
+  },
+  "iv-rules": {
+    "prefix": "iv-rules",
+    "body": [
+      "{required: false, trigger: 'blur', validator: validateLength}"
+    ]
+  },
+  "iv-rules-method": {
+    "prefix": "iv-rules-method",
+    "body": [
+      "const validateLength = (rule, value, callback) => {",
+      "\tif (value && value.length > 128) {",
+      "\t\tcallback(new Error('最大长度不能大于128位'))",
+      "\t} else {",
+      "\t\tcallback()",
+      "\t}",
+      "}"
+    ]
   }
 }
