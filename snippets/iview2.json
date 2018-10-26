@@ -242,5 +242,68 @@
       "\t}",
       "}"
     ]
+  },
+  "iv-modal-info": {
+    "prefix": "iv-modal-info",
+    "body": [
+      "this.\\$Modal.info({",
+      "\ttitle: '$1',",
+      "\tcontent: '$2'",
+      "})"
+    ],
+    "description": "信息模态框"
+  },
+  "iv-modal-success": {
+    "prefix": "iv-modal-success",
+    "body": [
+      "this.\\$Modal.success({",
+      "\ttitle: '$1',",
+      "\tcontent: '$2'",
+      "})"
+    ],
+    "description": "成功模态框"
+  },
+  "iv-modal-warning": {
+    "prefix": "iv-modal-warning",
+    "body": [
+      "this.\\$Modal.warning({",
+      "\ttitle: '$1',",
+      "\tcontent: '$2'",
+      "})"
+    ],
+    "description": "警告模态框"
+  },
+  "iv-modal-error": {
+    "prefix": "iv-modal-error",
+    "body": [
+      "this.\\$Modal.error({",
+      "\ttitle: '$1',",
+      "\tcontent: '$2'",
+      "})"
+    ],
+    "description": "警告模态框"
+  },
+  "iv-modal-confirm": {
+    "prefix": "iv-modal-confirm",
+    "body": [
+      "this.\\$Modal.confirm({",
+      "\ttitle: '$1',",
+      "\tcontent: '$2',",
+      "\tonOk: () => {",
+      "\t\t$3",
+      "\t},",
+      "\tonCancel: () => {",
+      "\t\t$4",
+      "\t}",
+      "})"
+    ],
+    "description": "确定模态框"
+  },
+  "iv-modal-remove": {
+    "prefix": "iv-modal-remove",
+    "body": [
+      "this.\\$Modal.remove()"
+    ],
+    "description": "移除模态框"
   }
 }

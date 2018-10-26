@@ -1,3 +1,6 @@
+### release 1.3.4 notes
+add iview modal snippets
+
 ### release 1.3.3 notes
 add iview form, rules snippets
 
