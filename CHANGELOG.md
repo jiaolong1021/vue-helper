@@ -1,3 +1,6 @@
+### release 1.3.5 notes
+add iview icon tip, optimize close tag function
+
 ### release 1.3.4 notes
 add iview modal snippets
 

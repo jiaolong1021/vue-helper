@@ -2,7 +2,7 @@
     "name": "vue-helper",
     "displayName": "vue-helper",
     "description": "extension for Element-UI, VUX, IVIEW2",
-    "version": "1.3.4",
+    "version": "1.3.5",
     "publisher": "shenjiaolong",
     "repository": {
         "url": "https://github.com/jiaolong1021/vue-helper"
@@ -17,25 +17,13 @@
     "activationEvents": [
         "onLanguage:html",
         "onLanguage:vue",
-        "onCommand:vue-helper.searchUnderCursor",
         "onCommand:vue-helper.functionCompletion",
         "onCommand:vue-helper.deleteComplete"
     ],
     "main": "./out/src/extension",
     "icon": "logo.png",
     "contributes": {
-        "commands": [
-            {
-                "command": "vue-helper.searchUnderCursor",
-                "title": "vue-helper.search"
-            }
-        ],
         "keybindings": [
-            {
-                "command": "vue-helper.searchUnderCursor",
-                "key": "ctrl+alt+z",
-                "when": "editorTextFocus"
-            },
             {
                 "command": "vue-helper.functionCompletion",
                 "key": "shift+alt+enter",

@@ -235,6 +235,7 @@ export default {
   "Tooltip": { 
     "attributes": ["content", "placement", "disabled", "delay", "always", "transfer", "options", "on-popper-show", "on-popper-hide"], 
     "framework": "iview2", 
+    "defaults": [":content"],
     "description": "slot：无（主体内容） content（提示框的内容，定义此 slot 时，会覆盖 props content。） " 
   },
   "Poptip": { 
@@ -346,5 +347,10 @@ export default {
   "Scroll": { 
     "attributes": ["height", "loading-text", "on-reach-top", "on-reach-bottom", "on-reach-edge", "distance-to-edge"], 
     "framework": "iview2" 
+  },
+  "Icon": {
+    "attributes": ["type"],
+    "defaults": ["type"],
+    "description": "iview icon"
   }
 }

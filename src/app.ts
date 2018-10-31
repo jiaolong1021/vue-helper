@@ -300,10 +300,8 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
   private _document: TextDocument;
   private _position: Position;
   private tagReg: RegExp = /<([\w-]+)\s+/g;
-  // private attrReg: RegExp = /(?:\(|\s*)(\w+)=['"][^'"]*/;
   private attrReg: RegExp = /(?:\(|\s*)((\w(-)?)*)=['"][^'"]*/;  // 能够匹配 left-right 属性
   private tagStartReg: RegExp = /<([\w-]*)$/;
-  private tagCloseReg: RegExp = /<(\w+)(\s*|\s+[\w-_]+=("[^"]+"|'[^']+'))\s*>$/gi;
   private size: number;
   private quotes: string;
 
@@ -519,13 +517,13 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
   // 是否是关闭标签
   isCloseTag() {
     let txt = this._document.getText(new Range(new Position(this._position.line, 0), this._position)).trim()
-    if(!txt.endsWith('>') || /.*=("[^"]*>|'[^']*>)$/gi.test(txt)) {
+    if(!txt.endsWith('>') || /.*=("[^"]*>|'[^']*>)$/gi.test(txt) || txt.endsWith('/>')) {
       return false
     }
-    let txtArr = txt.match(/<([\w-]+)(\s*|(\s+[\w-_]+=("[^"]+"|'[^']+'))+)\s*>/gim)
+    let txtArr = txt.match(/<([\w-]+)(\s*|(\s+[\w-_]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim)
     if(Array.isArray(txtArr) && txtArr.length > 0) {
       let txtStr = txtArr[txtArr.length - 1]
-      return /<([\w-]+)(\s*|(\s+[\w-_]+=("[^"]+"|'[^']+'))+)\s*>$/gi.test(txtStr)
+      return /<([\w-]+)(\s*|(\s+[\w-_]+(=("[^"]*"|'[^']*'))?)+)\s*>$/gi.test(txtStr)
     }
     return false
   }
@@ -693,7 +691,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
   provideDefinition(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Definition> {
     // 获取定义word
     const line = document.lineAt(position.line)
-    const textSplite = [' ', '<', '>', '"', '\'', '.', '\\', "=", ":", "@", "(", ")", "[", "]", "{", "}", ","]
+    const textSplite = [' ', '<', '>', '"', '\'', '.', '\\', "=", ":", "@", "(", ")", "[", "]", "{", "}", ",", "!"]
     // 通过前后字符串拼接成选择文本
     let posIndex = position.character
     let textMeta = line.text.substr(posIndex, 1)

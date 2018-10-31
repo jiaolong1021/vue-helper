@@ -17,36 +17,36 @@ export function activate(context: vscode.ExtensionContext) {
     let vueLanguageConfig = vscode.languages.setLanguageConfiguration('vue', {wordPattern: app.WORD_REG});
 
     // 注册文档搜索命令
-    let disposable = vscode.commands.registerCommand('vue-helper.searchUnderCursor', () => {
-        if (context.workspaceState.get('element-helper.loading', false)) {
-            vscode.window.showInformationMessage('Document is initializing, please wait a minute depend on your network.');
-            return;
-        }
+    // let disposable = vscode.commands.registerCommand('vue-helper.searchUnderCursor', () => {
+    //     if (context.workspaceState.get('element-helper.loading', false)) {
+    //         vscode.window.showInformationMessage('Document is initializing, please wait a minute depend on your network.');
+    //         return;
+    //     }
 
-        // 获取选中文本
-        const selection =  app.getSeletedText();
-        let items = library.queryAll().map((item) => {
-            return {
-                label: item.tag,
-                detail: item.name,
-                path: item.path,
-                description: item.type
-            };
-        });
+    //     // 获取选中文本
+    //     const selection =  app.getSeletedText();
+    //     let items = library.queryAll().map((item) => {
+    //         return {
+    //             label: item.tag,
+    //             detail: item.name,
+    //             path: item.path,
+    //             description: item.type
+    //         };
+    //     });
         
-        if (items.length < 1) {
-            vscode.window.showInformationMessage('Initializing。。。, please try again.');
-            return;
-        }
-        let find = items.filter(item => item.label === selection);
-        if (find.length) {
-            app.openDocs({keyword: find[0].path}, find[0].label);
-            return;
-        }
-        const a = vscode.window.showQuickPick(items).then(selected => {
-            selected && app.openDocs({keyword: selected.path}, selected.label);
-        })
-    });
+    //     if (items.length < 1) {
+    //         vscode.window.showInformationMessage('Initializing。。。, please try again.');
+    //         return;
+    //     }
+    //     let find = items.filter(item => item.label === selection);
+    //     if (find.length) {
+    //         app.openDocs({keyword: find[0].path}, find[0].label);
+    //         return;
+    //     }
+    //     const a = vscode.window.showQuickPick(items).then(selected => {
+    //         selected && app.openDocs({keyword: selected.path}, selected.label);
+    //     })
+    // });
 
     // 函数补全函数
     let functionCompletionDisposable = vscode.commands.registerCommand('vue-helper.functionCompletion', () => {
@@ -61,7 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
     // 到达定义函数
     let vueHelperDefinition = vscode.languages.registerDefinitionProvider(['vue', 'html'], new vueHelperDefinitionProvider())
 
-    context.subscriptions.push(app, disposable, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition);
+    context.subscriptions.push(app, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition);
 }
 
 // this method is called when your extension is deactivated
