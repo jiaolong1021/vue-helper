@@ -1,3 +1,6 @@
+### release 1.3.6 notes
+close tag support tag attributu name include : or @
+
 ### release 1.3.5 notes
 add iview icon tip, optimize close tag function
 

@@ -520,10 +520,10 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     if(!txt.endsWith('>') || /.*=("[^"]*>|'[^']*>)$/gi.test(txt) || txt.endsWith('/>')) {
       return false
     }
-    let txtArr = txt.match(/<([\w-]+)(\s*|(\s+[\w-_]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim)
+    let txtArr = txt.match(/<([\w-]+)(\s*|(\s+[\w-_:@]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim)
     if(Array.isArray(txtArr) && txtArr.length > 0) {
       let txtStr = txtArr[txtArr.length - 1]
-      return /<([\w-]+)(\s*|(\s+[\w-_]+(=("[^"]*"|'[^']*'))?)+)\s*>$/gi.test(txtStr)
+      return /<([\w-]+)(\s*|(\s+[\w-_:@]+(=("[^"]*"|'[^']*'))?)+)\s*>$/gi.test(txtStr)
     }
     return false
   }
