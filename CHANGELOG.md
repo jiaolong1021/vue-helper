@@ -1,3 +1,7 @@
+### release 1.3.7 notes
+1. close tag support tag attributu name include : or @
+2. iview split, cell, divider snippet.
+
 ### release 1.3.6 notes
 close tag support tag attributu name include : or @
 

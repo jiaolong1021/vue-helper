@@ -8,7 +8,7 @@ export default {
   },
   "Col": {
     "attributes": ["span", "order", "offset", "push", "pull", "class-name", "xs", "sm", "md", "lg"],
-    "defaults": [":span"],
+    "defaults": ["span"],
     "description": "栅格列",
     "framework": "iview2"
   },
@@ -206,16 +206,17 @@ export default {
     "framework": "iview2" 
   },
   "Badge": { 
-    "attributes": ["count", "overflow-count", "dot", "class-name"], 
+    "attributes": ["count", "overflow-count", "dot", "class-name", "type", "show-zero", "status", "text", "offset"], 
     "framework": "iview2" 
   },
   "Collapse": { 
-    "attributes": ["v-model", "accordion", "on-change"], 
+    "attributes": ["v-model", "accordion", "simple", "on-change"], 
     "defaults": ["v-model"],
     "framework": "iview2" 
   }, 
   "Panel": { 
-    "attributes": ["name"], 
+    "attributes": ["name", "hide-arrow"], 
+    "defaults": ["name"],
     "framework": "iview2", 
     "description": "slot：无（面板头内容） content（描述内容） " 
   },
@@ -260,15 +261,18 @@ export default {
   },
   "Menu": { 
     "attributes": ["mode", "theme", "active-name", "open-names", "accordion", "width", "on-select", "on-open-change", "updateOpened", "updateActiveName"], 
+    "defaults": ["active-name"],
     "framework": "iview2" 
   }, 
   "MenuItem": { 
     "attributes": ["name"], 
+    "defaults": ["name"],
     "framework": "iview2" 
   }, 
   "Submenu": { 
     "attributes": ["name"], 
     "framework": "iview2", 
+    "defaults": ["name"],
     "description": "slot：无（菜单项） title（子菜单标题） " 
   }, 
   "MenuGroup": { 
@@ -352,5 +356,34 @@ export default {
     "attributes": ["type"],
     "defaults": ["type"],
     "description": "iview icon"
+  },
+  "Split":{
+    "attributes":["value","mode","min","max","on-move-start","on-moving","on-move-end"],
+    "framework":"iview2",
+    "description":"slot：left（mode 为 horizontal 时可用，左边面板） right（mode 为 horizontal 时可用，右边面板） top（mode 为 vertical 时可用，上边面板） bottom（mode 为 vertical 时可用，下边面板） trigger（自定义分割拖拽节点） "
+  },
+  "Divider":{
+    "attributes":["type","orientation","dashed"],
+    "framework":"iview2"
+  },
+  "CellGroup": {
+    "attributes": ["on-click"],
+    "description": "cell group",
+    "framework": "iview2"
+  },
+  "Cell": {
+    "description": "cell, slot: icon 标题前的 Icon, label	相当于 label, extra	相当于 extra, arrow 有链接时，可自定义右侧箭头",
+    "framework": "iview2",
+    "attributes": ["name", "title", "label", "extra", "disabled", "elected", "to", "replace", "target"]
+  },
+  "Anchor":{
+    "attributes":["affix","offset-top","offset-bottom","bounds","scroll-offset","container","show-ink","on-select","on-change"],
+    "subtags": ["AnchorLink"],
+    "framework":"iview2"
+  },
+  "AnchorLink":{
+    "attributes":["href","title","scroll-offset"],
+    "defaults": ["href"],
+    "framework":"iview2"
   }
 }

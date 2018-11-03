@@ -52,5 +52,41 @@
       "\t$3",
       "</Form>"
     ]
+  },
+  "iv-menu-sub": {
+    "prefix": "iv-menu-sub",
+    "body": [
+      "<Menu active-name=\"1-1\">",
+      "\t<Submenu name=\"1\">",
+      "\t\t<template slot=\"title\">",
+      "\t\t\t<Icon type=\"ios-people\" /> 用户管理",
+      "\t\t</template>",
+      "\t\t<MenuItem name=\"1-1\">新增用户</MenuItem>",
+      "\t\t<MenuItem name=\"1-2\">活跃用户</MenuItem>",
+      "\t</Submenu>",
+      "</Menu>"
+    ]
+  },
+  "iv-menu": {
+    "prefix": "iv-menu",
+    "body": [
+      "<Menu active-name=\"1-1\">",
+      "\t<MenuItem name=\"1-1\">新增用户</MenuItem>",
+      "</Menu>"
+    ]
+  },
+  "iv-dropdown": {
+    "prefix": "iv-dropdown",
+    "body": [
+      "<Dropdown>",
+      "\t<Button type=\"primary\">",
+      "\t\t下拉菜单",
+      "\t\t<Icon type=\"ios-arrow-down\"></Icon>",
+      "\t</Button>",
+      "\t<DropdownMenu slot=\"list\">",
+      "\t\t<DropdownItem>驴打滚</DropdownItem>",
+      "\t</DropdownMenu>",
+      "</Dropdown>"
+    ]
   }
 }
