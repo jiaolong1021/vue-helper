@@ -520,10 +520,10 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     if(!txt.endsWith('>') || /.*=("[^"]*>|'[^']*>)$/gi.test(txt) || txt.endsWith('/>')) {
       return false
     }
-    let txtArr = txt.match(/<([\w-]+)(\s*|(\s+[\w-_:@]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim)
+    let txtArr = txt.match(/<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim)
     if(Array.isArray(txtArr) && txtArr.length > 0) {
       let txtStr = txtArr[txtArr.length - 1]
-      return /<([\w-]+)(\s*|(\s+[\w-_:@]+(=("[^"]*"|'[^']*'))?)+)\s*>$/gi.test(txtStr)
+      return /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*>$/gi.test(txtStr)
     }
     return false
   }
@@ -549,10 +549,10 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
   // 自动补全关闭标签
   getCloseTagSuggestion() {
     let txtInfo = this._document.lineAt(this._position.line)
-    let txtArr = txtInfo.text.match(/<([\w-]+)(\s*|(\s+[\w-_:@]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim)
+    let txtArr = txtInfo.text.match(/<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim)
     let tag = 'div'
     if(txtArr) {
-      tag = txtArr[txtArr.length - 1].replace(/<([\w-]+)(\s*|(\s+[\w-_:@]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim, '$1')
+      tag = txtArr[txtArr.length - 1].replace(/<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim, '$1')
     }
     window.activeTextEditor.edit((editBuilder) => {
       editBuilder.insert(this._position, '</' + tag + '>');

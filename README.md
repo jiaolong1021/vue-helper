@@ -2,9 +2,8 @@
 this plugin main extend for element-ui, vux, iview2, after plan support nuxt
 ## detail function can see change log.
 
-### release 1.3.7 notes
-1. close tag support tag attributu name include : or @
-2. iview split, cell, divider snippet.
+### release 1.3.8 notes
+close tag support tag attributu name include .
 
 ### release 1.3.1 notes
 property or method go to definiton in current page (keyword: cmd(mac) | ctrl(win))
