@@ -305,5 +305,34 @@
       "this.\\$Modal.remove()"
     ],
     "description": "移除模态框"
+  },
+  "iv-page-data": {
+    "prefix": "iv-page-data",
+    "body": [
+      "pageSize: 10,",
+      "currentPage: 1,",
+      "pageSizeList: [10, 20, 30, 50],",
+      "pageTotal: 0"
+    ]
+  },
+  "iv-page-method": {
+    "prefix": "iv-page-method",
+    "body": [
+      "getDate() {",
+      "\tlet params = {",
+      "\t\tpage: this.currentPage,",
+      "\t\tsize: this.pageSize",
+      "\t}",
+      "},",
+      "pageChange(page) {",
+      "\tthis.currentPage = page",
+      "\tthis.getData()",
+      "},",
+      "pageSizeChange(size) {",
+      "\tthis.currentPage = 1",
+      "\tthis.pageSize = size",
+      "\tthis.getData()",
+      "}"
+    ]
   }
 }

@@ -175,7 +175,7 @@ export default {
   }, 
   "FormItem": { 
     "attributes": ["prop", "label", "label-width", "label-for", "required", "rules", "error", "show-message"], 
-    "defaults": [":label"],
+    "defaults": ["label"],
     "framework": "iview2", 
     "description": "slot：无（内容） label（label 内容） " 
   },

@@ -88,5 +88,18 @@
       "\t</DropdownMenu>",
       "</Dropdown>"
     ]
+  },
+  "iv-page": {
+    "prefix": "iv-page",
+    "body": [
+      "<Page :total=\"pageTotal\"",
+      ":current.sync=\"currentPage\"",
+      ":show-total=\"true\"",
+      ":show-sizer=\"true\"",
+      ":show-elevator=\"true\"",
+      "@on-change=\"pageChange\"",
+      "@on-page-size-change=\"pageSizeChange\" >",
+      "</Page>"
+    ]
   }
 }
