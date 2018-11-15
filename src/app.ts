@@ -758,16 +758,17 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
         if(selectText === matchName && braceLeftCount === 2) {
           return Promise.resolve(new Location(document.uri, new Position(pos, lineText.indexOf(matchName) + matchName.length)))
         }
-        let braceLeft = lineText.match("{") ? lineText.match("{").length : 0
-        let braceRight = lineText.match("}") ? lineText.match("}").length : 0
+        let braceLeft = lineText.match(/{/gi) ? lineText.match(/{/gi).length : 0
+        let braceRight = lineText.match(/}/gi) ? lineText.match(/}/gi).length : 0
         braceLeftCount += braceLeft - braceRight
       } else if(attr) {
+        // console.log(selectText + ' --- ' + lineText + ' --- ' + braceLeftCount);
         let matchName = lineText.replace(/\s*(\w*)\s*(:|\().*/gi, '$1')
         if(selectText === matchName && braceLeftCount === 1) {
           return Promise.resolve(new Location(document.uri, new Position(pos, lineText.indexOf(matchName) + matchName.length)))
         }
-        let braceLeft = lineText.match("{") ? lineText.match("{").length : 0
-        let braceRight = lineText.match("}") ? lineText.match("}").length : 0
+        let braceLeft = lineText.match(/{/gi) ? lineText.match(/{/gi).length : 0
+        let braceRight = lineText.match(/}/gi) ? lineText.match(/}/gi).length : 0
         braceLeftCount += braceLeft - braceRight
       }
 

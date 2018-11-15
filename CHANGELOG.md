@@ -1,3 +1,6 @@
+### release 1.3.10 notes
+optimize jump to definition function
+
 ### release 1.3.9 notes
 add iview page snippets. iv-page, iv-page-data, iv-page-method
 
