@@ -1,3 +1,9 @@
+### release 1.4.0 notes
+jump to definition function support self define component.
+not supoort global component, must import by import or require.
+the jump path support begin with @ and relation path
+![](./examples/definition-file-jump.gif)
+
 ### release 1.3.10 notes
 optimize jump to definition function
 

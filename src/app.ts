@@ -3,14 +3,13 @@ import {
   Event, Uri, CancellationToken, TextDocumentContentProvider,
   EventEmitter, workspace, CompletionItemProvider, ProviderResult,
   TextDocument, Position, CompletionItem, CompletionList, CompletionItemKind,
-  SnippetString, Range, HoverProvider, Hover, Selection, TextLine, DefinitionProvider, Definition, Location
+  SnippetString, Range, HoverProvider, Hover, Selection, TextLine
 } from 'vscode';
 import Resource from './resource';
 import TAGS from './vue-tags'
 import ATTRS from './vue-attributes'
 import Documents from './documents'
 import DocumentsAttr from './documents-attr'
-import { activate } from './extension';
 
 const prettyHTML = require('pretty');
 const Path = require('path');
@@ -684,102 +683,4 @@ export class DocumentHoverProvider implements HoverProvider {
 
     return null
   }
-}
-
-// 跳转到定义位置
-export class vueHelperDefinitionProvider implements DefinitionProvider {
-  provideDefinition(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Definition> {
-    // 获取定义word
-    const line = document.lineAt(position.line)
-    const textSplite = [' ', '<', '>', '"', '\'', '.', '\\', "=", ":", "@", "(", ")", "[", "]", "{", "}", ",", "!"]
-    // 通过前后字符串拼接成选择文本
-    let posIndex = position.character
-    let textMeta = line.text.substr(posIndex, 1)
-    let selectText = ''
-    // 前向获取符合要求的字符串
-    while(textSplite.indexOf(textMeta) === -1 && posIndex <= line.text.length) {
-      selectText += textMeta
-      textMeta = line.text.substr(++posIndex, 1)
-    }
-    // 往后获取符合要求的字符串
-    posIndex = position.character - 1
-    textMeta = line.text.substr(posIndex, 1)
-    while(textSplite.indexOf(textMeta) === -1 && posIndex > 0) {
-      selectText = textMeta + selectText
-      textMeta = line.text.substr(--posIndex, 1)
-    }
-
-    // 查找字符串位置
-    let pos = 0
-    let begin = false
-    let lineText = ''
-    let braceLeftCount = 0
-    let attr = ''
-    while(pos < document.lineCount && !/^\s*<\/script>\s*$/g.test(lineText)) {
-      lineText = document.lineAt(++pos).text
-      if(!begin) {
-        if(/^\s*<script.*>\s*$/g.test(lineText)) {
-          begin = true
-        }
-        continue; 
-      }
-      // data具有return，单独处理
-      let vueAttr = {
-        props: 1,
-        computed: 2,
-        methods: 3,
-        watch: 4,
-        beforeCreate: 5,
-        created: 6,
-        beforeMount: 7,
-        mounted: 8,
-        beforeUpdate: 9,
-        updated: 10,
-        activated: 11,
-        deactivated: 12,
-        beforeDestroy: 13,
-        destroyed: 14,
-        directives: 15,
-        filters: 16,
-        components: 17,
-        data: 18
-      }
-      // 判断现在正在哪个属性进行遍历
-      let keyWord = lineText.replace(/\s*(\w*)\s*(\(\s*\)|:)\s*{\s*/gi, '$1')
-      // braceLeftCount <= 3 用于去除data属性中包含vue其他属性从而不能定义问题
-      if(vueAttr[keyWord] !== undefined && braceLeftCount <= 3) {
-        attr = keyWord
-        braceLeftCount = 0
-      }
-
-      // data属性匹配
-      if(attr === 'data' && braceLeftCount >= 2) {
-        let matchName = lineText.replace(/\s*(\w+):.+/gi, '$1')
-        if(selectText === matchName && braceLeftCount === 2) {
-          return Promise.resolve(new Location(document.uri, new Position(pos, lineText.indexOf(matchName) + matchName.length)))
-        }
-        let braceLeft = lineText.match(/{/gi) ? lineText.match(/{/gi).length : 0
-        let braceRight = lineText.match(/}/gi) ? lineText.match(/}/gi).length : 0
-        braceLeftCount += braceLeft - braceRight
-      } else if(attr) {
-        // console.log(selectText + ' --- ' + lineText + ' --- ' + braceLeftCount);
-        let matchName = lineText.replace(/\s*(\w*)\s*(:|\().*/gi, '$1')
-        if(selectText === matchName && braceLeftCount === 1) {
-          return Promise.resolve(new Location(document.uri, new Position(pos, lineText.indexOf(matchName) + matchName.length)))
-        }
-        let braceLeft = lineText.match(/{/gi) ? lineText.match(/{/gi).length : 0
-        let braceRight = lineText.match(/}/gi) ? lineText.match(/}/gi).length : 0
-        braceLeftCount += braceLeft - braceRight
-      }
-
-      // data取return的属性值
-      if(attr === 'data') {
-        if(/\s*return\s*{\s*/gi.test(lineText)) {
-          braceLeftCount = 2
-        }
-      }
-    }
-    return Promise.resolve(null);
-  }
-
 }

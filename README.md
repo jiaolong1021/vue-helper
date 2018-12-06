@@ -1,9 +1,12 @@
 # vue-helper
-this plugin main extend for element-ui, vux, iview2, after plan support nuxt
+this plugin main extend for element-ui, vux, iview, after plan support nuxt
 ## detail function can see change log.
 
-### release 1.3.10 notes
-optimize jump to definition function
+### release 1.4.0 notes
+jump to definition function support self define component.
+not supoort global component, must import by import or require.
+the jump path support begin with @ and relation path
+![](./examples/definition-file-jump.gif)
 
 ### release 1.3.1 notes
 property or method go to definiton in current page (keyword: cmd(mac) | ctrl(win))
