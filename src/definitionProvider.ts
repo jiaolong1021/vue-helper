@@ -94,7 +94,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
         data: 18
       }
       // 判断现在正在对哪个属性进行遍历
-      let keyWord = lineText.replace(/\s*(\w*)\s*(\(\s*\)|:)\s*{\s*/gi, '$1')
+      let keyWord = lineText.replace(/\s*(\w*)\s*(\(\s*\)|:|(:\s*function\s*\(\s*\)))\s*{\s*/gi, '$1')
       // braceLeftCount <= 3 用于去除data属性中包含vue其他属性从而不能定义问题
       if(vueAttr[keyWord] !== undefined && braceLeftCount <= 3) {
         attr = keyWord

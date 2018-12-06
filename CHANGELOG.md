@@ -1,3 +1,7 @@
+### release 1.4.1 notes
+solve issue: 
+[#2 Move to Definition function does not work](https://github.com/jiaolong1021/vue-helper/issues/2)
+
 ### release 1.4.0 notes
 jump to definition function support self define component.
 not supoort global component, must import by import or require.
