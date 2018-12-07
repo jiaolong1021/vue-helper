@@ -15,7 +15,7 @@ const prettyHTML = require('pretty');
 const Path = require('path');
 const fs = require('fs');
 
-export const SCHEME = 'element-helper';
+export const SCHEME = 'vue-helper';
 
 export interface Query {
   keyword: string
@@ -189,7 +189,7 @@ export class App {
       });
   }
 
-  openDocs(query?: Query, title = 'Element-helper', editor = window.activeTextEditor) {
+  openDocs(query?: Query, title = 'vue-helper', editor = window.activeTextEditor) {
     this.openHtml(encodeDocsUri(query), title)
   }
 
@@ -202,9 +202,9 @@ const HTML_CONTENT = (query: Query) => {
   const filename = Path.join(__dirname, '..', '..', 'package.json');
   const data = fs.readFileSync(filename, 'utf8');
   const content = JSON.parse(data);
-  const versions = content.contributes.configuration.properties['element-helper.version']['enum'];
-  const lastVersion = versions[versions.length - 1];
-  const config = workspace.getConfiguration('element-helper');
+  const versions = content.contributes.configuration.properties['vue-helper.version']['enum'];
+  // const lastVersion = versions[versions.length - 1];
+  const config = workspace.getConfiguration('vue-helper');
   const language = <string>config.get('language');
   const version = config.get('version');
 
@@ -241,10 +241,10 @@ const HTML_CONTENT = (query: Query) => {
 
   return `
   <style type="text/css">${style}</style>
-  <body class="element-helper-docs-container">
-  <div class="element-helper-move-mask"></div>
-  <div class="element-helper-loading-mask">
-    <div class="element-helper-loading-spinner">
+  <body class="vue-helper-docs-container">
+  <div class="vue-helper-move-mask"></div>
+  <div class="vue-helper-loading-mask">
+    <div class="vue-helper-loading-spinner">
       <svg viewBox="25 25 50 50" class="circular">
         <circle cx="50" cy="50" r="20" fill="none" class="path"></circle>
       </svg>
@@ -256,7 +256,7 @@ const HTML_CONTENT = (query: Query) => {
     var iframe = document.querySelector('#docs-frame');
     var link = document.querySelector('.docs-notice a');
     window.addEventListener('message', (e) => {
-      e.data.loaded && (document.querySelector('.element-helper-loading-mask').style.display = 'none');
+      e.data.loaded && (document.querySelector('.vue-helper-loading-mask').style.display = 'none');
       if(e.data.hash) {
         var pathArr = link.href.split('#');
         pathArr.pop();
@@ -593,7 +593,7 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
       this.getCloseTagSuggestion()
       return null
     }
-    const config = workspace.getConfiguration('element-helper');
+    const config = workspace.getConfiguration('vue-helper');
     this.size = config.get('indent-size');
     this.quotes = config.get('quotes') === 'double' ? '"' : "'";
 

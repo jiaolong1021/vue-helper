@@ -55,9 +55,16 @@
     ],
     "configuration": {
       "type": "object",
-      "title": "ELement Helper Configuration",
+      "title": "Vue Helper",
       "properties": {
-        "element-helper.language": {
+        "vue-helper.alias": {
+          "type": "object",
+          "default": {
+            "@": "."
+          },
+          "description": "webpack alias"
+        },
+        "vue-helper.language": {
           "type": "string",
           "default": "zh-CN",
           "description": "Document Language of Element UI",
@@ -67,9 +74,9 @@
             "es"
           ]
         },
-        "element-helper.version": {
+        "vue-helper.version": {
           "type": "string",
-          "default": "2.3",
+          "default": "2.4",
           "description": "Document version of Element UI",
           "enum": [
             "1.4",
@@ -80,12 +87,12 @@
             "2.4"
           ]
         },
-        "element-helper.indent-size": {
+        "vue-helper.indent-size": {
           "type": "number",
           "default": 2,
           "description": "Indentation size of snippets"
         },
-        "element-helper.quotes": {
+        "vue-helper.quotes": {
           "type": "string",
           "default": "double",
           "description": "Normal quotes of autocomplete",
@@ -94,7 +101,7 @@
             "double"
           ]
         },
-        "element-helper.pug-quotes": {
+        "vue-helper.pug-quotes": {
           "type": "string",
           "default": "single",
           "description": "Pug quotes of autocomplete",
@@ -122,10 +129,11 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.1",
     "element-gh-pages": "^1.0.25",
-    "element-helper-json": "^2.0.5",
     "hoek": "^5.0.3",
     "jquery": "^3.2.1",
+    "param-case": "^2.1.1",
     "pretty": "^2.0.0",
-    "shelljs": "^0.8.2"
+    "shelljs": "^0.8.2",
+    "vue-helper-json": "^2.0.5"
   }
 }

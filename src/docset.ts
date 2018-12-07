@@ -14,7 +14,7 @@ class DocSet {
     this.id_ = item.type;
     this.indexPath = this.id_ + '/index.json';
     this.index_ = null;
-    this.language_ = workspace.getConfiguration('element-helper').get('language');
+    this.language_ = workspace.getConfiguration('vue-helper').get('language');
     this.getMemu();
   }
 

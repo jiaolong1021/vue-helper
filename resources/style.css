@@ -1,8 +1,8 @@
-.element-helper-docs-container {
+.vue-helper-docs-container {
   background-color: white;
 }
 
-.element-helper-docs-container iframe {
+.vue-helper-docs-container iframe {
     position: absolute;
     border: none;
     left: 0;
@@ -11,7 +11,7 @@
     height: 100%;
 }
 
-.element-helper-docs-container .docs-notice {
+.vue-helper-docs-container .docs-notice {
   position: absolute;
   right: 10px;
   background: #50bfff;
@@ -21,12 +21,12 @@
   z-index: 9999;
 }
 
-.element-helper-docs-container .docs-notice a {
+.vue-helper-docs-container .docs-notice a {
   color: inherit;
   text-decoration: underline;
 }
 
-.element-helper-loading-mask, .element-helper-move-mask {
+.vue-helper-loading-mask, .vue-helper-move-mask {
     position: absolute;
     z-index: 10000;
     background-color: hsla(0,0%,100%,.9);
@@ -37,25 +37,25 @@
     left: 0;
     transition: opacity .3s
 }
-.element-helper-move-mask {
+.vue-helper-move-mask {
   display: none;
   background-color: hsla(0,0%,100%,0);
 }
 
-.element-helper-loading-mask.is-fullscreen {
+.vue-helper-loading-mask.is-fullscreen {
     position: fixed
 }
 
-.element-helper-loading-mask.is-fullscreen .element-helper-loading-spinner {
+.vue-helper-loading-mask.is-fullscreen .vue-helper-loading-spinner {
     margin-top: -25px
 }
 
-.element-helper-loading-mask.is-fullscreen .element-helper-loading-spinner .circular {
+.vue-helper-loading-mask.is-fullscreen .vue-helper-loading-spinner .circular {
     width: 50px;
     height: 50px
 }
 
-.element-helper-loading-spinner {
+.vue-helper-loading-spinner {
     top: 50%;
     margin-top: -21px;
     width: 100%;
@@ -63,19 +63,19 @@
     position: absolute
 }
 
-.element-helper-loading-spinner .element-helper-loading-text {
+.vue-helper-loading-spinner .vue-helper-loading-text {
     color: #20a0ff;
     margin: 3px 0;
     font-size: 14px
 }
 
-.element-helper-loading-spinner .circular {
+.vue-helper-loading-spinner .circular {
     width: 42px;
     height: 42px;
     animation: loading-rotate 2s linear infinite
 }
 
-.element-helper-loading-spinner .path {
+.vue-helper-loading-spinner .path {
     animation: loading-dash 1.5s ease-in-out infinite;
     stroke-dasharray: 90,150;
     stroke-dashoffset: 0;
@@ -84,7 +84,7 @@
     stroke-linecap: round
 }
 
-.element-helper-loading-fade-enter, .element-helper-loading-fade-leave-active {
+.vue-helper-loading-fade-enter, .vue-helper-loading-fade-leave-active {
     opacity: 0
 }
 

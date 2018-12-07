@@ -66,7 +66,7 @@ class Library {
    */
   fetchAllVersion(repos: RepoObject[]) {
     cd(`${Resource.RESOURCE_PATH}/..`);
-    exec('npm update element-helper-json --save', { async: true });
+    exec('npm update vue-helper-json --save', { async: true });
     for (let i = 0; i < repos.length; ++i) {
       let repo = repos[i];
       this.fetchVersion(repo);
@@ -74,7 +74,7 @@ class Library {
   }
 
   setVersionSchema(versions: string[]) {
-    const config = workspace.getConfiguration('element-helper');
+    const config = workspace.getConfiguration('vue-helper');
     const filename = Path.join(__dirname, '..', '..', 'package.json');
     fs.readFile(filename, 'utf8', (err, data) => {
       if (err) {
@@ -82,7 +82,7 @@ class Library {
         return;
       };
       const content = JSON.parse(data);
-      content.contributes.configuration.properties['element-helper.version']['enum'] = versions;
+      content.contributes.configuration.properties['vue-helper.version']['enum'] = versions;
       config.update('version', versions[versions.length - 1], true);
       fs.writeFileSync(filename, JSON.stringify(content, null, 2));
     });
@@ -126,7 +126,7 @@ class Library {
   }
 
   setLoading(value: boolean) {
-    this.context.workspaceState.update('element-helper.loading', value);
+    this.context.workspaceState.update('vue-helper.loading', value);
   }
 
   getValues(obj) {

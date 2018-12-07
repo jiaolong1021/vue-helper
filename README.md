@@ -2,9 +2,12 @@
 this plugin main extend for element-ui, vux, iview, after plan support nuxt
 ## detail function can see change log.
 
-### release 1.4.1 notes
-solve issue: 
-[#2 Move to Definition function does not work](https://github.com/jiaolong1021/vue-helper/issues/2)
+### release 1.4.2 notes
+support add alias through user settings. (use for jump to definition function)
+alias support relative path
+![](./examples/setting-alias.png)
+support iview, element-ui tag jump to definition
+![](./examples/iview-jump.gif)
 
 ### release 1.4.0 notes
 jump to definition function support self define component.

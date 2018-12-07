@@ -58,29 +58,29 @@ export default class Resource {
     const htmlPath = Path.join(Resource.ELEMENT_PATH, file);
     Resource.get(htmlPath)
       .then((content:string) => {
-        const matched = [];
-        content = content.replace(Resource.URL_REG, (match, one, two, three)=> {
-          const name = Path.basename(three);
-          const url = `http:${three}`;
-          Resource.getFromUrl(url, Path.join(Path.dirname(htmlPath), name)).catch(error =>{
-            // one more again
-            Resource.getFromUrl(url, Path.join(Path.dirname(htmlPath), name));
-          });
-          return `${one}${two}${name}${two}`;
-        });
+        // const matched = [];
+        // content = content.replace(Resource.URL_REG, (match, one, two, three)=> {
+        //   const name = Path.basename(three);
+        //   const url = `http:${three}`;
+        //   Resource.getFromUrl(url, Path.join(Path.dirname(htmlPath), name)).catch(error =>{
+        //     // one more again
+        //     Resource.getFromUrl(url, Path.join(Path.dirname(htmlPath), name));
+        //   });
+        //   return `${one}${two}${name}${two}`;
+        // });
 
-        let $ = cheerio.load(content);
+        // let $ = cheerio.load(content);
 
-        const jqScript = $(`<script type="text/javascript" src="${Path.join(Resource.RESOURCE_PATH, '../node_modules/jquery/dist/jquery.min.js')}"></script>`);
-        const fixScript = $(`<script type="text/javascript" src="${Path.join(Resource.RESOURCE_PATH, 'element', `fix${vs}.js`)}"></script>`);
-        const style = $(`<link href="${Path.join(Resource.RESOURCE_PATH, 'element', 'style.css')}" rel="stylesheet">`);
-        $('body').append(jqScript).append(fixScript);
-        $('head').append(style);
+        // const jqScript = $(`<script type="text/javascript" src="${Path.join(Resource.RESOURCE_PATH, '../node_modules/jquery/dist/jquery.min.js')}"></script>`);
+        // const fixScript = $(`<script type="text/javascript" src="${Path.join(Resource.RESOURCE_PATH, 'element', `fix${vs}.js`)}"></script>`);
+        // const style = $(`<link href="${Path.join(Resource.RESOURCE_PATH, 'element', 'style.css')}" rel="stylesheet">`);
+        // $('body').append(jqScript).append(fixScript);
+        // $('head').append(style);
 
-        const indexPath = Path.join(Resource.ELEMENT_PATH, file);
-        const dir = Path.dirname(indexPath);
-        fs.writeFileSync(Path.join(dir, 'main.html'), $.html());
-        return content;
+        // const indexPath = Path.join(Resource.ELEMENT_PATH, file);
+        // const dir = Path.dirname(indexPath);
+        // fs.writeFileSync(Path.join(dir, 'main.html'), $.html());
+        // return content;
       });
   }
 
