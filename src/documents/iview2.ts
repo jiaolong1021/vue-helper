@@ -83,7 +83,8 @@ export default {
 | on-blur | 输入框失去焦点时触发 |
 | on-keyup | 原生的 keyup 事件 |
 | on-keydown | 原生的 keydown 事件 |
-| on-keypress | 原生的 keypress 事件 |\n
+| on-keypress | 原生的 keypress 事件 |
+| on-search | 开启 search 时可用，点击搜索或按下回车键时触发 |\n
 | slot | 说明 |
 | :--- | :--- |
 | prepend | 前置内容，仅在 text 类型下有效 |

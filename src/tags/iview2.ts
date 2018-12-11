@@ -51,7 +51,7 @@ export default {
   },
   "Input": {
     "attributes": ["type", "v-model", "size", "placeholder", "clearable", "disable", "readonly", "maxlength", "icon", "rows", "autosize", "number", "autofocus", "autocomplete", "element-id", "spellcheck", "wrap", 
-    "on-enter", "on-click", "on-change", "on-blur", "on-keyup", "on-keydown", "on-keypress", "focus"],
+    "on-enter", "on-click", "on-change", "on-blur", "on-keyup", "on-keydown", "on-keypress", "on-focus", "on-search"],
     "description": "Input输入框，slot： prepend（前置内容，仅在 text 类型下有效）， append（后置内容，仅在 text 类型下有效）",
     "defaults": ["v-model"],
     "framework": "iview2"
