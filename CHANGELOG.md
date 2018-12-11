@@ -1,3 +1,8 @@
+### release 1.4.3 notes
+1. support path ignore index
+![](./examples/path-index.gif)
+2. iview Input add on-search method tip
+
  ### release 1.4.2 notes
 support add alias through user settings. (use for jump to definition function)
 alias support relative path
