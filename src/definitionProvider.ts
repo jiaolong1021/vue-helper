@@ -289,14 +289,17 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
     }
     
     // 添加后缀，判断文件是否存在
-    let isFileExist = false
     const postfix = ['vue', 'js', 'css', 'scss', 'less']
     for (let i = 0; i < postfix.length; i++) {
       const post = postfix[i]
       let tempFile = path.resolve(workspace.rootPath, filePath) + '.' + post
-      isFileExist = fs.existsSync(tempFile)
-      if (isFileExist) {
+      if (fs.existsSync(tempFile)) {
         return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
+      }
+      // index文件判断
+      let indexFile = path.resolve(workspace.rootPath, filePath) + path.sep + 'index.' + post
+      if(fs.existsSync(indexFile)) {
+        return Promise.resolve(new Location(Uri.file(indexFile), new Position(0, 0)))
       }
     }
 
