@@ -2,7 +2,7 @@
   "name": "vue-helper",
   "displayName": "vue-helper",
   "description": "extension for Element-UI, VUX, IVIEW2",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/jiaolong1021/vue-helper"
@@ -18,7 +18,8 @@
     "onLanguage:html",
     "onLanguage:vue",
     "onCommand:vue-helper.functionCompletion",
-    "onCommand:vue-helper.deleteComplete"
+    "onCommand:vue-helper.deleteComplete",
+    "onCommand:vue-helper.pxRem"
   ],
   "main": "./out/src/extension",
   "icon": "logo.png",
@@ -32,6 +33,11 @@
       {
         "key": "backspace",
         "command": "vue-helper.deleteComplete",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "alt+z",
+        "command": "vue-helper.pxRem",
         "when": "editorTextFocus"
       }
     ],
@@ -63,6 +69,16 @@
             "@": "."
           },
           "description": "webpack alias"
+        },
+        "vue-helper.rem-px": {
+          "type": "number",
+          "default": 16,
+          "description": "1rem equal px value"
+        },
+        "vue-helper.rem-decimal-length": {
+          "type": "integer",
+          "default": 4,
+          "description": "decimal length"
         },
         "vue-helper.language": {
           "type": "string",

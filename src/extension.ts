@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 import {App, ElementDocsContentProvider, SCHEME, ElementCompletionItemProvider, DocumentHoverProvider } from './app';
 import { vueHelperDefinitionProvider } from './definitionProvider'
+import { PxRem } from './px-rem';
 import Library from './library';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -27,10 +28,15 @@ export function activate(context: vscode.ExtensionContext) {
         app.deleteComplete()
     })
 
+    // px、rem转化函数
+    let pxRemDisposable = vscode.commands.registerCommand('vue-helper.pxRem', () => {
+        new PxRem().handle()
+    })
+
     // 到达定义函数
     let vueHelperDefinition = vscode.languages.registerDefinitionProvider(['vue', 'html'], new vueHelperDefinitionProvider())
 
-    context.subscriptions.push(app, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition);
+    context.subscriptions.push(app, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition, pxRemDisposable);
 }
 
 // this method is called when your extension is deactivated

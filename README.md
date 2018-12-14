@@ -2,9 +2,11 @@
 this plugin main extend for element-ui, vux, iview, after plan support nuxt
 ## detail function can see change log.
 
-### release 1.4.4 notes
-1. optimize go to definition function
-2. optimize alias setting.
+### release 1.4.5 notes
+rem px exchange
+![](./examples/rem.gif)
+rem px exchange setting
+![](./examples/rem-config.png)
 
 ### release 1.4.2 notes
 support add alias through user settings. (use for jump to definition function)

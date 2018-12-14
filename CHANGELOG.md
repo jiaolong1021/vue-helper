@@ -1,3 +1,9 @@
+### release 1.4.5 notes
+rem px exchange
+![](./examples/rem.gif)
+rem px exchange setting
+![](./examples/rem-config.png)
+
 ### release 1.4.4 notes
 1. optimize go to definition function
 2. optimize alias setting.
