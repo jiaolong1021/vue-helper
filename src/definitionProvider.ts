@@ -281,25 +281,33 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
     if (config || config.alias) {
       // 支持的前缀、后缀
       for (const key in config.alias) {
-        if (config.alias.hasOwnProperty(key) && filePath.indexOf(key) === 0) {
+        if (config.alias.hasOwnProperty(key) && filePath.indexOf(key + path.sep) === 0) {
           filePath = filePath.replace(key, config.alias[key])
           break
         }
       }
     }
     
-    // 添加后缀，判断文件是否存在
-    const postfix = ['vue', 'js', 'css', 'scss', 'less']
-    for (let i = 0; i < postfix.length; i++) {
-      const post = postfix[i]
-      let tempFile = path.resolve(workspace.rootPath, filePath) + '.' + post
+    // 文件存在后缀，则直接查找
+    if (/.*\..*$/gi.test(filePath)) {
+      let tempFile = path.resolve(workspace.rootPath, filePath)
       if (fs.existsSync(tempFile)) {
         return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
       }
-      // index文件判断
-      let indexFile = path.resolve(workspace.rootPath, filePath) + path.sep + 'index.' + post
-      if(fs.existsSync(indexFile)) {
-        return Promise.resolve(new Location(Uri.file(indexFile), new Position(0, 0)))
+    } else {
+      // 添加后缀，判断文件是否存在
+      const postfix = ['vue', 'js', 'css', 'scss', 'less']
+      for (let i = 0; i < postfix.length; i++) {
+        const post = postfix[i]
+        let tempFile = path.resolve(workspace.rootPath, filePath) + '.' + post
+        if (fs.existsSync(tempFile)) {
+          return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
+        }
+        // index文件判断
+        let indexFile = path.resolve(workspace.rootPath, filePath) + path.sep + 'index.' + post
+        if(fs.existsSync(indexFile)) {
+          return Promise.resolve(new Location(Uri.file(indexFile), new Position(0, 0)))
+        }
       }
     }
 

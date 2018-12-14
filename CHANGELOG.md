@@ -1,3 +1,7 @@
+### release 1.4.4 notes
+1. optimize go to definition function
+2. optimize alias setting.
+
 ### release 1.4.3 notes
 1. support path ignore index
 ![](./examples/path-index.gif)
