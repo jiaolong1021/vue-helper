@@ -2,7 +2,7 @@
   "name": "vue-helper",
   "displayName": "vue-helper",
   "description": "extension for Element-UI, VUX, IVIEW2",
-  "version": "1.4.5",
+  "version": "1.5.0",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/jiaolong1021/vue-helper"
@@ -19,11 +19,23 @@
     "onLanguage:vue",
     "onCommand:vue-helper.functionCompletion",
     "onCommand:vue-helper.deleteComplete",
-    "onCommand:vue-helper.pxRem"
+    "onCommand:vue-helper.pxRem",
+    "onCommand:vue-helper.pxToRem",
+    "onCommand:vue-helper.remToPx"
   ],
   "main": "./out/src/extension",
   "icon": "logo.png",
   "contributes": {
+    "commands": [
+      {
+        "command": "vue-helper.pxToRem",
+        "title": "vue-helper.pxToRem"
+      },
+      {
+        "command": "vue-helper.remToPx",
+        "title": "vue-helper.remToPx"
+      }
+    ],
     "keybindings": [
       {
         "command": "vue-helper.functionCompletion",

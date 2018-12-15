@@ -1,3 +1,7 @@
+### release 1.5.0 notes
+exchange rem to px or exchange px to rem for all file through command
+![](./examples/rem-file.gif)
+
 ### release 1.4.5 notes
 rem px exchange
 ![](./examples/rem.gif)

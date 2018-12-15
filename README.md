@@ -2,6 +2,10 @@
 this plugin main extend for element-ui, vux, iview, after plan support nuxt
 ## detail function can see change log.
 
+### release 1.5.0 notes
+exchange rem to px or exchange px to rem for all file through command
+![](./examples/rem-file.gif)
+
 ### release 1.4.5 notes
 rem px exchange
 ![](./examples/rem.gif)
