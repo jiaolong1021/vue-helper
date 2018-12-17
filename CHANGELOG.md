@@ -1,3 +1,6 @@
+### release 1.5.1 notes
+fix bug jump to definition with postfix
+
 ### release 1.5.0 notes
 exchange rem to px or exchange px to rem for all file through command
 ![](./examples/rem-file.gif)

@@ -281,7 +281,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
     if (config || config.alias) {
       // 支持的前缀、后缀
       for (const key in config.alias) {
-        if (config.alias.hasOwnProperty(key) && filePath.indexOf(key + path.sep) === 0) {
+        if (config.alias.hasOwnProperty(key) && filePath.indexOf(key + '/') === 0) {
           filePath = filePath.replace(key, config.alias[key])
           break
         }
@@ -289,7 +289,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
     }
     
     // 文件存在后缀，则直接查找
-    if (/.*\..*$/gi.test(filePath)) {
+    if (/(.*\/.*|[^.]+)\..*$/gi.test(filePath)) {
       let tempFile = path.resolve(workspace.rootPath, filePath)
       if (fs.existsSync(tempFile)) {
         return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
