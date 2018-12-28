@@ -172,6 +172,145 @@ export class App {
     }
   }
 
+  // 选择html代码块
+  selectHtmlBlock(editor, lineText, startPosition) {
+    let tagReg = /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim
+    let tagCloseReg = /<\/[\w-]*>/gim
+    // 标签栈，用于匹配标签
+    let tagStack = []
+    let isBegin = false
+    let lineCount = editor.document.lineCount
+    // 标记位置
+    let lineCurrent = startPosition.line
+    let beginPosition = new Position(startPosition.line, startPosition.character + lineText.length - lineText.replace(/\s*(.*)/, '$1').length)
+    // 选择html代码块
+    while((!isBegin || tagStack.length > 0) && lineCurrent < lineCount) {
+      isBegin = true
+      // 1. 将标签放入栈
+      let tagArr = null
+      if (lineText.trim().endsWith('>')) {
+        tagArr = lineText.match(tagReg)
+      } else {
+        tagArr = lineText.match(tagReg)
+        let tagPos = 0
+        if (tagArr) {
+          for (let i = 0; i < tagArr.length; i++) {
+            const tag = tagArr[i];
+            tagPos = lineText.indexOf(tag, tagPos) + tag.length
+          }
+        }
+        let subLineText = lineText.substr(tagPos, lineText.length)
+        let subTagArr = subLineText.match(/<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*/gim)
+        if (subTagArr) {
+          tagStack = tagStack.concat(subTagArr)              
+        }
+      }
+      
+      if (tagArr) {
+        tagStack = tagStack.concat(tagArr)
+      }
+      // 2. 有关闭标签就用最后一个标签来匹配栈中最后标签，如果匹配就移除栈，不匹配也移除栈，继续匹配，直到栈为空退出
+      let tagCloseArr = lineText.match(tagCloseReg)
+      if (tagCloseArr) {
+        let closeTagPos = 0
+        for (let i = 0; i < tagCloseArr.length; i++) {
+          let isRemoveCloseTag = false
+          const tagCloseItem = tagCloseArr[i];
+          closeTagPos = lineText.indexOf(tagCloseItem ,closeTagPos) + tagCloseItem.length
+          if (tagStack.length > 0) {
+            let endTag = tagStack[tagStack.length - 1]
+            while(tagStack.length > 0 && !isRemoveCloseTag) {
+              if (endTag.replace(/<([\w-]+)(\s.*)?>?/gi, '$1') === tagCloseItem.replace(/<\/([\w-]+)>/gi, '$1')) {
+                isRemoveCloseTag = true
+              }
+              tagStack.pop()
+              endTag = tagStack[tagStack.length - 1]
+            }
+            // 匹配完成
+            if (tagStack.length === 0) {
+              // 同一行闭环
+              if (lineCurrent === beginPosition.line) {
+                closeTagPos += beginPosition.character
+              }
+              editor.selection = new Selection(beginPosition, new Position(lineCurrent, closeTagPos))
+              return
+            }
+          }
+        }
+      }
+      // 3. 取下一行数据
+      ++lineCurrent
+      if (lineCount >= lineCurrent) {
+        lineText = editor.document.lineAt(lineCurrent).text
+      }
+    }
+  }
+
+  // 选择函数块
+  selectJsBlock(editor, lineText, startPosition, type) {
+  	let lineCount = editor.document.lineCount
+    let lineCurrent = startPosition.line
+    let braceLeftCount = 0
+    let tagLeftReg = /{/gi
+    let tagRightReg = /}/gi
+    let tagRight = '}'
+    if (type === 'array') {
+      tagLeftReg = /\[/gi
+      tagRightReg = /\]/gi
+      tagRight = ']'
+    }
+    while(lineCurrent <= lineCount) {
+      let braceLeft = lineText.match(tagLeftReg) ? lineText.match(tagLeftReg).length : 0
+      let braceRight = lineText.match(tagRightReg) ? lineText.match(tagRightReg).length : 0
+      braceLeftCount += braceLeft - braceRight
+      if (braceLeftCount <= 0) {
+        let endPos = 0
+        for (let i = 0; i <= braceLeftCount + braceLeft; i++) {
+          endPos = lineText.indexOf(tagRight, endPos)
+        }
+        editor.selection = new Selection(startPosition, new Position(lineCurrent, ++endPos))
+        return
+      }
+
+      ++lineCurrent
+      if (lineCount >= lineCurrent) {
+        lineText = editor.document.lineAt(lineCurrent).text
+      }
+    }
+  }
+
+  // 块选择
+  blockSelect() {
+    let editor = window.activeTextEditor;
+    if(!editor) { return; }
+
+    let startPosition = editor.selection.start
+    let lineTextObj = editor.document.lineAt(startPosition.line)
+    let lineText = lineTextObj.text
+    if (lineText.length > 0 && startPosition.character === 0 && lineText[startPosition.character] === '[') {
+      this.selectJsBlock(editor, lineText, startPosition, 'array')
+    } else if (lineText.length > 0 && startPosition.character > 0 && lineText[startPosition.character - 1] === '[') {
+      this.selectJsBlock(editor, lineText, new Position(startPosition.line, startPosition.character - 1), 'array')
+    } else if (lineText.length > 0 && startPosition.character < lineText.length && lineText[startPosition.character] === '[') {
+      this.selectJsBlock(editor, lineText, startPosition, 'array')
+    } else if (lineText.length > 0 && startPosition.character === 0 && lineText[startPosition.character] === '{') {
+      this.selectJsBlock(editor, lineText, startPosition, 'json')
+    } else if (lineText.length > 0 && startPosition.character > 0 && lineText[startPosition.character - 1] === '{') {
+      this.selectJsBlock(editor, lineText, new Position(startPosition.line, startPosition.character - 1), 'json')
+    } else if (lineText.length > 0 && startPosition.character < lineText.length && lineText[startPosition.character] === '{') {
+      this.selectJsBlock(editor, lineText, startPosition, 'json')
+    } else if (lineText.trim().length > 0 && /(function|if|for|while)?.+\(.*\)\s*{/gi.test(lineText)) {
+      this.selectJsBlock(editor, lineText, startPosition, 'function')
+    } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<') {
+      lineText = lineText.substring(startPosition.character, lineText.length)
+      this.selectHtmlBlock(editor, lineText, startPosition)
+    } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<') {
+      lineText = lineText.substring(startPosition.character, lineText.length)
+      this.selectHtmlBlock(editor, lineText, startPosition)
+    }
+    return ;
+  }
+
   setConfig() {
     // https://github.com/Microsoft/vscode/issues/24464
     const config = workspace.getConfiguration('editor');

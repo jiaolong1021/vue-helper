@@ -29,8 +29,13 @@ export function activate(context: vscode.ExtensionContext) {
         app.deleteComplete()
     })
 
+    let blockSelectDisposable = vscode.commands.registerCommand('vue-helper.blockSelect', () => {
+        app.blockSelect()
+    })
+
     // px、rem转化函数
     let pxRemDisposable = vscode.commands.registerCommand('vue-helper.pxRem', () => {
+        console.log('prToRem');
         pxRem.handle()
     })
 
@@ -47,7 +52,7 @@ export function activate(context: vscode.ExtensionContext) {
     // 到达定义函数
     let vueHelperDefinition = vscode.languages.registerDefinitionProvider(['vue', 'html'], new vueHelperDefinitionProvider())
 
-    context.subscriptions.push(app, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition, pxRemDisposable, pxToRemDisposable, remToPxDisposable);
+    context.subscriptions.push(app, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition, pxRemDisposable, pxToRemDisposable, remToPxDisposable, blockSelectDisposable);
 }
 
 // this method is called when your extension is deactivated

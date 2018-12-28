@@ -2,8 +2,10 @@
 this plugin main extend for element-ui, vux, iview, after plan support nuxt
 ## detail function can see change log.
 
-### release 1.5.1 notes
-fix bug jump to definition with postfix
+### release 1.6.0 notes
+add select block fucntion. shortkey(**alt + x**) <br>
+now support function, html tag, if, for, while, json, array block select
+![](./examples/selectBlock.gif)
 
 ### release 1.5.0 notes
 exchange rem to px or exchange px to rem for all file 
@@ -11,7 +13,7 @@ through command
 ![](./examples/rem-file.gif)
 
 ### release 1.4.5 notes
-rem px exchange
+rem px exchange, shortkey (**alt + z**)
 ![](./examples/rem.gif)
 rem px exchange setting
 ![](./examples/rem-config.png)

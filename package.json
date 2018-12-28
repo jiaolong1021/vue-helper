@@ -2,7 +2,7 @@
   "name": "vue-helper",
   "displayName": "vue-helper",
   "description": "extension for Element-UI, VUX, IVIEW2",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/jiaolong1021/vue-helper"
@@ -19,6 +19,7 @@
     "onLanguage:vue",
     "onCommand:vue-helper.functionCompletion",
     "onCommand:vue-helper.deleteComplete",
+    "onCommand:vue-helper.blockSelect",
     "onCommand:vue-helper.pxRem",
     "onCommand:vue-helper.pxToRem",
     "onCommand:vue-helper.remToPx"
@@ -50,6 +51,11 @@
       {
         "key": "alt+z",
         "command": "vue-helper.pxRem",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "alt+x",
+        "command": "vue-helper.blockSelect",
         "when": "editorTextFocus"
       }
     ],
