@@ -291,6 +291,10 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
     // 文件存在后缀，则直接查找
     if (/(.*\/.*|[^.]+)\..*$/gi.test(filePath)) {
       let tempFile = path.resolve(workspace.rootPath, filePath)
+      // 相对路径处理
+      if (filePath.indexOf('./') === 0) {
+        tempFile = document.fileName.replace(/(.*)\/[^\/]*$/i, '$1') + path.sep + filePath.replace(/.\//i, '')
+      }
       if (fs.existsSync(tempFile)) {
         return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
       }
@@ -299,7 +303,12 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
       const postfix = ['vue', 'js', 'css', 'scss', 'less']
       for (let i = 0; i < postfix.length; i++) {
         const post = postfix[i]
-        let tempFile = path.resolve(workspace.rootPath, filePath) + '.' + post
+        // 相对路径处理
+        let tempFile = path.resolve(workspace.rootPath, filePath)
+        if (filePath.indexOf('./') === 0) {
+          tempFile = document.fileName.replace(/(.*)\/[^\/]*$/i, '$1') + path.sep + filePath.replace(/.\//i, '')
+        }
+        tempFile += '.' + post
         if (fs.existsSync(tempFile)) {
           return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
         }
