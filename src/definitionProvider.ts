@@ -275,24 +275,29 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
    */
   async definitionOutFile(document: TextDocument, file: any) {
     let filePath = file.path
+    let isRelative = false
+    if (filePath.indexOf('./') === 0) {
+      isRelative = true
+    }
 
     // 1. 根据文件目录查询是否存在相应文件
     let config = workspace.getConfiguration('vue-helper')
     if (config || config.alias) {
       // 支持的前缀、后缀
       for (const key in config.alias) {
-        if (config.alias.hasOwnProperty(key) && filePath.indexOf(key + '/') === 0) {
+        if (config.alias.hasOwnProperty(key) && filePath.indexOf(key) === 0) {
           filePath = filePath.replace(key, config.alias[key])
           break
         }
       }
     }
+    console.log(filePath)
     
     // 文件存在后缀，则直接查找
     if (/(.*\/.*|[^.]+)\..*$/gi.test(filePath)) {
       let tempFile = path.resolve(workspace.rootPath, filePath)
       // 相对路径处理
-      if (filePath.indexOf('./') === 0) {
+      if (isRelative) {
         tempFile = document.fileName.replace(/(.*)\/[^\/]*$/i, '$1') + path.sep + filePath.replace(/.\//i, '')
       }
       if (fs.existsSync(tempFile)) {
@@ -305,7 +310,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
         const post = postfix[i]
         // 相对路径处理
         let tempFile = path.resolve(workspace.rootPath, filePath)
-        if (filePath.indexOf('./') === 0) {
+        if (isRelative) {
           tempFile = document.fileName.replace(/(.*)\/[^\/]*$/i, '$1') + path.sep + filePath.replace(/.\//i, '')
         }
         tempFile += '.' + post
