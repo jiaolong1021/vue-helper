@@ -1,3 +1,6 @@
+### release 1.6.2 notes
+fixed relative path jump.
+
 ### release 1.6.1 notes
 fixed relative path jump.
 
