@@ -3,6 +3,7 @@ import { TextDocument, Position, CancellationToken, ProviderResult, DefinitionPr
 const path = require('path');
 const fs = require('fs')
 const paramCamse = require('param-case')
+const glob = require('glob')
 
 async function readDir(dir:string, selectText: string, frame: string) {
   return await new Promise((resolve, reject) => {
@@ -232,6 +233,15 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
           if (lineText.toLowerCase().includes(tag) && (lineText.trim().indexOf('import') === 0 || lineText.trim().indexOf('require') === 0)) {
             return this.definitionOutFile(document, this.getDefinitionPosition(lineText))
           }
+           // 全目录搜索看是否存在改文件
+          let files = glob.sync(workspace.rootPath + '/!(node_modules)/**/*.vue')
+          for (let i = 0; i < files.length; i++) {
+            const vueFile = files[i];
+            let vueChangeFile = vueFile.replace(/-/gi, '').toLowerCase().replace(/\.vue$/, '')
+            if (vueChangeFile.endsWith('/' + tag)) {
+              return Promise.resolve(new Location(Uri.file(vueFile), new Position(0, 0)))
+            }
+          }
         }
       } else {
         // data属性匹配, data具有return，单独处理
@@ -261,6 +271,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
         }
       }
     }
+   
     return Promise.resolve(null);
   }
   
@@ -291,7 +302,6 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
         }
       }
     }
-    console.log(filePath)
     
     // 文件存在后缀，则直接查找
     if (/(.*\/.*|[^.]+)\..*$/gi.test(filePath)) {

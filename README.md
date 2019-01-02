@@ -2,8 +2,8 @@
 this plugin main extend for element-ui, vux, iview, after plan support nuxt
 ## detail function can see change log.
 
-### release 1.6.2 notes
-fixed relative path jump.
+### release 1.6.3 notes
+support global vue component jump
 
 ### release 1.6.0 notes
 add select block fucntion. shortkey(**alt + x**) <br>

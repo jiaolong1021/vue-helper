@@ -1,3 +1,6 @@
+### release 1.6.3 notes
+support global vue component jump
+
 ### release 1.6.2 notes
 fixed relative path jump.
 
