@@ -74,7 +74,7 @@ async function getPlugin(plugin: any) {
       if (ret) {
         resolve(ret)
       } else {
-         reject(null)
+        reject(null)
       }
     })
   })
@@ -197,6 +197,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
     if (textMeta === '<') {
       searchType = 'components'
     }
+    let isGlobalSearch = false
     while(pos < document.lineCount && !/^\s*<\/script>\s*$/g.test(lineText)) {
       lineText = document.lineAt(++pos).text
       // 从script标签开始查找
@@ -233,14 +234,17 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
           if (lineText.toLowerCase().includes(tag) && (lineText.trim().indexOf('import') === 0 || lineText.trim().indexOf('require') === 0)) {
             return this.definitionOutFile(document, this.getDefinitionPosition(lineText))
           }
-           // 全目录搜索看是否存在改文件
-          let files = glob.sync(workspace.rootPath + '/!(node_modules)/**/*.vue')
-          for (let i = 0; i < files.length; i++) {
-            const vueFile = files[i];
-            let vueChangeFile = vueFile.replace(/-/gi, '').toLowerCase().replace(/\.vue$/, '')
-            if (vueChangeFile.endsWith('/' + tag)) {
-              return Promise.resolve(new Location(Uri.file(vueFile), new Position(0, 0)))
-            }
+          if (!isGlobalSearch) {
+            isGlobalSearch = true
+            // 全目录搜索看是否存在改文件
+           let files = glob.sync(workspace.rootPath + '/!(node_modules)/**/*.vue')
+           for (let i = 0; i < files.length; i++) {
+             const vueFile = files[i];
+             let vueChangeFile = vueFile.replace(/-/gi, '').toLowerCase().replace(/\.vue$/, '')
+             if (vueChangeFile.endsWith('/' + tag)) {
+               return Promise.resolve(new Location(Uri.file(vueFile), new Position(0, 0)))
+             }
+           }
           }
         }
       } else {

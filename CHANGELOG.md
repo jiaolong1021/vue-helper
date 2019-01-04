@@ -1,3 +1,6 @@
+### release 1.6.4 notes
+optimize select function
+
 ### release 1.6.3 notes
 support global vue component jump
 

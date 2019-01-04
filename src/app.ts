@@ -251,24 +251,42 @@ export class App {
   	let lineCount = editor.document.lineCount
     let lineCurrent = startPosition.line
     let braceLeftCount = 0
-    let tagLeftReg = /{/gi
-    let tagRightReg = /}/gi
+    let tagLeft = '{'
     let tagRight = '}'
     if (type === 'array') {
-      tagLeftReg = /\[/gi
-      tagRightReg = /\]/gi
+      tagLeft = '['
       tagRight = ']'
     }
     while(lineCurrent <= lineCount) {
-      let braceLeft = lineText.match(tagLeftReg) ? lineText.match(tagLeftReg).length : 0
-      let braceRight = lineText.match(tagRightReg) ? lineText.match(tagRightReg).length : 0
-      braceLeftCount += braceLeft - braceRight
-      if (braceLeftCount <= 0) {
-        let endPos = 0
-        for (let i = 0; i <= braceLeftCount + braceLeft; i++) {
-          endPos = lineText.indexOf(tagRight, endPos)
+      let pos: number = 0
+      while((lineText.indexOf(tagLeft, pos) !== -1 || lineText.indexOf(tagRight, pos) !== -1) && pos < lineText.length) {
+        let i = -1
+        if (lineText.indexOf(tagLeft, pos) !== -1) {
+          i = lineText.indexOf(tagLeft, pos)
         }
-        editor.selection = new Selection(startPosition, new Position(lineCurrent, ++endPos))
+        if (lineText.indexOf(tagRight, pos) !== -1) {
+          if (i === -1 || i > lineText.indexOf(tagRight, pos)) {
+            // 左标签不存在、左右标签都存在，右标签在前
+            --braceLeftCount
+            pos = lineText.indexOf(tagRight, pos) + 1
+          } else {
+            ++braceLeftCount
+            pos = i + 1
+          }
+        } else {
+          // 存在左标签
+          if (i !== -1) {
+            ++braceLeftCount
+            pos = i + 1
+          }
+        }
+        if (braceLeftCount === 0) {
+          break
+        }
+      }
+
+      if (braceLeftCount === 0) {
+        editor.selection = new Selection(startPosition, new Position(lineCurrent, pos))
         return
       }
 
@@ -277,6 +295,7 @@ export class App {
         lineText = editor.document.lineAt(lineCurrent).text
       }
     }
+    return
   }
 
   // 块选择
@@ -288,17 +307,17 @@ export class App {
     let lineTextObj = editor.document.lineAt(startPosition.line)
     let lineText = lineTextObj.text
     if (lineText.length > 0 && startPosition.character === 0 && lineText[startPosition.character] === '[') {
-      this.selectJsBlock(editor, lineText, startPosition, 'array')
+      this.selectJsBlock(editor, lineText.substring(startPosition.character, lineText.length), startPosition, 'array')
     } else if (lineText.length > 0 && startPosition.character > 0 && lineText[startPosition.character - 1] === '[') {
-      this.selectJsBlock(editor, lineText, new Position(startPosition.line, startPosition.character - 1), 'array')
+      this.selectJsBlock(editor, lineText.substring(startPosition.character - 1, lineText.length), new Position(startPosition.line, startPosition.character - 1), 'array')
     } else if (lineText.length > 0 && startPosition.character < lineText.length && lineText[startPosition.character] === '[') {
-      this.selectJsBlock(editor, lineText, startPosition, 'array')
+      this.selectJsBlock(editor, lineText.substring(startPosition.character, lineText.length), startPosition, 'array')
     } else if (lineText.length > 0 && startPosition.character === 0 && lineText[startPosition.character] === '{') {
-      this.selectJsBlock(editor, lineText, startPosition, 'json')
+      this.selectJsBlock(editor, lineText.substring(startPosition.character, lineText.length), startPosition, 'json')
     } else if (lineText.length > 0 && startPosition.character > 0 && lineText[startPosition.character - 1] === '{') {
-      this.selectJsBlock(editor, lineText, new Position(startPosition.line, startPosition.character - 1), 'json')
+      this.selectJsBlock(editor, lineText.substring(startPosition.character - 1, lineText.length), new Position(startPosition.line, startPosition.character - 1), 'json')
     } else if (lineText.length > 0 && startPosition.character < lineText.length && lineText[startPosition.character] === '{') {
-      this.selectJsBlock(editor, lineText, startPosition, 'json')
+      this.selectJsBlock(editor, lineText.substring(startPosition.character, lineText.length), startPosition, 'json')
     } else if (lineText.trim().length > 0 && /(function|if|for|while)?.+\(.*\)\s*{/gi.test(lineText)) {
       this.selectJsBlock(editor, lineText, startPosition, 'function')
     } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<') {
