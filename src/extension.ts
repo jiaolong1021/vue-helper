@@ -29,13 +29,13 @@ export function activate(context: vscode.ExtensionContext) {
         app.deleteComplete()
     })
 
+    // 代码块选择
     let blockSelectDisposable = vscode.commands.registerCommand('vue-helper.blockSelect', () => {
         app.blockSelect()
     })
 
     // px、rem转化函数
     let pxRemDisposable = vscode.commands.registerCommand('vue-helper.pxRem', () => {
-        console.log('prToRem');
         pxRem.handle()
     })
 

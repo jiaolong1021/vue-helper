@@ -1,3 +1,7 @@
+### release 1.6.5 notes
+support select variable for obj and array.  shortkey(**alt + x**)
+![](./examples/variable-block.gif)
+
 ### release 1.6.4 notes
 optimize select function
 

@@ -175,6 +175,7 @@ export class App {
   // 选择html代码块
   selectHtmlBlock(editor, lineText, startPosition) {
     let tagReg = /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim
+    let tagRegNoClose = /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*/gim
     let tagCloseReg = /<\/[\w-]*>/gim
     // 标签栈，用于匹配标签
     let tagStack = []
@@ -191,7 +192,7 @@ export class App {
       if (lineText.trim().endsWith('>')) {
         tagArr = lineText.match(tagReg)
       } else {
-        tagArr = lineText.match(tagReg)
+        tagArr = lineText.match(tagRegNoClose)
         let tagPos = 0
         if (tagArr) {
           for (let i = 0; i < tagArr.length; i++) {
@@ -200,12 +201,11 @@ export class App {
           }
         }
         let subLineText = lineText.substr(tagPos, lineText.length)
-        let subTagArr = subLineText.match(/<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*/gim)
+        let subTagArr = subLineText.match(tagRegNoClose)
         if (subTagArr) {
           tagStack = tagStack.concat(subTagArr)              
         }
       }
-      
       if (tagArr) {
         tagStack = tagStack.concat(tagArr)
       }
@@ -318,14 +318,17 @@ export class App {
       this.selectJsBlock(editor, lineText.substring(startPosition.character - 1, lineText.length), new Position(startPosition.line, startPosition.character - 1), 'json')
     } else if (lineText.length > 0 && startPosition.character < lineText.length && lineText[startPosition.character] === '{') {
       this.selectJsBlock(editor, lineText.substring(startPosition.character, lineText.length), startPosition, 'json')
-    } else if (lineText.trim().length > 0 && /(function|if|for|while)?.+\(.*\)\s*{/gi.test(lineText)) {
-      this.selectJsBlock(editor, lineText, startPosition, 'function')
+    } else if ((lineText.trim().length > 0 && /(function|if|for|while)?.+\(.*\)\s*{/gi.test(lineText) )
+      || /(.*\(.*\)\s*{\s*)|(.*:\s*{\s*)/gi.test(lineText)) {
+      this.selectJsBlock(editor, lineText, new Position(startPosition.line, lineText.length - lineText.replace(/\s*/, '').length), 'function')
     } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<') {
       lineText = lineText.substring(startPosition.character, lineText.length)
       this.selectHtmlBlock(editor, lineText, startPosition)
     } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<') {
       lineText = lineText.substring(startPosition.character, lineText.length)
       this.selectHtmlBlock(editor, lineText, startPosition)
+    } else if (/.*:\s*\[\s*/gi.test(lineText)) {
+      this.selectJsBlock(editor, lineText, new Position(startPosition.line, lineText.length - lineText.replace(/\s*/, '').length), 'array')
     }
     return ;
   }
