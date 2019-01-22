@@ -319,7 +319,7 @@ export class App {
     } else if (lineText.length > 0 && startPosition.character < lineText.length && lineText[startPosition.character] === '{') {
       this.selectJsBlock(editor, lineText.substring(startPosition.character, lineText.length), startPosition, 'json')
     } else if ((lineText.trim().length > 0 && /(function|if|for|while)?.+\(.*\)\s*{/gi.test(lineText) )
-      || /(.*\(.*\)\s*{\s*)|(.*:\s*{\s*)/gi.test(lineText)) {
+      || /(.*\(.*\)\s*{\s*)|(.*\s*{\s*)/gi.test(lineText)) {
       this.selectJsBlock(editor, lineText, new Position(startPosition.line, lineText.length - lineText.replace(/\s*/, '').length), 'function')
     } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<') {
       lineText = lineText.substring(startPosition.character, lineText.length)

@@ -1,8 +1,8 @@
 {
   "name": "vue-helper",
   "displayName": "vue-helper",
-  "description": "extension for Element-UI, VUX, IVIEW2",
-  "version": "1.6.5",
+  "description": "enhance ability for write vue and extension for Element-UI, VUX, IVIEW",
+  "version": "1.6.6",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/jiaolong1021/vue-helper"

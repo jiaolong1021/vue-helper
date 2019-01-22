@@ -1,10 +1,9 @@
 # vue-helper
-this plugin main extend for element-ui, vux, iview, after plan support nuxt
+this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
-### release 1.6.5 notes
-support select variable for obj and array.  shortkey(**alt + x**)
-![](./examples/variable-block.gif)
+### release 1.6.6 notes
+enhance select block ability for css select.
 
 ### release 1.6.0 notes
 add select block fucntion. shortkey(**alt + x**) <br>
