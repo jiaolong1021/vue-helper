@@ -2,8 +2,8 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
-### release 1.6.6 notes
-enhance select block ability for css select.
+### release 1.6.7 notes
+optimize jump definition function
 
 ### release 1.6.0 notes
 add select block fucntion. shortkey(**alt + x**) <br>

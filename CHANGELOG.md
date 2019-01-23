@@ -1,3 +1,7 @@
+
+### release 1.6.7 notes
+optimize jump definition function
+
 ### release 1.6.6 notes
 enhance select block ability for css select.
 
