@@ -1,4 +1,7 @@
 
+### release 1.6.8 notes
+optimize jump definition function
+
 ### release 1.6.7 notes
 optimize jump definition function
 

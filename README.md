@@ -2,7 +2,7 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
-### release 1.6.7 notes
+### release 1.6.8 notes
 optimize jump definition function
 
 ### release 1.6.0 notes
