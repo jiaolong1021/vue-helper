@@ -74,7 +74,7 @@ async function getPlugin(plugin: any) {
       if (ret) {
         resolve(ret)
       } else {
-        reject(null)
+        resolve('')
       }
     })
   })
@@ -100,10 +100,9 @@ async function getMain(rootPath:string) {
 
  /**
 * 在node_modules目录下去查找
-* @param line 
 * @param selectText 
 */
-async function definitionPlugin(line: TextLine, selectText: string) {
+async function definitionPlugin(selectText: string) {
  // 获取框架
  let frame: any = await getPlugin(['iview', 'element-ui'])
  if (frame === 'iview') {
@@ -219,7 +218,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
          */
         // attr存在，说明已遍历过import内容
         if (attr) {
-          let retPath: any = await definitionPlugin(line, selectText)
+          let retPath: any = await definitionPlugin(selectText)
           if (retPath) {
             return Promise.resolve(new Location(Uri.file(retPath), new Position(0, 0)))
           }

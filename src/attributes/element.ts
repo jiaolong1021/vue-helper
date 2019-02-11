@@ -229,6 +229,7 @@ export default {
   "el-autocomplete/debounce": {"version": ">=2.0.0", "description": "debounce delay when typing, in milliseconds, default: 300"},
   "el-rate/max": {"description": "max rating score, default: 5"},
   "el-badge/max": {"description": "maximum value, shows '{max}+' when exceeded. Only works if 'value' is a Number"},
+  "el-badge/type": {"description": "type", options: ["primary", "success", "warning", "danger", "info"]},
   "el-checkbox-group/max": {"description": "maximum number of checkbox checked"},
   "el-input-number/max": {"description": "the maximum allowed value"},
   "el-slider/height": {"description": "Slider height, required in vertical mode"},

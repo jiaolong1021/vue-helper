@@ -1,4 +1,7 @@
 
+### release 1.6.9 notes
+add snippets for element-ui
+
 ### release 1.6.8 notes
 optimize jump definition function
 

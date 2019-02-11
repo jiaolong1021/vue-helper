@@ -1,77 +1,132 @@
 {
-  "message": {
-    "prefix": "el-msg",
-    "body": [
-      "this.\\$message({",
-      "\tmessage: '${1:text}',",
-      "\ttype: '${2:info}'",
-      "});"
-    ],
-    "description": "消息提示"
-  },
-  "msgbox-alert": {
+  "el-alert": {
     "prefix": "el-alert",
     "body": [
-      "this.\\$alert('${1:content}', '${2:title}', {",
-      "\tconfirmButtonText: '${3:confirm}',",
-      "\tcallback: ${4:action} => {",
+      "this.\\$alert('这是一段内容', '标题名称', {",
+      "\tconfirmButtonText: '确定',",
+      "\tcallback: action => {",
       "\t\t",
       "\t}",
-      "});"
-    ],
-    "description": "alert"
+      "})"
+    ]
   },
-  "msgbox-confirm": {
-    "prefix": "el-confirm",
+  "el-confirm": {
+    "prefix": "el-conform",
     "body": [
-      "this.\\$confirm('${1:content}', '${2:title}', {",
-      "\tconfirmButtonText: '${3:confirm}',",
-      "\tcancelButtonText: '${4:cancel}',",
-      "\ttype: '${5:warning}'",
+      "this.\\$confirm('此操作将永久删除该文件, 是否继续?', '提示', {",
+      "\tconfirmButtonText: '确定',",
+      "\tcancelButtonText: '取消',",
+      "\ttype: 'warning'",
       "}).then(() => {",
-      "\t",
-      "}).catch(() => {});"
-    ],
-    "description": "confirm"
+      "\tthis.\\$message({",
+      "\t\ttype: 'success',",
+      "\t\tmessage: '删除成功!'",
+      "\t})",
+      "}).catch(() => {",
+      "\tthis.\\$message({",
+      "\t\ttype: 'info',",
+      "\t\tmessage: '已取消删除'",
+      "\t})",
+      "})"
+    ]
   },
-  "msgbox-prompt": {
-    "prefix": "el-prompt",
+  "el-form:clear": {
+    "prefix": "el-form:clear",
+    "body": "this.\\$refs['${1:form}'].clearValidate()"
+  },
+  "el-form:valid": {
+    "prefix": "el-form:valid",
     "body": [
-      "this.\\$prompt('${1:content}', '${2:title}', {",
-      "\tconfirmButtonText: '${3:confirm}',",
-      "\tcancelButtonText: '${4:cancel}',",
-      "\tinputPattern: /${5:regExp}/,",
-      "\tinputErrorMessage: '${6:errormsg}'",
-      "}).then(({ value }) => {",
-      "\t",
-      "}).catch(() => {});"
-    ],
-    "description": "prompt"
+      "this.\\$refs['${1:formName}'].validate((valid) => {",
+      "\tif (valid) {",
+      "\t\t$2",
+      "\t} else {",
+      "\t\treturn false",
+      "\t}",
+      "})"
+    ]
   },
-  "msgbox": {
-    "prefix": "el-msgb",
+  "el-message": {
+    "prefix": "el-message",
     "body": [
-      "this.\\$msgbox({",
-      "\ttitle: '${1:title}',",
-      "\tmessage: '${2:string|VNode}',",
-      "\tshowCancelButton: ${3:true},",
-      "\tconfirmButtonText: '${4:confirm}',",
-      "\tcancelButtonText: '${5:cancel}',",
-      "\tbeforeClose: (action, instance, done) => {}",
-      "}).then(action => {",
-      "\t",
-      "});"
-    ],
-    "description": "message box"
+      "this.\\$message({",
+      "\tmessage: '恭喜你，这是一条成功消息',",
+      "\ttype: 'success'",
+      "})"
+    ]
   },
-  "notification": {
+  "el-message:close": {
+    "prefix": "el-message:close",
+    "body": [
+      "this.\\$message({",
+      "\tmessage: '恭喜你，这是一条成功消息',",
+      "\tshowClose: true,",
+      "\ttype: 'success'",
+      "})"
+    ]
+  },
+  "el-notify": {
     "prefix": "el-notify",
     "body": [
       "this.\\$notify({",
-      "\ttitle: '${1:title}',",
-      "\tmessage: '${2:string|VNode}'",
+      "\ttitle: '标题名称',",
+      "\tmessage: h('i', {style: 'color: teal'}, 'notify')",
+      "})"
+    ]
+  },
+  "el-notify:noclose": {
+    "prefix": "el-notify:noclose",
+    "body": [
+      "this.\\$notify({",
+      "\ttitle: '提示',",
+      "\tmessage: '不会自动关闭的消息',",
+      "\tduration: 0",
+      "})"
+    ]
+  },
+  "el-notify:success": {
+    "prefix": "el-notify:success",
+    "body": [
+      "this.\\$notify({",
+      "\ttitle: '成功',",
+      "\tmessage: '这是一条成功的提示消息',",
+      "\ttype: 'success'",
+      "})"
+    ]
+  },
+  "el-prompt": {
+    "prefix": "el-prompt",
+    "body": [
+      "this.\\$prompt('请输入邮箱', '提示', {",
+      "\tconfirmButtonText: '确定',",
+      "\tcancelButtonText: '取消',",
+      "\tinputPattern: '',",
+      "\tinputErrorMessage: ''",
+      "}).then(({ value }) => {",
+      "\t",
+      "}).catch(() => {",
+      "\t",
       "});"
-    ],
-    "description": "notify"
+    ]
+  },
+  "el-rules:array": {
+    "prefix": "el-rules:array",
+    "body": "{ type: 'array', required: true, message: '请至少选择一个', trigger: 'change' }"
+  },
+  "el-rules:date": {
+    "prefix": "el-rules:date",
+    "body": "{ type: 'date', required: true, message: '请选择日期', trigger: 'change' }"
+  },
+  "el-rules:minMax": {
+    "prefix": "el-rules:minMax",
+    "body": "{require: true, min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }"
+  },
+  "el-rules:required": {
+    "prefix": "el-rules:required",
+    "body": "{required: true, message:'请输入', trigger: 'blur'}"
+  },
+  "el-rules:self": {
+    "prefix": "el-rules:self",
+    "body": "{ validator: validatePass, trigger: 'blur' }"
   }
 }

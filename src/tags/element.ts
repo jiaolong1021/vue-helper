@@ -192,7 +192,7 @@ export default {
     "framework": "element-ui"
   },
   "el-badge": {
-    "attributes": ["value", "max", "is-dot", "hidden"],
+    "attributes": ["value", "max", "is-dot", "hidden", "type"],
     "defaults": ["value"],
     "description": "A number or status mark on buttons and icons.",
     "framework": "element-ui"
