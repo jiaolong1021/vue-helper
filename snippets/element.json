@@ -128,5 +128,38 @@
   "el-rules:self": {
     "prefix": "el-rules:self",
     "body": "{ validator: validatePass, trigger: 'blur' }"
+  },
+  "el-rules:selfmethod": {
+    "prefix": "el-rules:selfmethod",
+    "body": [
+      "var validatePass = (rule, value, callback) => {",
+      "\tif (value === '') {",
+      "\t\tcallback(new Error(''));",
+      "\t} else {",
+      "\t\tcallback();",
+      "\t}",
+      "}"
+    ]
+  },
+  "el-pagination": {
+    "prefix": "el-pagination",
+    "body": [
+      "handleCurrentChange (pageNum) {",
+      "\tthis.pageNum = pageNum",
+      "\tthis.fetchList()",
+      "},",
+      "handleSizeChange(pageSize) {",
+      "\tthis.pageSize = pageSize",
+      "\tthis.fetchList()",
+      "}"
+    ]
+  },
+  "reg-phone": {
+    "prefix": "reg-phone",
+    "body": "/^[1][3,4,5,7,8][0-9]{9}$/"
+  },
+  "reg-email": {
+    "prefix": "reg-email",
+    "body": "/^[A-Za-z\\d]+([-_.][A-Za-z\\d]+)*@([A-Za-z\\d]+[-.])+[A-Za-z\\d]{2,4}$/"
   }
 }

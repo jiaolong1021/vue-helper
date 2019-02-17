@@ -1,4 +1,7 @@
 
+### release 1.6.10 notes
+add snippet for pagination and regExp for phone and email [prefix with reg-]
+
 ### release 1.6.9 notes
 add snippets for element-ui
 

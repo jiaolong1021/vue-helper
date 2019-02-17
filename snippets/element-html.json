@@ -311,11 +311,11 @@
       "<el-pagination",
       "\t@size-change=\"handleSizeChange\"",
       "\t@current-change=\"handleCurrentChange\"",
-      "\t:current-page=\"currentPage4\"",
-      "\t:page-sizes=\"[100, 200, 300, 400]\"",
-      "\t:page-size=\"100\"",
+      "\t:current-page=\"pageNum\"",
+      "\t:page-sizes=\"[10, 20, 50]\"",
+      "\t:page-size=\"pageSize\"",
       "\tlayout=\"total, sizes, prev, pager, next, jumper\"",
-      "\t:total=\"400\">",
+      "\t:total=\"totalCount\">",
       "</el-pagination>"
     ]
   },
