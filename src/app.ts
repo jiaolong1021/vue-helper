@@ -88,7 +88,7 @@ export class App {
   }
 
   // backspace删除处理
-  deleteComplete() {
+  async deleteComplete() {
     let editor = window.activeTextEditor;
     if(!editor) { return; }
     // 多选择点删除处理
@@ -108,7 +108,7 @@ export class App {
           selectionList.push(selection)
         }
       }
-      editor.edit((editBuilder) => {
+      await editor.edit((editBuilder) => {
         for (let i = 0; i < selectionList.length; i++) {
           editBuilder.delete(selectionList[i]) 
         }
@@ -120,7 +120,7 @@ export class App {
       // 首行
       if(editor.selection.anchor.line === 0) {
         if(editor.selection.anchor.character > 0) {
-          editor.edit((editBuilder) => {
+          await editor.edit((editBuilder) => {
             editBuilder.delete(new Selection(new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1), editor.selection.anchor))
           })
         }
@@ -134,39 +134,41 @@ export class App {
             line -= 1
             preText = editor.document.lineAt(line).text
           }
-          editor.edit((editBuilder) => {
+          await editor.edit((editBuilder) => {
             editBuilder.delete(new Selection(new Position(line, preText.length), editor.selection.anchor))
           })
         } else {
           let startPosition
           let endPosition: Position = editor.selection.anchor
-          let preLineText = editor.document.getText(new Range(new Position(editor.selection.anchor.line, 0), editor.selection.anchor))
-          if(editor.selection.anchor.character === 0 || preLineText.trim() === '') {
-            startPosition = new Position(editor.selection.anchor.line - 1, editor.document.lineAt(editor.selection.anchor.line - 1).text.length)
+          let preLineText = editor.document.getText(new Range(new Position(endPosition.line, 0), endPosition))
+          if(endPosition.character === 0 || preLineText.trim() === '') {
+            startPosition = new Position(endPosition.line - 1, editor.document.lineAt(endPosition.line - 1).text.length)
           } else {
-            startPosition = new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1)
+            startPosition = new Position(endPosition.line, endPosition.character - 1)
             // 对{}, (), [], '', "", <>进行成对删除处理
-            let txt = editor.document.getText(new Range(new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1), editor.selection.anchor))
-            if(editor.document.lineAt(editor.selection.anchor.line).text.length > editor.selection.anchor.character) {
-              let nextTxt = editor.document.getText(new Range(editor.selection.anchor, new Position(editor.selection.anchor.line, editor.selection.anchor.character + 1)))
+            let txt = editor.document.getText(new Range(new Position(endPosition.line, endPosition.character - 1), endPosition))
+            if(editor.document.lineAt(endPosition.line).text.length > endPosition.character) {
+              let nextTxt = editor.document.getText(new Range(endPosition, new Position(endPosition.line, endPosition.character + 1)))
               if((txt === '{' && nextTxt === '}') 
               || (txt === '(' && nextTxt === ')') 
               || (txt === '\'' && nextTxt === '\'') 
               || (txt === '"' && nextTxt === '"') 
               || (txt === '[' && nextTxt === ']') 
               || (txt === '<' && nextTxt === '>')) {
-                endPosition = new Position(editor.selection.anchor.line, editor.selection.anchor.character + 1)
+                endPosition = new Position(endPosition.line, endPosition.character + 1)
               }
             }
           }
-          editor.edit((editBuilder) => {
+          // console.log('deleteLeft');
+          // return commands.executeCommand('deleteLeft')
+          await editor.edit((editBuilder) => {
             editBuilder.delete(new Selection(startPosition, endPosition))
           })
         }
       }
     } else {
       // 选择块
-      editor.edit((editBuilder) => {
+      await editor.edit((editBuilder) => {
         editBuilder.delete(window.activeTextEditor.selection)
       })
     }
@@ -588,14 +590,23 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     let index = 0;
     let that = this;
     function build(tag, { subtags, defaults }, snippets) {
+      // 属性
       let attrs = '';
       defaults && defaults.forEach((item, i) => {
-        attrs += ` ${item}=${that.quotes}$${index + i + 1}${that.quotes}`;
+        index++
+        attrs += ` ${item}=${that.quotes}$${index}${that.quotes}`;
       });
+      // 开始标签
       snippets.push(`${index > 0 ? '<' : ''}${tag}${attrs}>`);
       index++;
-      subtags && subtags.forEach(item => build(item, TAGS[item], snippets));
-      snippets.push(`</${tag}>`);
+      // 子标签
+      if (subtags) {
+        subtags.forEach(item => build(item, TAGS[item], snippets));
+        snippets.push(`</${tag}>`);
+      } else {
+        // 关闭标签
+        snippets.push(`$${index}</${tag}>`);
+      }
     };
     build(tag, tagVal, snippets);
 

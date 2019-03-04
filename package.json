@@ -1,8 +1,8 @@
 {
   "name": "vue-helper",
   "displayName": "vue-helper",
-  "description": "enhance ability for write vue and extension for Element-UI, VUX, IVIEW",
-  "version": "1.6.10",
+  "description": "vue enhance，extension for Element-UI, VUX, IVIEW",
+  "version": "1.6.11",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/jiaolong1021/vue-helper"
@@ -46,7 +46,7 @@
       {
         "key": "backspace",
         "command": "vue-helper.deleteComplete",
-        "when": "editorTextFocus"
+        "when": "textInputFocus && !editorReadonly"
       },
       {
         "key": "alt+z",

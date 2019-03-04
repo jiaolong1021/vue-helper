@@ -49,7 +49,9 @@ export default {
 | icon | 图标类名 | string | — | — |
 | autofocus | 是否默认聚焦 | boolean | — | false |
 | native-type | 原生 type 属性 | string | button / submit / reset | button |
-`,
+| 事件名称 | 说明 | 回调参数 |
+| :--- | :--- | :--- |
+| click | 点击时触发事件 | event |`,
 "el-radio": `[element：http://element-cn.eleme.io/#/zh-CN/component/radio](http://element-cn.eleme.io/#/zh-CN/component/radio) \n
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 | :--- | :--- | :--- | :--- | :--- |
