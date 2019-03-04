@@ -593,11 +593,11 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
       // 属性
       let attrs = '';
       defaults && defaults.forEach((item, i) => {
-        index++
-        attrs += ` ${item}=${that.quotes}$${index}${that.quotes}`;
+        attrs += ` ${item}=${that.quotes}$${index + i + 1}${that.quotes}`;
       });
       // 开始标签
       snippets.push(`${index > 0 ? '<' : ''}${tag}${attrs}>`);
+      defaults && (index += defaults.length)
       index++;
       // 子标签
       if (subtags) {

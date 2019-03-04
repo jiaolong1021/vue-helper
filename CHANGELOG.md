@@ -1,4 +1,7 @@
 
+### release 1.6.12 notes
+optimize write snippet
+
 ### release 1.6.11 notes
 optimize write snippet
 
