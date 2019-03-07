@@ -2,8 +2,10 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
-### release 1.6.12 notes
-optimize write snippet
+### release 1.7.0 notes
+1. optimize choice for code block
+2. add vue html attr select function. shortkey(**alt + x**)
+![](./examples/choice-attr.gif)
 
 ### release 1.6.9 notes
 add snippets for element-ui [prefix with el-]

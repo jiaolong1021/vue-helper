@@ -1,4 +1,9 @@
 
+### release 1.7.0 notes
+1. optimize choice for code block
+2. add vue html attr select function. shortkey(**alt + x**)
+![](./examples/choice-attr.gif)
+
 ### release 1.6.12 notes
 optimize write snippet
 

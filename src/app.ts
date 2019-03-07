@@ -3,7 +3,7 @@ import {
   Event, Uri, CancellationToken, TextDocumentContentProvider,
   EventEmitter, workspace, CompletionItemProvider, ProviderResult,
   TextDocument, Position, CompletionItem, CompletionList, CompletionItemKind,
-  SnippetString, Range, HoverProvider, Hover, Selection, TextLine
+  SnippetString, Range, HoverProvider, Hover, Selection, TextLine, TextEditor
 } from 'vscode';
 import Resource from './resource';
 import TAGS from './vue-tags'
@@ -159,7 +159,6 @@ export class App {
               }
             }
           }
-          // console.log('deleteLeft');
           // return commands.executeCommand('deleteLeft')
           await editor.edit((editBuilder) => {
             editBuilder.delete(new Selection(startPosition, endPosition))
@@ -176,9 +175,9 @@ export class App {
 
   // 选择html代码块
   selectHtmlBlock(editor, lineText, startPosition) {
-    let tagReg = /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim
+    let tagReg = /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*(\/)?>/gim
     let tagRegNoClose = /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*/gim
-    let tagCloseReg = /<\/[\w-]*>/gim
+    let tagCloseReg = /(<\/[\w-]*>)|(\/>)/gim
     // 标签栈，用于匹配标签
     let tagStack = []
     let isBegin = false
@@ -211,6 +210,7 @@ export class App {
       if (tagArr) {
         tagStack = tagStack.concat(tagArr)
       }
+
       // 2. 有关闭标签就用最后一个标签来匹配栈中最后标签，如果匹配就移除栈，不匹配也移除栈，继续匹配，直到栈为空退出
       let tagCloseArr = lineText.match(tagCloseReg)
       if (tagCloseArr) {
@@ -222,7 +222,8 @@ export class App {
           if (tagStack.length > 0) {
             let endTag = tagStack[tagStack.length - 1]
             while(tagStack.length > 0 && !isRemoveCloseTag) {
-              if (endTag.replace(/<([\w-]+)(\s.*)?>?/gi, '$1') === tagCloseItem.replace(/<\/([\w-]+)>/gi, '$1')) {
+              let endTagName = endTag.replace(/<([\w-]+)(\s.*)?>?/gi, '$1')
+              if (endTagName === tagCloseItem.replace(/<\/([\w-]+)>/gi, '$1') || tagCloseItem.endsWith('/>')) {
                 isRemoveCloseTag = true
               }
               tagStack.pop()
@@ -263,9 +264,11 @@ export class App {
       let pos: number = 0
       while((lineText.indexOf(tagLeft, pos) !== -1 || lineText.indexOf(tagRight, pos) !== -1) && pos < lineText.length) {
         let i = -1
+        // 左标签
         if (lineText.indexOf(tagLeft, pos) !== -1) {
           i = lineText.indexOf(tagLeft, pos)
         }
+        // 右标签
         if (lineText.indexOf(tagRight, pos) !== -1) {
           if (i === -1 || i > lineText.indexOf(tagRight, pos)) {
             // 左标签不存在、左右标签都存在，右标签在前
@@ -288,7 +291,11 @@ export class App {
       }
 
       if (braceLeftCount === 0) {
-        editor.selection = new Selection(startPosition, new Position(lineCurrent, pos))
+        let extra = 0
+        if (lineCurrent === startPosition.line) {
+          extra = editor.document.lineAt(lineCurrent).text.indexOf(lineText)
+        }
+        editor.selection = new Selection(startPosition, new Position(lineCurrent, pos + extra))
         return
       }
 
@@ -298,6 +305,51 @@ export class App {
       }
     }
     return
+  }
+
+  selectLineBlock(editor: TextEditor, lineText: String, startPosition: Position) {
+    // "" '' () {} 空格
+    // 1. 遍历左侧查询结束标签
+    let TAGS = ["\"", "'", "(", "{", "[", " "]
+    let TAGS_CLOSE = {
+      "\"": "\"",
+      "'": "'",
+      "(": ")",
+      "{": "}",
+      "[": "]",
+      " ": " "
+    }
+    let pos = startPosition.character - 1
+    let endTag = '',
+    beginPos = 0,
+    endPos = 0,
+    inBeginTags = []
+    while (pos >= 0) {
+      if (TAGS.indexOf(lineText[pos]) !== -1) {
+        endTag = lineText[pos]
+        break
+      }
+      --pos
+    }
+    beginPos = pos + 1
+    if (endTag.length > 0) {
+      pos = startPosition.character
+      while (pos <= lineText.length && pos >= 0) {
+        let txt = lineText[pos]
+        if (inBeginTags.length === 0 && (txt === TAGS_CLOSE[endTag] || txt === '>') && pos > beginPos) {
+          break
+        }
+        if (inBeginTags.length > 0 && TAGS_CLOSE[inBeginTags[inBeginTags.length - 1]] === txt) {
+          inBeginTags.pop()
+        } else if (TAGS.indexOf(txt) !== -1) {
+          inBeginTags.push(txt)
+        }
+
+        ++pos
+      }
+    }
+    endPos = pos
+    editor.selection = new Selection(new Position(startPosition.line, beginPos), new Position(startPosition.line, endPos))
   }
 
   // 块选择
@@ -321,16 +373,19 @@ export class App {
     } else if (lineText.length > 0 && startPosition.character < lineText.length && lineText[startPosition.character] === '{') {
       this.selectJsBlock(editor, lineText.substring(startPosition.character, lineText.length), startPosition, 'json')
     } else if ((lineText.trim().length > 0 && /(function|if|for|while)?.+\(.*\)\s*{/gi.test(lineText) )
-      || /(.*\(.*\)\s*{\s*)|(.*\s*{\s*)/gi.test(lineText)) {
+      || /^(\s*[\sa-zA-Z_-]*\([\sa-zA-Z_-]*\)\s*{\s*)|(\s*[\sa-zA-Z:_-]*\s*{\s*)$/gi.test(lineText)) {
       this.selectJsBlock(editor, lineText, new Position(startPosition.line, lineText.length - lineText.replace(/\s*/, '').length), 'function')
-    } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<') {
+    } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<' && startPosition.character <= lineText.indexOf('<')) {
       lineText = lineText.substring(startPosition.character, lineText.length)
       this.selectHtmlBlock(editor, lineText, startPosition)
-    } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<') {
+    } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<' && startPosition.character <= lineText.indexOf('<')) {
       lineText = lineText.substring(startPosition.character, lineText.length)
       this.selectHtmlBlock(editor, lineText, startPosition)
-    } else if (/.*:\s*\[\s*/gi.test(lineText)) {
+    } else if (/^\s*[\sa-zA-Z:_-]*\s*\[\s*$/gi.test(lineText)) {
       this.selectJsBlock(editor, lineText, new Position(startPosition.line, lineText.length - lineText.replace(/\s*/, '').length), 'array')
+    } else {
+      // 在本行选择
+      this.selectLineBlock(editor, lineText, startPosition)
     }
     return ;
   }
