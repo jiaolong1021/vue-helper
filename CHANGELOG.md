@@ -1,3 +1,5 @@
+### release 1.7.2 notes
+go to definition supports auto add index path
 
 ### release 1.7.1 notes
 enhance go to definition in javascript file.

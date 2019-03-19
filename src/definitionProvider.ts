@@ -319,14 +319,21 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
         if (isRelative) {
           tempFile = document.fileName.replace(/(.*)\/[^\/]*$/i, '$1') + path.sep + filePath.replace(/.\//i, '')
         }
-        tempFile += '.' + post
-        if (fs.existsSync(tempFile)) {
-          return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
-        }
-        // index文件判断
-        let indexFile = path.resolve(workspace.rootPath, filePath) + path.sep + 'index.' + post
-        if(fs.existsSync(indexFile)) {
-          return Promise.resolve(new Location(Uri.file(indexFile), new Position(0, 0)))
+        if (tempFile.endsWith('/')) {
+          tempFile = tempFile + 'index.' + post
+          if (fs.existsSync(tempFile)) {
+            return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
+          }
+        } else {
+          let indexFile = tempFile + path.sep + 'index.' + post
+          tempFile += '.' + post
+          if (fs.existsSync(tempFile)) {
+            return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
+          }
+          // index文件判断
+          if(fs.existsSync(indexFile)) {
+            return Promise.resolve(new Location(Uri.file(indexFile), new Position(0, 0)))
+          }
         }
       }
     }
