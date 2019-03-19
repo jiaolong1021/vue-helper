@@ -2,6 +2,10 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
+### release 1.7.1 notes
+enhance go to definition in javascript file.
+detail config see release 1.4.2 notes
+
 ### release 1.7.0 notes
 1. optimize choice for code block
 2. add vue html attr select function. shortkey(**alt + x**)
