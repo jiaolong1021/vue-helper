@@ -102,6 +102,10 @@
           "default": 4,
           "description": "decimal length"
         },
+        "vue-helper.tips": {
+          "type": "string",
+          "default": "tips.json"
+        },
         "vue-helper.language": {
           "type": "string",
           "default": "zh-CN",
@@ -163,7 +167,7 @@
     "@types/mocha": "^2.2.42",
     "@types/node": "^10.12.12",
     "typescript": "^2.6.1",
-    "vscode": "^1.1.6"
+    "vscode": "^1.1.32"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.1",
@@ -171,6 +175,7 @@
     "glob": "^7.1.3",
     "hoek": "^5.0.3",
     "jquery": "^3.2.1",
+    "lodash": "^4.17.11",
     "param-case": "^2.1.1",
     "pretty": "^2.0.0",
     "shelljs": "^0.8.2",

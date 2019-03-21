@@ -2,11 +2,10 @@
 import * as vscode from 'vscode';
 import {App, ElementDocsContentProvider, SCHEME, ElementCompletionItemProvider, DocumentHoverProvider } from './app';
 import { vueHelperDefinitionProvider } from './definitionProvider'
+import { JsCompletionItemProvider } from './js-complete'
 import { PxRem } from './px-rem';
-import Library from './library';
 
 export function activate(context: vscode.ExtensionContext) {
-    let library = new Library(context);
     let app = new App();
     app.setConfig();
     let docs = new ElementDocsContentProvider();
@@ -14,10 +13,13 @@ export function activate(context: vscode.ExtensionContext) {
     let registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, docs);
     let registrationHover = vscode.languages.registerHoverProvider('vue', new DocumentHoverProvider)
     let pxRem = new PxRem()
+    let jsCompletionItemProvider = new JsCompletionItemProvider();
 
     // 为标签、属性提示提供自动完成功能, 关闭标签功能
     let completion = vscode.languages.registerCompletionItemProvider(['vue', 'html'], completionItemProvider, '' ,':', '<', '"', "'", '/', '@', '(', '>', '{');
     let vueLanguageConfig = vscode.languages.setLanguageConfiguration('vue', {wordPattern: app.WORD_REG});
+
+    let jsCompletion = vscode.languages.registerCompletionItemProvider('javascript', jsCompletionItemProvider, `.`)
 
     // 函数补全函数
     let functionCompletionDisposable = vscode.commands.registerCommand('vue-helper.functionCompletion', () => {
@@ -52,7 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
     // 到达定义函数
     let vueHelperDefinition = vscode.languages.registerDefinitionProvider(['vue', 'javascript', 'html'], new vueHelperDefinitionProvider())
 
-    context.subscriptions.push(app, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition, pxRemDisposable, pxToRemDisposable, remToPxDisposable, blockSelectDisposable);
+    context.subscriptions.push(app, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition, pxRemDisposable, pxToRemDisposable, remToPxDisposable, blockSelectDisposable, jsCompletion);
 }
 
 // this method is called when your extension is deactivated
