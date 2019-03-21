@@ -1,3 +1,10 @@
+### release 2.0.0 notes
+support tips for javascript through local json file.
+you can config like this:
+![](./examples/tips-config.png)
+tips result like this:
+![](./examples/tips.gif)
+
 ### release 1.7.2 notes
 go to definition supports auto add index path
 
