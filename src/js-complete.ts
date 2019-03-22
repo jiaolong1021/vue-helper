@@ -32,7 +32,7 @@ export class JsCompletionItemProvider implements CompletionItemProvider {
       if (fs.existsSync(filePath)) {
         const data = fs.readFileSync(filePath, 'utf8');
         const content = JSON.parse(data);
-        let prevText = document.lineAt(position.line).text
+        let prevText = document.lineAt(position.line).text.trim()
         if (prevText.endsWith(')')) {
           // 方法参数提示
           let ret = prevText.replace(/.*\.(.*)\(\)$/gi, '$1')
@@ -55,8 +55,13 @@ export class JsCompletionItemProvider implements CompletionItemProvider {
             }
           }
         }
-        prevText = prevText.substring(0, position.character - 1)
-        let lineText = prevText.replace(/.*\.(.*)$/gi, '$1')
+        prevText = prevText.substring(0, prevText.length - 1)
+        let lineText = ''
+        if (prevText.includes('.')) {
+          lineText = prevText.replace(/.*\.(.*)$/gi, '$1')
+        } else {
+          lineText = prevText
+        }
         if (lineText.endsWith(')')) {
           // 匹配到方法
           lineText = lineText.replace(/\(.*\)/, '')
