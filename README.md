@@ -2,12 +2,41 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
+## release 2.0.1 notes
+optimize tips for javascript
+![](./examples/tips-opt.gif)
+tips.json
+```
+{
+  "plus": {
+    "field": {
+      "ROUTE_SPEASKER": ""
+    },
+    "method": {
+      "getRecorder": {
+        "params": ["url, id, styles, extras", "url, id, styles"],
+        "returnType": "object",
+        "return": "name"
+      },
+      "get": {
+        "params": "url, id, styles, extras",
+        "returnType": "object",
+        "return": "name"
+      }
+    }
+  },
+  "name": {
+    "field": {
+      "hello": ""
+    }
+  }
+}
+```
+
 ### release 2.0.0 notes
 support tips for javascript through local json file.
 you can config like this:
 ![](./examples/tips-config.png)
-tips result like this:
-![](./examples/tips.gif)
 
 ### release 1.7.1 notes
 enhance go to definition in javascript file.

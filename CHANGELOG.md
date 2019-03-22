@@ -1,3 +1,33 @@
+## release 2.0.1 notes
+optimize tips for javascript
+![](./examples/tips-opt.gif)
+tips.json
+```
+{
+  "plus": {
+    "field": {
+      "ROUTE_SPEASKER": ""
+    },
+    "method": {
+      "getRecorder": {
+        "params": ["url, id, styles, extras", "url, id, styles"],
+        "returnType": "object",
+        "return": "name"
+      },
+      "get": {
+        "params": "url, id, styles, extras",
+        "returnType": "object",
+        "return": "name"
+      }
+    }
+  },
+  "name": {
+    "field": {
+      "hello": ""
+    }
+  }
+}
+```
 ### release 2.0.0 notes
 support tips for javascript through local json file.
 you can config like this:

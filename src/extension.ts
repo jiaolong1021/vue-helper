@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
     let completion = vscode.languages.registerCompletionItemProvider(['vue', 'html'], completionItemProvider, '' ,':', '<', '"', "'", '/', '@', '(', '>', '{');
     let vueLanguageConfig = vscode.languages.setLanguageConfiguration('vue', {wordPattern: app.WORD_REG});
 
-    let jsCompletion = vscode.languages.registerCompletionItemProvider('javascript', jsCompletionItemProvider, `.`)
+    let jsCompletion = vscode.languages.registerCompletionItemProvider('javascript', jsCompletionItemProvider, '.', '(')
 
     // 函数补全函数
     let functionCompletionDisposable = vscode.commands.registerCommand('vue-helper.functionCompletion', () => {
