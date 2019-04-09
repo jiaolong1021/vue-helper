@@ -2,6 +2,9 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
+## release 2.0.3 notes
+optimize block select function.
+
 ## release 2.0.1 notes
 optimize tips for javascript
 ![](./examples/tips-opt.gif)

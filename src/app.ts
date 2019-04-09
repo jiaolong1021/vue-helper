@@ -341,7 +341,7 @@ export class App {
         }
         if (inBeginTags.length > 0 && TAGS_CLOSE[inBeginTags[inBeginTags.length - 1]] === txt) {
           inBeginTags.pop()
-        } else if (TAGS.indexOf(txt) !== -1) {
+        } else if (TAGS.indexOf(txt) !== -1 && txt !== ' ') {
           inBeginTags.push(txt)
         }
 
