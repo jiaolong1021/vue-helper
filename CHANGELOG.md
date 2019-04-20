@@ -1,3 +1,6 @@
+## release 2.0.4 notes
+optimize block select function.
+
 ## release 2.0.3 notes
 optimize block select function.
 

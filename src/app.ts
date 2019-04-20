@@ -310,20 +310,23 @@ export class App {
   selectLineBlock(editor: TextEditor, lineText: String, startPosition: Position) {
     // "" '' () {} 空格
     // 1. 遍历左侧查询结束标签
-    let TAGS = ["\"", "'", "(", "{", "[", " "]
+    let TAGS = ["\"", "'", "(", "{", "[", " ", "`"]
     let TAGS_CLOSE = {
       "\"": "\"",
       "'": "'",
       "(": ")",
       "{": "}",
       "[": "]",
-      " ": " "
+      " ": " ",
+      "`": "`"
     }
     let pos = startPosition.character - 1
     let endTag = '',
     beginPos = 0,
     endPos = 0,
-    inBeginTags = []
+    inBeginTags = [],
+    includeTags = false
+    beginPos = pos
     while (pos >= 0) {
       if (TAGS.indexOf(lineText[pos]) !== -1) {
         endTag = lineText[pos]
@@ -331,7 +334,13 @@ export class App {
       }
       --pos
     }
-    beginPos = pos + 1
+    console.log(beginPos + ' -- ' + pos);
+    if (beginPos === pos) {
+      includeTags = true
+      beginPos = pos
+    } else {
+      beginPos = pos + 1
+    }
     if (endTag.length > 0) {
       pos = startPosition.character
       while (pos <= lineText.length && pos >= 0) {
@@ -348,7 +357,7 @@ export class App {
         ++pos
       }
     }
-    endPos = pos
+    includeTags ? (endPos = pos + 1) : (endPos = pos)
     editor.selection = new Selection(new Position(startPosition.line, beginPos), new Position(startPosition.line, endPos))
   }
 
