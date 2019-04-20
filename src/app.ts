@@ -334,7 +334,6 @@ export class App {
       }
       --pos
     }
-    console.log(beginPos + ' -- ' + pos);
     if (beginPos === pos) {
       includeTags = true
       beginPos = pos
