@@ -5,6 +5,7 @@ this plugin main enhance ability for write vue and extension for Element-UI, VUX
 ## release 2.1.0 notes
 add common code snippets for vue
 all begin with v
+
 | prefix | vue html snippet |
 | --- | --- |
 | vfor | v-for="(item, index) in items" :key="index" |
