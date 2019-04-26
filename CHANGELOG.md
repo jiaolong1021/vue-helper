@@ -1,3 +1,83 @@
+## release 2.1.0 notes
+add common code snippets for vue
+all begin with v
+| prefix | vue html snippet |
+| --- | --- |
+| vfor | v-for="(item, index) in items" :key="index" |
+| vcomponent | \<component :is="componentId">\</component> |
+| vka | \<keep-alive>\</keep-alive> |
+| vtransition | \<transition>\</transition> |
+| vtg |  \<transition-group>\</transition-group> |
+| vrl | \<router-link>\</router-link> |
+| vrlt | \<router-link to=\"\">\</router-link> |
+| vrv | \<router-view>\</router-view> |
+
+| prefix | vue javascript snippet |
+| --- | --- |
+| vgsilent | Vue.config.silent = true |
+| vgeh | Vue.config.errorHandler = function (err, vm, info) {} |
+| vgwh | Vue.config.warnHandler = function (msg, vm, trace) {} |
+| vgextend | Vue.extend({template: template}) |
+| vgset | Vue.set(target, key, value) |
+| vgdelete | Vue.delete(target, key) |
+| vgdirective | Vue.directive({id, [definition]}) |
+| vgfilter | Vue.filter({id, [definition]}) |
+| vgcomponent | Vue.component({id, [definition]}) |
+| vgnt | Vue.nextTick({}) |
+| vguse | Vue.use(plugin) |
+| vgmixin | Vue.mixin({mixin}) |
+| vgcompile | Vue.compile(template) |
+| vodata | data() { return {} } |
+| vomounted | mounted () {} |
+| vobm | beforeMount () {} |
+| vocreated | created () {} |
+| vobc | beforeCreate () {} |
+| voupdated | updated () {} |
+| vobu | beforeUpdate () {} |
+| voactivated | activated () {} |
+| vodeactivated | deactivated () {} |
+| vobd | beforeDestroy () {} |
+| vodestroyed | destroyed () {} |
+| voprops | props: {} |
+| vopd | propsData: {} |
+| vocomputed | computed: {} |
+| vomethods | methods: {} |
+| vowatch | watch: {} |
+| vowo | key: { deep: true, immediate: true, handler: function (val, oldVal}) { } } |
+| vodirectives | directives: {} |
+| vofilters | filters: {} |
+| vocomponents | components: {} |
+| vomixins | mixins:[] |
+| voprovide | provide: {} |
+| voinject | inject: [] |
+| vomodel | model: {prop: '', event: ''} |
+| vorender | render(h) {} |
+| vnew | new Vue({}) |
+| vnt | this.$nextTick(() => {}) |
+| vdata | this.$data |
+| vprops| this.$props |
+| vel | this.$el |
+| voptions | this.$options |
+| vparent | this.$parent |
+| vroot | this.$root |
+| vchildren | this.$children |
+| vslots | this.$slots |
+| vss | this.$scopedSlots.default({}) |
+| vrefs | this.$refs |
+| vis | this.$isServer |
+| vattrs | this.$attrs |
+| vlisteners | this.$listeners |
+| vwatch | this.$watch(expOrFn, callback, [opitons]) |
+| vset | this.$set(target, key, value) |
+| vdelete | this.$delete |
+| von | this.$on(event, callback) |
+| vonce | this.$once(event, callback) |
+| voff | this.$off(event, callback) |
+| vemit | this.$emit(event, args) |
+| vmount | this.$mount() |
+| vfu | this.$forceUpdate() |
+| vdestroy | this.$destroy() |
+
 ## release 2.0.4 notes
 optimize block select function.
 

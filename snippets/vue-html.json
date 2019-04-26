@@ -1,0 +1,64 @@
+{
+  "v-for": {
+    "prefix": "vfor",
+    "body": [
+      "v-for=\"(${2:item}, ${3:index}) in ${1:items}\" :key=\"${4:index}\""
+    ],
+    "description": "Expects: Array | Object | number | string"
+  },
+  "vcomponent": {
+    "prefix": "vcomponent",
+    "body": [
+      "<component :is=\"${1:componentId}\"></component>$0"
+    ],
+    "description": "component element"
+  },
+  "vka": {
+    "prefix": "vka",
+    "body": [
+      "<keep-alive$1>",
+      "\t$2",
+      "</keep-alive>$0"
+    ],
+    "description": "keep-alive element"
+  },
+  "vtransition": {
+    "prefix": "vtransition",
+    "body": [
+      "<transition$1>",
+      "\t$2",
+      "</transition>$0"
+    ],
+    "description": "transition element"
+  },
+  "transition-group": {
+    "prefix": "vtg",
+    "body": [
+      "<transition-group$1>",
+      "\t$2",
+      "</transition-group>"
+    ],
+    "description": "transition-group element"
+  },
+  "routerLink": {
+    "prefix": "vrl",
+    "body": [
+      "<router-link $1>$2</router-link>$0"
+    ],
+    "description": "router-link element"
+  },
+  "routerLinkTo": {
+    "prefix": "vrlt",
+    "body": [
+      "<router-link to=\"$1\">$2</router-link>$0"
+    ],
+    "description": "<router-link to=''></router-link>. router-link element"
+  },
+  "routerView": {
+    "prefix": "vrv",
+    "body": [
+      "<router-view>$1</router-view>$0"
+    ],
+    "description": "router-view element"
+  }
+}
