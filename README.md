@@ -9,13 +9,13 @@ all begin with v
 | prefix | vue html snippet |
 | --- | --- |
 | vfor | v-for="(item, index) in items" :key="index" |
-| vcomponent | \<component :is="componentId">\</component> |
-| vka | \<keep-alive>\</keep-alive> |
-| vtransition | \<transition>\</transition> |
-| vtg |  \<transition-group>\</transition-group> |
-| vrl | \<router-link>\</router-link> |
-| vrlt | \<router-link to=\"\">\</router-link> |
-| vrv | \<router-view>\</router-view> |
+| vcomponent | &lt;component :is="componentId">&lt;/component> |
+| vka | &lt;keep-alive>&lt;/keep-alive> |
+| vtransition | &lt;transition>&lt;/transition> |
+| vtg |  &lt;transition-group>&lt;/transition-group> |
+| vrl | &lt;router-link>&lt;/router-link> |
+| vrlt | &lt;router-link to=''>&lt;/router-link> |
+| vrv | &lt;router-view>&lt;/router-view> |
 
 | prefix | vue javascript snippet |
 | --- | --- |
