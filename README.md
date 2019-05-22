@@ -3,7 +3,8 @@ this plugin main enhance ability for write vue and extension for Element-UI, VUX
 ## detail function can see change log.
 
 ## release 2.1.4 notes
-optimize iview tag
+optimize iview tag,
+fixed bug: Extended search input box cannot be backspaced #3
 
 ## release 2.1.0 notes
 add common code snippets for vue
