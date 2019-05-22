@@ -31,6 +31,11 @@ export function activate(context: vscode.ExtensionContext) {
         app.deleteComplete()
     })
 
+    // 格式化html标签
+    let tagFormatDisposable = vscode.commands.registerCommand('vue-helper.tagFormat', () => {
+        app.tagFormat()
+    })
+
     // 代码块选择
     let blockSelectDisposable = vscode.commands.registerCommand('vue-helper.blockSelect', () => {
         app.blockSelect()
@@ -54,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
     // 到达定义函数
     let vueHelperDefinition = vscode.languages.registerDefinitionProvider(['vue', 'javascript', 'html'], new vueHelperDefinitionProvider())
 
-    context.subscriptions.push(app, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition, pxRemDisposable, pxToRemDisposable, remToPxDisposable, blockSelectDisposable, jsCompletion);
+    context.subscriptions.push(app, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition, pxRemDisposable, pxToRemDisposable, remToPxDisposable, blockSelectDisposable, jsCompletion, tagFormatDisposable);
 }
 
 // this method is called when your extension is deactivated

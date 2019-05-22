@@ -2,7 +2,7 @@
   "name": "vue-helper",
   "displayName": "vue-helper",
   "description": "vue enhance，extension for Element-UI, VUX, IVIEW",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/jiaolong1021/vue-helper"
@@ -46,7 +46,32 @@
       {
         "key": "backspace",
         "command": "vue-helper.deleteComplete",
-        "when": "textInputFocus && !editorReadonly"
+        "when": "textInputFocus && !editorReadonly && editorLangId == vue"
+      },
+      {
+        "key": "backspace",
+        "command": "vue-helper.deleteComplete",
+        "when": "textInputFocus && !editorReadonly && editorLangId == javascript && !suggestWidgetVisible"
+      },
+      {
+        "key": "backspace",
+        "command": "vue-helper.deleteComplete",
+        "when": "textInputFocus && !editorReadonly && editorLangId == html && !suggestWidgetVisible"
+      },
+      {
+        "key": "enter",
+        "command": "vue-helper.tagFormat",
+        "when": "textInputFocus && !editorReadonly && editorLangId == vue && !suggestWidgetVisible"
+      },
+      {
+        "key": "enter",
+        "command": "vue-helper.tagFormat",
+        "when": "textInputFocus && !editorReadonly && editorLangId == html && !suggestWidgetVisible"
+      },
+      {
+        "key": "enter",
+        "command": "vue-helper.tagFormat",
+        "when": "textInputFocus && !editorReadonly && editorLangId == javascript && !suggestWidgetVisible"
       },
       {
         "key": "alt+z",

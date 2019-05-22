@@ -38,6 +38,27 @@ export class App {
   private _disposable: Disposable;
   public WORD_REG: RegExp = /(-?\d*\.\d\w*)|([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)/gi;
 
+  asNormal(key: string, modifiers?: string) {
+    switch (key) {
+      case 'enter':
+        if (modifiers === 'ctrl') {
+          return commands.executeCommand('editor.action.insertLineAfter');
+        } else {
+          return commands.executeCommand('type', { source: 'keyboard', text: '\n' });
+        }
+      case 'tab':
+          if (workspace.getConfiguration('emmet').get<boolean>('triggerExpansionOnTab')) {
+            return commands.executeCommand('editor.emmet.action.expandAbbreviation');
+          } else if (modifiers === 'shift') {
+            return commands.executeCommand('editor.action.outdentLines');
+          } else {
+            return commands.executeCommand('tab');
+          }
+      case 'backspace':
+        return commands.executeCommand('deleteLeft');
+    }
+  }
+
   // 获取光标选中范围内容
   getSeletedText() {
     let editor = window.activeTextEditor;
@@ -170,6 +191,28 @@ export class App {
       await editor.edit((editBuilder) => {
         editBuilder.delete(window.activeTextEditor.selection)
       })
+    }
+  }
+
+  // 强化格式化html标签
+  tagFormat() {
+    let editor = window.activeTextEditor;
+    if(!editor) { return; }
+    if (window.activeTextEditor.selections.length === 1) {
+      let text = editor.document.lineAt(editor.selection.anchor.line).text
+      if (/^\s*<[A-Z][A-Za-z0-9_-]*.*>.*<\/[A-Z][A-Za-z0-9_-]*>\s*$/g.test(text)) {
+        let space = text.replace(/^(\s*)[a-zA-Z-_<].*/g, '$1')
+        let content = `\n${space}\t\n${space}`
+        editor.edit((editBuilder) => {
+          editBuilder.insert(editor.selection.anchor, content)
+        })
+        let newPosition = editor.selection.active.translate(1, space.length)
+        editor.selection = new Selection(newPosition, newPosition);
+      } else {
+        this.asNormal('enter')
+      }
+    } else {
+      this.asNormal('enter')
     }
   }
 
@@ -400,11 +443,11 @@ export class App {
 
   setConfig() {
     // https://github.com/Microsoft/vscode/issues/24464
-    const config = workspace.getConfiguration('editor');
-    const quickSuggestions = config.get('quickSuggestions');
-    if (!quickSuggestions["strings"]) {
-      config.update("quickSuggestions", { "strings": true }, true);
-    }
+    // const config = workspace.getConfiguration('editor');
+    // const quickSuggestions = config.get('quickSuggestions');
+    // if (!quickSuggestions["strings"]) {
+    //   config.update("quickSuggestions", { "strings": true }, true);
+    // }
   }
 
   openHtml(uri: Uri, title) {

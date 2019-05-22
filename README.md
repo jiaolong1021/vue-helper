@@ -2,8 +2,8 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
-## release 2.1.3 notes
-modify snippets short cut, remove begin with vg or vo. all begin with v
+## release 2.1.4 notes
+optimize iview tag
 
 ## release 2.1.0 notes
 add common code snippets for vue
