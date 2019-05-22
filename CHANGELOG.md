@@ -1,3 +1,6 @@
+## release 2.1.6 notes
+use webpack to Bundle Extension
+
 ## release 2.1.4 notes
 optimize iview tag
 
