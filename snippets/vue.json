@@ -108,7 +108,7 @@
     "description": "Vue.compile( template )"
   },
   "vodata": {
-    "prefix": "vodata",
+    "prefix": "vdata",
     "body": [
       "data() {",
       "\treturn {",
@@ -119,7 +119,7 @@
     "description": "The data object for the Vue instance."
   },
   "vomounted": {
-    "prefix": "vomounted",
+    "prefix": "vmounted",
     "body": [
       "mounted () {",
       "\t$1",
@@ -128,7 +128,7 @@
     "description": "mounted"
   },
   "vobm": {
-    "prefix": "vobm",
+    "prefix": "vbm",
     "body": [
       "beforeMount () {",
       "\t$1",
@@ -137,7 +137,7 @@
     "description": "beforeMount"
   },
   "vocreated": {
-    "prefix": "vocreated",
+    "prefix": "vcreated",
     "body": [
       "created () {",
       "\t$1",
@@ -146,7 +146,7 @@
     "description": "created"
   },
   "vobc": {
-    "prefix": "vobc",
+    "prefix": "vbc",
     "body": [
       "beforeCreate () {",
       "\t$1",
@@ -155,7 +155,7 @@
     "description": "beforeCreate"
   },
   "voupdated": {
-    "prefix": "voupdated",
+    "prefix": "vupdated",
     "body": [
       "updated () {",
       "\t$1",
@@ -164,7 +164,7 @@
     "description": "updated"
   },
   "vobu": {
-    "prefix": "vobu",
+    "prefix": "vbu",
     "body": [
       "beforeUpdate () {",
       "\t$1",
@@ -173,7 +173,7 @@
     "description": "beforeUpdate"
   },
   "voactivated": {
-    "prefix": "voactivated",
+    "prefix": "vactivated",
     "body": [
       "activated () {",
       "\t$1",
@@ -182,7 +182,7 @@
     "description": "activated"
   },
   "vodeactivated": {
-    "prefix": "vodeactivated",
+    "prefix": "vdeactivated",
     "body": [
       "deactivated () {",
       "\t$1",
@@ -191,7 +191,7 @@
     "description": "deactivated"
   },
   "vobd": {
-    "prefix": "vobd",
+    "prefix": "vbd",
     "body": [
       "beforeDestroy () {",
       "\t$1",
@@ -200,7 +200,7 @@
     "description": "beforeDestroy"
   },
   "vodestroyed": {
-    "prefix": "vodestroyed",
+    "prefix": "vdestroyed",
     "body": [
       "destroyed () {",
       "\t$1",
@@ -209,7 +209,7 @@
     "description": "destroyed"
   },
   "voprops": {
-    "prefix": "voprops",
+    "prefix": "vprops",
     "body": [
       "props: {",
       "\t$1",
@@ -218,7 +218,7 @@
     "description": "props"
   },
   "vopd": {
-    "prefix": "vopd",
+    "prefix": "vpd",
     "body": [
       "propsData: {",
       "\t$1",
@@ -227,7 +227,7 @@
     "description": "props"
   },
   "vocomputed": {
-    "prefix": "vocomputed",
+    "prefix": "vcomputed",
     "body": [
       "computed: {",
       "\t$1",
@@ -236,7 +236,7 @@
     "description": "computed"
   },
   "vomethods": {
-    "prefix": "vomethods",
+    "prefix": "vmethods",
     "body": [
       "methods: {",
       "\t$1",
@@ -245,7 +245,7 @@
     "description": "methods"
   },
   "vowatch": {
-    "prefix": "vowatch",
+    "prefix": "vwatch",
     "body": [
       "watch: {",
       "\t$1",
@@ -254,7 +254,7 @@
     "description": "watch"
   },
   "vowo": {
-    "prefix": "vowo",
+    "prefix": "vwo",
     "body": [
       "${1:key}: {",
       "\tdeep: ${2:true},",
@@ -267,7 +267,7 @@
     "description": "Vue Watcher with options."
   },
   "vodirectives": {
-    "prefix": "vodirectives",
+    "prefix": "vdirectives",
     "body": [
       "directives: {",
       "\t$1",
@@ -276,7 +276,7 @@
     "description": "directives"
   },
   "vofilters": {
-    "prefix": "vofilters",
+    "prefix": "vfilters",
     "body": [
       "filters: {",
       "\t$1",
@@ -285,7 +285,7 @@
     "description": "filters"
   },
   "vocomponents": {
-    "prefix": "vocomponents",
+    "prefix": "vcomponents",
     "body": [
       "components: {",
       "\t$1",
@@ -294,14 +294,14 @@
     "description": "components"
   },
   "vomixins": {
-    "prefix": "vomixins",
+    "prefix": "vmixins",
     "body": [
       "mixins:[$1],"
     ],
     "description": "mixins"
   },
   "voprovide": {
-    "prefix": "voprovide",
+    "prefix": "vprovide",
     "body": [
       "provide: {",
       "\t$1",
@@ -310,14 +310,14 @@
     "description": "provide"
   },
   "voinject": {
-    "prefix": "voinject",
+    "prefix": "vinject",
     "body": [
       "inject: [$1],"
     ],
     "description": "inject"
   },
   "vomodel": {
-    "prefix": "vomodel",
+    "prefix": "vmodel",
     "body": [
       "model: {",
       "\tprop: $1,",
@@ -327,7 +327,7 @@
     "description": "model"
   },
   "vorender": {
-    "prefix": "vorender",
+    "prefix": "vrender",
     "body": [
       "render(h) {",
       "\t$1",

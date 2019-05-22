@@ -98,7 +98,6 @@
       ":page-size=\"pageSize\"",
       ":show-sizer=\"true\"",
       ":show-elevator=\"true\"",
-      ":page-size=\"pageSize\"",
       ":page-size-opts=\"pageSizeList\"",
       "@on-change=\"pageChange\"",
       "@on-page-size-change=\"pageSizeChange\" >",

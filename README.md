@@ -2,6 +2,9 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
+## release 2.1.3 notes
+modify snippets short cut, remove begin with vg or vo. all begin with v
+
 ## release 2.1.0 notes
 add common code snippets for vue
 all begin with v
@@ -19,44 +22,44 @@ all begin with v
 
 | prefix | vue javascript snippet |
 | --- | --- |
-| vgsilent | Vue.config.silent = true |
-| vgeh | Vue.config.errorHandler = function (err, vm, info) {} |
-| vgwh | Vue.config.warnHandler = function (msg, vm, trace) {} |
-| vgextend | Vue.extend({template: template}) |
-| vgset | Vue.set(target, key, value) |
-| vgdelete | Vue.delete(target, key) |
-| vgdirective | Vue.directive({id, [definition]}) |
-| vgfilter | Vue.filter({id, [definition]}) |
-| vgcomponent | Vue.component({id, [definition]}) |
-| vgnt | Vue.nextTick({}) |
-| vguse | Vue.use(plugin) |
-| vgmixin | Vue.mixin({mixin}) |
-| vgcompile | Vue.compile(template) |
-| vodata | data() { return {} } |
-| vomounted | mounted () {} |
-| vobm | beforeMount () {} |
-| vocreated | created () {} |
-| vobc | beforeCreate () {} |
-| voupdated | updated () {} |
-| vobu | beforeUpdate () {} |
-| voactivated | activated () {} |
-| vodeactivated | deactivated () {} |
-| vobd | beforeDestroy () {} |
-| vodestroyed | destroyed () {} |
-| voprops | props: {} |
-| vopd | propsData: {} |
-| vocomputed | computed: {} |
-| vomethods | methods: {} |
-| vowatch | watch: {} |
-| vowo | key: { deep: true, immediate: true, handler: function (val, oldVal}) { } } |
-| vodirectives | directives: {} |
-| vofilters | filters: {} |
-| vocomponents | components: {} |
-| vomixins | mixins:[] |
-| voprovide | provide: {} |
-| voinject | inject: [] |
-| vomodel | model: {prop: '', event: ''} |
-| vorender | render(h) {} |
+| vsilent | Vue.config.silent = true |
+| veh | Vue.config.errorHandler = function (err, vm, info) {} |
+| vwh | Vue.config.warnHandler = function (msg, vm, trace) {} |
+| vextend | Vue.extend({template: template}) |
+| vset | Vue.set(target, key, value) |
+| vdelete | Vue.delete(target, key) |
+| vdirective | Vue.directive({id, [definition]}) |
+| vfilter | Vue.filter({id, [definition]}) |
+| vcomponent | Vue.component({id, [definition]}) |
+| vnt | Vue.nextTick({}) |
+| vuse | Vue.use(plugin) |
+| vmixin | Vue.mixin({mixin}) |
+| vcompile | Vue.compile(template) |
+| vdata | data() { return {} } |
+| vmounted | mounted () {} |
+| vbm | beforeMount () {} |
+| vcreated | created () {} |
+| vbc | beforeCreate () {} |
+| vupdated | updated () {} |
+| vbu | beforeUpdate () {} |
+| vactivated | activated () {} |
+| vdeactivated | deactivated () {} |
+| vbd | beforeDestroy () {} |
+| vdestroyed | destroyed () {} |
+| vprops | props: {} |
+| vpd | propsData: {} |
+| vcomputed | computed: {} |
+| vmethods | methods: {} |
+| vwatch | watch: {} |
+| vwo | key: { deep: true, immediate: true, handler: function (val, oldVal}) { } } |
+| vdirectives | directives: {} |
+| vfilters | filters: {} |
+| vcomponents | components: {} |
+| vmixins | mixins:[] |
+| vprovide | provide: {} |
+| vinject | inject: [] |
+| vmodel | model: {prop: '', event: ''} |
+| vrender | render(h) {} |
 | vnew | new Vue({}) |
 | vnt | this.$nextTick(() => {}) |
 | vdata | this.$data |

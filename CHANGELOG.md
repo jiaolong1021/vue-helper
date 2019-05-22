@@ -1,3 +1,6 @@
+## release 2.1.3 notes
+modify snippets short cut, remove begin with vg or vo. all begin with v
+
 ## release 2.1.0 notes
 add common code snippets for vue
 all begin with v
