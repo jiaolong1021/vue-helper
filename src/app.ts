@@ -199,14 +199,27 @@ export class App {
     let editor = window.activeTextEditor;
     if(!editor) { return; }
     if (window.activeTextEditor.selections.length === 1) {
+      let veturConfig = workspace.getConfiguration('vetur')
+      const tabSize = workspace.getConfiguration('editor').tabSize
+      let spaceAdd = ''
+      if (veturConfig) {
+        for (let i = 0; i < veturConfig.format.options.tabSize; i++) {
+          spaceAdd += ' '
+        }
+      } else {
+        for (let i = 0; i < tabSize; i++) {
+          spaceAdd += ' '
+        }
+      }
+      const spaceAddLen = spaceAdd.length
       let text = editor.document.lineAt(editor.selection.anchor.line).text
       if (/^\s*<[A-Z][A-Za-z0-9_-]*.*>.*<\/[A-Z][A-Za-z0-9_-]*>\s*$/g.test(text)) {
         let space = text.replace(/^(\s*)[a-zA-Z-_<].*/g, '$1')
-        let content = `\n${space}\t\n${space}`
+        let content = `\n${space}${spaceAdd}\n${space}`
         editor.edit((editBuilder) => {
           editBuilder.insert(editor.selection.anchor, content)
         })
-        let newPosition = editor.selection.active.translate(1, space.length)
+        let newPosition = editor.selection.active.translate(1, space.length + spaceAddLen)
         editor.selection = new Selection(newPosition, newPosition);
       } else {
         this.asNormal('enter')
@@ -423,9 +436,6 @@ export class App {
       this.selectJsBlock(editor, lineText.substring(startPosition.character - 1, lineText.length), new Position(startPosition.line, startPosition.character - 1), 'json')
     } else if (lineText.length > 0 && startPosition.character < lineText.length && lineText[startPosition.character] === '{') {
       this.selectJsBlock(editor, lineText.substring(startPosition.character, lineText.length), startPosition, 'json')
-    } else if ((lineText.trim().length > 0 && /(function|if|for|while)?.+\(.*\)\s*{/gi.test(lineText) )
-      || /^(\s*[\sa-zA-Z_-]*\([\sa-zA-Z_-]*\)\s*{\s*)|(\s*[\sa-zA-Z:_-]*\s*{\s*)$/gi.test(lineText)) {
-      this.selectJsBlock(editor, lineText, new Position(startPosition.line, lineText.length - lineText.replace(/\s*/, '').length), 'function')
     } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<' && startPosition.character <= lineText.indexOf('<')) {
       lineText = lineText.substring(startPosition.character, lineText.length)
       this.selectHtmlBlock(editor, lineText, startPosition)
@@ -434,6 +444,9 @@ export class App {
       this.selectHtmlBlock(editor, lineText, startPosition)
     } else if (/^\s*[\sa-zA-Z:_-]*\s*\[\s*$/gi.test(lineText)) {
       this.selectJsBlock(editor, lineText, new Position(startPosition.line, lineText.length - lineText.replace(/\s*/, '').length), 'array')
+    } else if ((lineText.trim().length > 0 && /(function|if|for|while)?.+\(.*\)\s*{/gi.test(lineText) )
+      || /^(\s*[\sa-zA-Z_-]*\([\sa-zA-Z_-]*\)\s*{\s*)|(\s*[\sa-zA-Z:_-]*\s*{\s*)$/gi.test(lineText)) {
+      this.selectJsBlock(editor, lineText, new Position(startPosition.line, lineText.length - lineText.replace(/\s*/, '').length), 'function')
     } else {
       // 在本行选择
       this.selectLineBlock(editor, lineText, startPosition)

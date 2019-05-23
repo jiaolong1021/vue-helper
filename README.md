@@ -2,6 +2,9 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
+## release 2.1.7 notes
+optimize iview tag,
+
 ## release 2.1.6 notes
 use webpack to Bundle Extension
 
