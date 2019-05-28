@@ -606,6 +606,41 @@ export default {
 | name | 说明 |
 | :--- | :--- |
 | append | 插入至表格最后一行之后的内容，如果需要对表格的内容进行无限滚动操作，可能需要用到这个 slot。若表格有合计行，该 slot 会位于合计行之上。 |`,
+"el-table-column": `[element：http://element-cn.eleme.io/#/zh-CN/component/table](http://element-cn.eleme.io/#/zh-CN/component/table) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| type | 对应列的类型。 selection 显示多选框，index 显示该行的索引, expand 显示可展开的按钮 | string | selection/index/expand | - |
+| index | 如果设置了 type=index，可以通过传递 index 属性来自定义索引 | number, Function(index) | - | - |
+| column-key | column 的 key，如果需要使用 filter-change 事件，则需要此属性标识是哪个 column 的筛选条件	| string | - | - |
+| label | 显示的标题 | string | - | - |
+| prop | 对应列内容的字段名，也可以使用 property 属性 | string | - | - |
+| width | 对应列的宽度 | string | - | - |
+| min-width | 对应列的最小宽度 | string | - | - |
+| fixed | 列是否固定在左侧或者右侧，true 表示固定在左侧 | string, boolean | true, left, right | - |
+| render-header | 列标题 Label 区域渲染使用的 Function | Function(h, { column, $index }) | - | - |
+| sortable | 对应列是否排序，'custom'代表希望远程排序，需监听Table的sort-change事件 | boolean, string | true, false, 'custom' | false |
+| sort-method | 排序使用方法，仅sortable为true时有效，需返回一数字 | Function(a, b) | - | - |
+| sort-by | 指定排序属性，sortable为true且没有sort-method有效。sort-by可为数组 | String/Array/Function(row, index) | - | - |
+| sort-orders | 轮转顺序，sortable为true有效。需传入一个数组 | array | ascending/descending/null | ['ascending', 'descending', null] |
+| resizable | 对应列是否可以通过拖动改变宽度（需要在 el-table 上设置 border 属性为真）| boolean | - | true |
+| formatter | 用来格式化内容 | Function(row, column, cellValue, index) | - | - |
+| show-overflow-tooltip | 当内容过长被隐藏时显示 tooltip | Boolean | - | false |
+| align | 对齐方式 | String | left/center/right | left |
+| header-align | 表头对齐方式 | String | left/center/right | - |
+| class-name | 列的className | string | — | — |
+| label-class-name | 当前列标题的自定义类名 | string | — | - |
+| selectable | 仅对 type=selection 的列有效，类型为 Function | Function(row, index) | — | — |
+| reserve-selection | 仅对 type=selection 的列有效，类型为 Boolean | Boolean | — | false |
+| filters | 数据过滤的选项，元素需要有 text 和 value 属性 | Array[{ text, value }] |  | — |
+| filter-placement | 过滤弹出框的定位 | String | - | — |
+| filter-multiple | 数据过滤的选项是否多选 | Boolean | — | true |
+| filter-method | 数据过滤使用的方法 | Function(value, row, column) | — | — |
+| filtered-value | 选中的数据过滤项 | Array | — | — |
+| slot name | 说明 |
+| :--- | :--- |
+| — | 自定义列的内容，参数为 { row, column, $index } |
+| header | 自定义表头的内容. 参数为 { column, $index } |
+`,
 "el-tag": `[element：http://element-cn.eleme.io/#/zh-CN/component/tag](http://element-cn.eleme.io/#/zh-CN/component/tag) \n
 | 参数 | 说明 | 类型 | 可选值 | 默认值 |
 | :--- | :--- | :--- | :--- | :--- |

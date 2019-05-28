@@ -1,3 +1,8 @@
+## release 2.1.8 notes
+remove jquery
+add el-table-column tips
+optimize block select
+
 ## release 2.1.7 notes
 optimize iview tag,
 
