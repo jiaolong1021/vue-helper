@@ -2,7 +2,7 @@
   "name": "vue-helper",
   "displayName": "vue-helper",
   "description": "vue enhance，extension for Element-UI, VUX, IVIEW",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/jiaolong1021/vue-helper"
@@ -190,7 +190,7 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/mocha": "^2.2.42",
+    "@types/mocha": "^5.2.7",
     "@types/node": "^10.12.12",
     "ts-loader": "^6.0.1",
     "typescript": "^2.6.1",
@@ -206,6 +206,6 @@
     "lodash": "^4.17.11",
     "param-case": "^2.1.1",
     "pretty": "^2.0.0",
-    "shelljs": "^0.8.2"
+    "shelljs": "^0.8.3"
   }
 }

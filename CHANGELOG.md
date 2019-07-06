@@ -1,3 +1,6 @@
+## release 2.1.9 notes
+optimize img, br complete tag
+
 ## release 2.1.8 notes
 remove jquery
 add el-table-column tips

@@ -844,11 +844,14 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     if(txtArr) {
       tag = txtArr[txtArr.length - 1].replace(/<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim, '$1')
     }
-    window.activeTextEditor.edit((editBuilder) => {
-      editBuilder.insert(this._position, '</' + tag + '>');
-    });
-    let newPosition = window.activeTextEditor.selection.active.translate(0, 0)
-    window.activeTextEditor.selection = new Selection(newPosition, newPosition);
+    let exclude = ['br', 'img']
+    if (exclude.indexOf(tag) === -1) {
+      window.activeTextEditor.edit((editBuilder) => {
+        editBuilder.insert(this._position, '</' + tag + '>');
+      });
+      let newPosition = window.activeTextEditor.selection.active.translate(0, 0)
+      window.activeTextEditor.selection = new Selection(newPosition, newPosition);
+    }
   }
 
   // 判断是否是{}括号开始
