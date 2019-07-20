@@ -1,3 +1,6 @@
+## release 2.1.10 notes
+add common code snippets for vue
+
 ## release 2.1.9 notes
 optimize img, br complete tag
 
