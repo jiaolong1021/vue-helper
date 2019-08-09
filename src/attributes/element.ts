@@ -463,4 +463,11 @@ export default {
   "icon": {"type": "shortcut-icon"},
   "el-input/icon": {"version": "<2.0.0", "type": "shortcut-icon", "description": "icon name"},
   "icons": ["el-icon-arrow-down", "el-icon-arrow-left","el-icon-arrow-right", "el-icon-arrow-up", "el-icon-caret-bottom", "el-icon-caret-left", "el-icon-caret-right", "el-icon-caret-top", "el-icon-check", "el-icon-circle-check", "el-icon-circle-cross", "el-icon-close", "el-icon-upload", "el-icon-d-arrow-left", "el-icon-d-arrow-right", "el-icon-d-caret", "el-icon-date", "el-icon-delete", "el-icon-document", "el-icon-edit", "el-icon-information", "el-icon-loading", "el-icon-menu", "el-icon-message", "el-icon-minus", "el-icon-more", "el-icon-picture", "el-icon-plus", "el-icon-search", "el-icon-setting", "el-icon-share", "el-icon-star-off", "el-icon-star-on", "el-icon-time", "el-icon-warning", "el-icon-delete2", "el-icon-upload2", "el-icon-view"],
+  "el-timeline-item/placement": ["top", "bottom"],
+  "el-timeline-item/type": ["primary", "success", "warning", "danger", "info"],
+  "el-timeline-item/color": ["hsl", "hsv", "hex", "rgb"],
+  "el-timeline-item/size": ["normal", "large"],
+  "el-divider/direction": ["horizontal", "vertical"],
+  "el-divider/content-position": ["left", "right", "center"],
+  "el-image/fit": ["fill", "contain", "cover", "none", "scale-down"]
 }

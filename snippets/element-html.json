@@ -626,5 +626,57 @@
       "\t<i v-else class=\"el-icon-plus avatar-uploader-icon\"></i>",
       "</el-upload>"
     ]
+  },
+  "el-timeline": {
+    "prefix": "el-timeline",
+    "body": [
+      "<el-timeline :reverse=\"reverse\">",
+      "\t<el-timeline-item",
+      "\t\tv-for=\"(activity, index) in activities\"",
+      "\t\t:key=\"index\"",
+      "\t\t:timestamp=\"activity.timestamp\">",
+      "\t\t{{activity.content}}",
+      "\t</el-timeline-item>",
+      "</el-timeline>"
+    ]
+  },
+  "el-calendar": {
+    "prefix": "el-calendar",
+    "body": [
+      "<el-calendar v-model=\"${1:value}\"></el-calendar>"
+    ]
+  },
+  "el-image": {
+    "prefix": "el-image",
+    "body": [
+      "<el-image",
+      "\tstyle=\"${1:width: 100px; height: 100px}\"",
+      "\t:src=\"${2:url}\"",
+      "\t:fit=\"${3:fit}\">$4</el-image>"
+    ]
+  },
+  "el-backtop": {
+    "prefix": "el-backtop",
+    "body": ["<el-backtop target=\"${1:.page-component__scroll .el-scrollbar__wrap}\">$2</el-backtop>"]
+  },
+  "el-infinite-scroll": {
+    "prefix": "el-infinite-scroll",
+    "body": [
+      "<ul class=\"infinite-list\" v-infinite-scroll=\"load\" style=\"overflow:auto\">",
+      "\t<li v-for=\"i in count\" class=\"infinite-list-item\">{{ i }}</li>",
+      "</ul>"
+    ]
+  },
+  "el-drawer": {
+    "prefix": "el-drawer",
+    "body": [
+      "<el-drawer",
+      "\ttitle=\"${1:我是标题}\"",
+      "\t:visible.sync=\"${2:drawer}\"",
+      "\t:direction=\"${3:direction}\"",
+      "\t:before-close=\"${4:handleClose}\">",
+      "\t${5:<span>我来啦!</span>}",
+      "</el-drawer>"
+    ]
   }
 }

@@ -1,3 +1,9 @@
+## release 2.1.11 notes
++ enhance element-ui tips.
+[el-timeline, el-timeline-item, el-divider, el-calendar, el-image, el-backtop, el-drawer]
++ object key value optimize. [alt + shift + enter]
+![](./examples/key-value.gif)
+
 ## release 2.1.10 notes
 add common code snippets for vue
 

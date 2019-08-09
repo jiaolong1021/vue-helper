@@ -89,6 +89,9 @@ export class App {
     // 本行全是空
     if(/^\s*$/gi.test(txt) || txt === '') {
       replaceTxt = 'name (params)' + replaceTxt
+    } else if (/[0-9a-zA-Z]\s{0,1}:\s{0,1}[\w\"\']/gi.test(txt)) {
+      // key: value
+      replaceTxt = ',\t\n' + baseEmpty
     } else if(txt.indexOf(')') === -1) {
       replaceTxt = ' (params)' + replaceTxt
     }
@@ -99,7 +102,17 @@ export class App {
     }
     // 下一行是一个函数
     if (/.*(.*).*{.*/gi.test(nextLineTxt)) {
-      replaceTxt += ','
+      let isCond = false
+      let txtTrim = txt.trim()
+      const condList = ['if', 'for', 'while', 'switch']
+      condList.forEach(cond => {
+        if (txtTrim.indexOf(cond) === 0) {
+          isCond = true
+        }
+      })
+      if (!isCond) {
+        replaceTxt += ','
+      }
     }
     editor.edit((editBuilder) => {
       editBuilder.insert(new Position(editor.selection.anchor.line, txt.length + 1), replaceTxt);

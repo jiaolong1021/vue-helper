@@ -310,5 +310,27 @@ export default {
     "attributes": ["name", "title"],
     "defaults": ["name", "title"],
     "framework": "element-ui"
+  },
+  "el-timeline": {
+    "attributes": ["reverse"],
+    "framework": "element-ui"
+  },
+  "el-timeline-item": {
+    "attributes": ["timestamp", "hide-timestamp", "placement", "type", "color", "size", "icon"]
+  },
+  "el-divider": {
+    "attributes": ["direction", "content-position"]
+  },
+  "el-calendar": {
+    "attributes": ["v-model", "range", "first-day-of-week", "date", "data"]
+  },
+  "el-image": {
+    "attributes": ['src', 'fit', 'alt', 'referrer-policy', 'lazy', 'scroll-container', 'preview-src-list', 'z-index', 'load', 'error']
+  },
+  "el-backtop": {
+    "attributes": ["target", "visibility-height", "right", "bottom", "click"]
+  },
+  "el-drawer": {
+    "attributes": ["append-to-body", "before-close", "close-on-press-escape", "custom-class", "destroy-on-close", "modal", "modal-append-to-body", "direction", "show-close", "size", "title", "visible", "wrapperClosable", "open", "opened", "close", "closed"]
   }
 }
