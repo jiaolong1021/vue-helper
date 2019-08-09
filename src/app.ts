@@ -91,7 +91,7 @@ export class App {
       replaceTxt = 'name (params)' + replaceTxt
     } else if (/[0-9a-zA-Z]\s{0,1}:\s{0,1}[\w\"\']/gi.test(txt)) {
       // key: value
-      replaceTxt = ',\t\n' + baseEmpty
+      replaceTxt = ',\n' + baseEmpty
     } else if(txt.indexOf(')') === -1) {
       replaceTxt = ' (params)' + replaceTxt
     }
