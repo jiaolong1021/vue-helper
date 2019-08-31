@@ -84,7 +84,7 @@ export default {
   },
   "el-option": {
     "attributes": ["value", "label", "disabled"],
-    "defaults": ["v-for", ":key"],
+    "defaults": [":label", ":value"],
     "framework": "element-ui"
   },
   "el-cascader": {

@@ -2,9 +2,10 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
+## release 2.1.13 notes
+optimize some bugs.
+
 ## release 2.1.11 notes
-+ enhance element-ui tips.
-[el-timeline, el-timeline-item, el-divider, el-calendar, el-image, el-backtop, el-drawer]
 + object key value optimize. [alt + shift + enter]
 ![](./examples/key-value.gif)
 

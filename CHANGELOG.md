@@ -1,3 +1,6 @@
+## release 2.1.13 notes
+optimize some bugs.
+
 ## release 2.1.11 notes
 + enhance element-ui tips.
 [el-timeline, el-timeline-item, el-divider, el-calendar, el-image, el-backtop, el-drawer]

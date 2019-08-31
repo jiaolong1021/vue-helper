@@ -84,8 +84,20 @@ export class App {
     let txt = editor.document.lineAt(editor.selection.anchor.line).text
     if(editor.document.lineCount <= editor.selection.anchor.line + 1) { return; }
     let nextLineTxt = editor.document.lineAt(editor.selection.anchor.line + 1).text
+    let veturConfig = workspace.getConfiguration('vetur')
+    const tabSize = workspace.getConfiguration('editor').tabSize
+    let spaceAdd = ''
+    if (veturConfig) {
+      for (let i = 0; i < veturConfig.format.options.tabSize; i++) {
+        spaceAdd += ' '
+      }
+    } else {
+      for (let i = 0; i < tabSize; i++) {
+        spaceAdd += ' '
+      }
+    }
     let baseEmpty = txt.replace(/(\s)\S.*/gi, '$1')
-    let replaceTxt = ' {\n' + baseEmpty + '\t\n' + baseEmpty +  '}'
+    let replaceTxt = ` {\n${baseEmpty}${spaceAdd}\n${baseEmpty}}`
     // 本行全是空
     if(/^\s*$/gi.test(txt) || txt === '') {
       replaceTxt = 'name (params)' + replaceTxt
@@ -117,7 +129,7 @@ export class App {
     editor.edit((editBuilder) => {
       editBuilder.insert(new Position(editor.selection.anchor.line, txt.length + 1), replaceTxt);
     });
-    let newPosition = editor.selection.active.translate(1, (baseEmpty + '\t').length)
+    let newPosition = editor.selection.active.translate(1, (baseEmpty + spaceAdd).length)
     editor.selection = new Selection(newPosition, newPosition);
   }
 

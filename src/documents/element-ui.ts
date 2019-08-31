@@ -897,8 +897,22 @@ export default {
 | popper-class | 为 Tooltip 的 popper 添加类名 | String | — | — |
 | enterable | 鼠标是否可进入到 tooltip 中 | Boolean | — | true |
 | hide-after | Tooltip 出现后自动隐藏延时，单位毫秒，为 0 则不会自动隐藏 | number | — | 0 |`,
-"el-popover": `[element：http://element-cn.eleme.io/#/zh-CN/component/popover](http://element-cn.eleme.io/#/zh-CN/component/popover) \n| 参数 | 说明 | 类型 | 可选值 | 默认值 |\n| :--- | :--- | :--- | :--- | :--- |\n| trigger | 触发方式 | String | click/focus/hover/manual | click |\n| title | 标题 | String | — | — |\n| content | 显示的内容，也可以通过 slot 传入 DOM | String | — | — |\n| width | 宽度 | String, Number | — | 最小宽度 150px |\n| placement | 出现位置 | String | top/top-start/top-end/bottom/bottom-start/bottom-end/left/left-start/left-end/right/right-start/right-end | bottom |\n| disabled | Popover 是否可用 | Boolean | — | false |\n| value(v-model) | 状态是否可见 | Boolean | — | false |\n| offset | 出现位置的偏移量 | Number | — | 0 |\n| transition | 定义渐变动画 | String | — | fade-in-linear |\n| visible-arrow | 是否显示 Tooltip 箭头，更多参数可见Vue-popper | Boolean | — | true |\n| popper-options | popper.js 的参数 | Object | 参考 popper.js 文档 | { boundariesElement: 'body', gpuAcceleration: false } |\n| popper-class | 为 popper 添加类名 | String | — | — |\n| open-delay | 触发方式为 hover 时的显示延迟，单位为毫秒 | Number | — | — |\n",
-"el-Slot": "[element：http://element-cn.eleme.io/#/zh-CN/component/popover](http://element-cn.eleme.io/#/zh-CN/component/popover) \n
+"el-popover": `[element：http://element-cn.eleme.io/#/zh-CN/component/popover](http://element-cn.eleme.io/#/zh-CN/component/popover) \n
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+| :--- | :--- | :--- | :--- | :--- |
+| trigger | 触发方式 | String | click/focus/hover/manual | click |
+| title | 标题 | String | — | — |
+| content | 显示的内容，也可以通过 slot 传入 DOM | String | — | — |
+| width | 宽度 | String, Number | — | 最小宽度 150px |
+| placement | 出现位置 | String | top/top-start/top-end/bottom/bottom-start/bottom-end/left/left-start/left-end/right/right-start/right-end | bottom |
+| disabled | Popover 是否可用 | Boolean | — | false |
+| value(v-model) | 状态是否可见 | Boolean | — | false |
+| offset | 出现位置的偏移量 | Number | — | 0 |
+| transition | 定义渐变动画 | String | — | fade-in-linear |
+| visible-arrow | 是否显示 Tooltip 箭头，更多参数可见Vue-popper | Boolean | — | true |
+| popper-options | popper.js 的参数 | Object | 参考 popper.js 文档 | { boundariesElement: 'body', gpuAcceleration: false } |
+| popper-class | 为 popper 添加类名 | String | — | — |
+| open-delay | 触发方式为 hover 时的显示延迟，单位为毫秒 | Number | — | — | \n
 | 参数 | 说明 |
 | :--- | :--- |
 | — | Popover 内嵌 HTML 文本 |

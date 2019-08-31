@@ -216,7 +216,7 @@ export default {
   "el-progress/type": {"options": ["line", "circle"], "description": "the type of progress bar, default: line"},
   "el-row/type": {"options": ["flex"], "description": "layout mode, you can use 'flex', works in modern browsers"},
   "el-input/type": {"description": "Same as the 'type' attribute of native input, except that it can be 'textarea'"},
-  "el-button/type": {"options": ["primary", "success", "warning", "danger", "infor", "text"], "description": "button type"},
+  "el-button/type": {"options": ["primary", "success", "warning", "danger", "info", "text"], "description": "button type"},
   "el-date-picker/type": {"options": ["year", "month", "date", "week", "datetime", "datetimerange", "daterange"], "description": "type of the picker, default: date"},
   "el-table-column/type": {"options": ["selection", "index", "expand"], "description": "type of the column. If set to 'selection', the column will display checkbox. If set to 'index', the column will display index of the row (staring from 1). If set to 'expand', the column will display expand icon."},
   "el-tag/type": {"options": ["info", "success", "warning", "danger"], "description": "theme"},
