@@ -58,16 +58,17 @@ export class PxRem {
         for (let j = 0; j < pxArr.length; j++) {
           const pxItem = pxArr[j];
           let pos = textLine.text.indexOf(pxItem, index + 1)
-          rangeArr.push({
-            val: pxItem,
-            range: new Range(new Position(textLine.lineNumber, pos), new Position(textLine.lineNumber, pos + pxItem.length))
-          })
+          if (!isNaN(parseFloat(pxItem))) {
+            rangeArr.push({
+              val: pxItem,
+              range: new Range(new Position(textLine.lineNumber, pos), new Position(textLine.lineNumber, pos + pxItem.length))
+            })
+          }
           index = pos
         }
         index = -1
       }
     }
-
     // 2. 全文件替换px值
     editor.edit((editBuilder) => {
       if (type === 'rem') {
