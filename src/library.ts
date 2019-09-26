@@ -69,7 +69,6 @@ class Library {
     exec('npm update vue-helper-json --save', { async: true });
     for (let i = 0; i < repos.length; ++i) {
       let repo = repos[i];
-      this.fetchVersion(repo);
     }
   }
 
@@ -85,34 +84,6 @@ class Library {
       content.contributes.configuration.properties['vue-helper.version']['enum'] = versions;
       config.update('version', versions[versions.length - 1], true);
       fs.writeFileSync(filename, JSON.stringify(content, null, 2));
-    });
-  }
-  
-  fetchVersion(repo: RepoObject) {
-    Resource.get(Path.join(Resource.ELEMENT_PATH, 'versions.json')).then((local: string) => {
-      Resource.getFromUrl(Resource.ELEMENT_VERSION_URL)
-        .then((online: string) => {
-          const oldVersions = this.getValues(JSON.parse(local));
-          const newVersions = this.getValues(JSON.parse(online));
-          if (!this.isSame(JSON.parse(local), JSON.parse(online))) {
-            cd(`${Resource.RESOURCE_PATH}/..`);
-            exec('npm update element-gh-pages --save', (error, stdout, stderr) => {
-              if (error) {
-                return;
-              }
-              const versionsStr = fs.readFileSync(Path.join(Resource.ELEMENT_PATH, 'versions.json'), 'utf8');
-              if (!this.isSame(JSON.parse(local), JSON.parse(versionsStr))) {
-                this.setVersionSchema(newVersions);
-                window.showInformationMessage(`${repo.name} version updated to lasted version`);
-              }
-              Resource.updateResource();
-            });
-          } else {
-            if (!fs.existsSync(Path.join(Resource.ELEMENT_PATH, 'main.html'))) {
-              Resource.updateResource();
-            }
-          }
-        });
     });
   }
 

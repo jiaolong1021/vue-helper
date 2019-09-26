@@ -1,3 +1,6 @@
+## release 2.1.15 notes
+solve issue #5 [definition jump feature can't jump to async function ](https://github.com/jiaolong1021/vue-helper/issues/5)
+
 ## release 2.1.14 notes
 optimize rem transfer to px
 
