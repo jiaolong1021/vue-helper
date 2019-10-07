@@ -1,3 +1,6 @@
+## release 2.1.16 notes
+optimize jump to definition
+
 ## release 2.1.15 notes
 solve issue #5 [definition jump feature can't jump to async function ](https://github.com/jiaolong1021/vue-helper/issues/5)
 

@@ -240,7 +240,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
           let braceRight = lineText.match(/}/gi) ? lineText.match(/}/gi).length : 0
           braceLeftCount += braceLeft - braceRight
         } else if(attr) {
-          let matchName = lineText.replace(/(.*\s)?(\w*)\s*(:|\().*/gi, '$2')
+          let matchName = lineText.replace(/\s*(async\s*)?(\w*)\s*(:|\().*/gi, '$2')
           if(selectText === matchName && braceLeftCount === 1) {
             return Promise.resolve(new Location(document.uri, new Position(pos, lineText.indexOf(matchName) + matchName.length)))
           }

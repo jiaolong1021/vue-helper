@@ -2,7 +2,7 @@
   "name": "vue-helper",
   "displayName": "vue-helper",
   "description": "vue enhance，extension for Element-UI, VUX, IVIEW",
-  "version": "2.1.15",
+  "version": "2.1.16",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/vs/vue-helper"
@@ -67,11 +67,6 @@
         "key": "enter",
         "command": "vue-helper.tagFormat",
         "when": "textInputFocus && !editorReadonly && editorLangId == html && !suggestWidgetVisible"
-      },
-      {
-        "key": "enter",
-        "command": "vue-helper.tagFormat",
-        "when": "textInputFocus && !editorReadonly && editorLangId == javascript && !suggestWidgetVisible"
       },
       {
         "key": "alt+z",
