@@ -1,11 +1,4 @@
 {
-  "v-for": {
-    "prefix": "vfor",
-    "body": [
-      "v-for=\"(${2:item}, ${3:index}) in ${1:items}\" :key=\"${4:index}\""
-    ],
-    "description": "Expects: Array | Object | number | string"
-  },
   "vcomponent": {
     "prefix": "vcomponent",
     "body": [

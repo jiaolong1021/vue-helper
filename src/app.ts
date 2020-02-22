@@ -136,7 +136,10 @@ export class App {
   // backspace删除处理
   async deleteComplete() {
     let editor = window.activeTextEditor;
-    if(!editor) { return; }
+    if(!editor) {
+      this.asNormal('backspace')
+      return; 
+    }
     // 多选择点删除处理
     if(window.activeTextEditor.selections.length > 1) {
       let selections = window.activeTextEditor.selections
@@ -213,16 +216,17 @@ export class App {
       }
     } else {
       // 选择块
-      await editor.edit((editBuilder) => {
-        editBuilder.delete(window.activeTextEditor.selection)
-      })
+      this.asNormal('backspace')
     }
   }
 
   // 强化格式化html标签
   tagFormat() {
     let editor = window.activeTextEditor;
-    if(!editor) { return; }
+    if(!editor) { 
+      this.asNormal('enter')
+      return; 
+    }
     if (window.activeTextEditor.selections.length === 1) {
       let veturConfig = workspace.getConfiguration('vetur')
       const tabSize = workspace.getConfiguration('editor').tabSize
@@ -479,126 +483,8 @@ export class App {
     return ;
   }
 
-  setConfig() {
-    // https://github.com/Microsoft/vscode/issues/24464
-    // const config = workspace.getConfiguration('editor');
-    // const quickSuggestions = config.get('quickSuggestions');
-    // if (!quickSuggestions["strings"]) {
-    //   config.update("quickSuggestions", { "strings": true }, true);
-    // }
-  }
-
-  openHtml(uri: Uri, title) {
-    return commands.executeCommand('vscode.previewHtml', uri, ViewColumn.Two, title)
-      .then((success) => {
-      }, (reason) => {
-        window.showErrorMessage(reason);
-      });
-  }
-
-  openDocs(query?: Query, title = 'vue-helper', editor = window.activeTextEditor) {
-    this.openHtml(encodeDocsUri(query), title)
-  }
-
   dispose() {
     this._disposable.dispose();
-  }
-}
-
-const HTML_CONTENT = (query: Query) => {
-  const filename = Path.join(__dirname, '..', '..', 'package.json');
-  const data = fs.readFileSync(filename, 'utf8');
-  const content = JSON.parse(data);
-  const versions = content.contributes.configuration.properties['vue-helper.version']['enum'];
-  // const lastVersion = versions[versions.length - 1];
-  const config = workspace.getConfiguration('vue-helper');
-  const language = <string>config.get('language');
-  const version = config.get('version');
-
-  let versionText = `${version}/`;
-  // if (version === lastVersion) {
-  //   versionText = '';
-  // }
-
-  let opts = ['<select class="docs-version">'];
-  let selected = '';
-  versions.forEach(item => {
-    selected = item === version ? ' selected="selected"' : '';
-    // if language is spanish, verison < 2.0 no documents
-    if (language === 'es' && item < '2.0') {
-    } else {
-      opts.push(`<option${selected} value ="${item}">${item}</option>`);
-    }
-  });
-  opts.push('</select>');
-  const html = opts.join('');
-
-  const path = query.keyword;
-  const style = fs.readFileSync(Path.join(Resource.RESOURCE_PATH, 'style.css'), 'utf-8');
-
-  const componentPath = `${versionText}main.html#/${language}/component/${path}`;
-  const href = Resource.ELEMENT_HOME_URL + componentPath.replace('main.html', 'index.html');
-  const iframeSrc = 'file://' + Path.join(Resource.ELEMENT_PATH, componentPath).split(Path.sep).join('/');
-
-  const notice = ({
-    'zh-CN': `版本：${html}，在线示例请在浏览器中<a href="${href}">查看</a>`,
-    'en-US': `Version: ${html}, view online examples in <a href="${href}">browser</a>`,
-    'es': `Versión: ${html}, ejemplo en línea en la <a href="${href}">vista</a> del navegador`
-  })[language];
-
-  return `
-  <style type="text/css">${style}</style>
-  <body class="vue-helper-docs-container">
-  <div class="vue-helper-move-mask"></div>
-  <div class="vue-helper-loading-mask">
-    <div class="vue-helper-loading-spinner">
-      <svg viewBox="25 25 50 50" class="circular">
-        <circle cx="50" cy="50" r="20" fill="none" class="path"></circle>
-      </svg>
-    </div>
-  </div>
-  <div class="docs-notice">${notice}</div>
-  <iframe id="docs-frame" src="${iframeSrc}"></iframe>
-  <script>
-    var iframe = document.querySelector('#docs-frame');
-    var link = document.querySelector('.docs-notice a');
-    window.addEventListener('message', (e) => {
-      e.data.loaded && (document.querySelector('.vue-helper-loading-mask').style.display = 'none');
-      if(e.data.hash) {
-        var pathArr = link.href.split('#');
-        pathArr.pop();
-        pathArr.push(e.data.hash);
-        link.href = pathArr.join('#');
-        var srcArr = iframe.src.split('#');
-        srcArr.pop();
-        srcArr.push(e.data.hash);
-        iframe.src = srcArr.join('#');
-      }
-    }, false);
-    document.querySelector('.docs-version').addEventListener('change', function() {
-      var version = this.options[this.selectedIndex].value;
-      var originalSrc = iframe.src;
-      var arr = originalSrc.split(new RegExp('/?[0-9.]*/main.html'));
-      iframe.src = arr.join('/' + version + '/main.html');
-      link.href = link.href.replace(new RegExp('/?[0-9.]*/index.html'), '/' + version + '/index.html');
-    }, false);
-  </script>
-  </body>`;
-};
-
-export class ElementDocsContentProvider implements TextDocumentContentProvider {
-  private _onDidChange = new EventEmitter<Uri>();
-
-  get onDidChange(): Event<Uri> {
-    return this._onDidChange.event;
-  }
-
-  public update(uri: Uri) {
-    this._onDidChange.fire(uri);
-  }
-
-  provideTextDocumentContent(uri: Uri, token: CancellationToken): string | Thenable<string> {
-    return HTML_CONTENT(decodeDocsUri(uri));
   }
 }
 

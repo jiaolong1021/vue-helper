@@ -1,16 +1,13 @@
 'use strict';
 import * as vscode from 'vscode';
-import {App, ElementDocsContentProvider, SCHEME, ElementCompletionItemProvider, DocumentHoverProvider } from './app';
+import {App, ElementCompletionItemProvider, DocumentHoverProvider } from './app';
 import { vueHelperDefinitionProvider } from './definitionProvider'
 import { JsCompletionItemProvider } from './js-complete'
 import { PxRem } from './px-rem';
 
 export function activate(context: vscode.ExtensionContext) {
     let app = new App();
-    app.setConfig();
-    let docs = new ElementDocsContentProvider();
     let completionItemProvider = new ElementCompletionItemProvider();
-    let registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, docs);
     let registrationHover = vscode.languages.registerHoverProvider('vue', new DocumentHoverProvider)
     let pxRem = new PxRem()
     let jsCompletionItemProvider = new JsCompletionItemProvider();
@@ -58,8 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // 到达定义函数
     let vueHelperDefinition = vscode.languages.registerDefinitionProvider(['vue', 'javascript', 'html'], new vueHelperDefinitionProvider())
-
-    context.subscriptions.push(app, registration, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition, pxRemDisposable, pxToRemDisposable, remToPxDisposable, blockSelectDisposable, jsCompletion, tagFormatDisposable);
+    context.subscriptions.push(app, completion, vueLanguageConfig, registrationHover, functionCompletionDisposable, deleteCompleteDisposable, vueHelperDefinition, pxRemDisposable, pxToRemDisposable, remToPxDisposable, blockSelectDisposable, jsCompletion, tagFormatDisposable);
 }
 
 // this method is called when your extension is deactivated
