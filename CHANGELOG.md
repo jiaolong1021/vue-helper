@@ -1,3 +1,7 @@
+## release 2.2.0 notes
+1. optimize block select function.
+2. remove some unused code.
+
 ## release 2.1.16 notes
 optimize jump to definition
 

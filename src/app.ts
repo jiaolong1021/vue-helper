@@ -1,20 +1,15 @@
 import {
-  window, commands, ViewColumn, Disposable,
-  Event, Uri, CancellationToken, TextDocumentContentProvider,
-  EventEmitter, workspace, CompletionItemProvider, ProviderResult,
+  window, commands, Disposable,
+  Uri, CancellationToken, workspace, CompletionItemProvider, ProviderResult,
   TextDocument, Position, CompletionItem, CompletionList, CompletionItemKind,
   SnippetString, Range, HoverProvider, Hover, Selection, TextLine, TextEditor
 } from 'vscode';
-import Resource from './resource';
 import TAGS from './vue-tags'
 import ATTRS from './vue-attributes'
 import Documents from './documents'
 import DocumentsAttr from './documents-attr'
 
 const prettyHTML = require('pretty');
-const Path = require('path');
-const fs = require('fs');
-
 export const SCHEME = 'vue-helper';
 
 export interface Query {
@@ -297,6 +292,7 @@ export class App {
       }
 
       // 2. 有关闭标签就用最后一个标签来匹配栈中最后标签，如果匹配就移除栈，不匹配也移除栈，继续匹配，直到栈为空退出
+      console.log(tagStack.length === 1, tagStack[0].indexOf('<img') === 0, lineText.indexOf('>') > 0)
       let tagCloseArr = lineText.match(tagCloseReg)
       if (tagCloseArr) {
         let closeTagPos = 0
@@ -325,6 +321,16 @@ export class App {
             }
           }
         }
+      } else if (tagStack.length === 1 && (tagStack[0].indexOf('<img') === 0 || tagStack[0].indexOf('<input') === 0) && lineText.indexOf('>') > 0) {
+        // 图片和input处理
+        let closeTagPos = 0
+        if (lineCurrent === beginPosition.line) {
+          closeTagPos = beginPosition.character + lineText.indexOf('>') + 1
+        } else {
+          closeTagPos = lineText.indexOf('>') + 1
+        }
+        editor.selection = new Selection(beginPosition, new Position(lineCurrent, closeTagPos))
+        return
       }
       // 3. 取下一行数据
       ++lineCurrent
@@ -393,9 +399,9 @@ export class App {
   }
 
   selectLineBlock(editor: TextEditor, lineText: String, startPosition: Position) {
-    // "" '' () {} 空格
+    // "" '' () {}, >< 空格
     // 1. 遍历左侧查询结束标签
-    let TAGS = ["\"", "'", "(", "{", "[", " ", "`"]
+    let TAGS = ["\"", "'", "(", "{", "[", " ", "`", ">"]
     let TAGS_CLOSE = {
       "\"": "\"",
       "'": "'",
@@ -403,7 +409,8 @@ export class App {
       "{": "}",
       "[": "]",
       " ": " ",
-      "`": "`"
+      "`": "`",
+      ">": "<"
     }
     let pos = startPosition.character - 1
     let endTag = '',
@@ -425,20 +432,31 @@ export class App {
     } else {
       beginPos = pos + 1
     }
+    // 存在结束标签
     if (endTag.length > 0) {
       pos = startPosition.character
-      while (pos <= lineText.length && pos >= 0) {
-        let txt = lineText[pos]
-        if (inBeginTags.length === 0 && (txt === TAGS_CLOSE[endTag] || txt === '>') && pos > beginPos) {
-          break
+      if (endTag === '>') {
+        while (pos <= lineText.length && pos >= 0) {
+          let txt = lineText[pos]
+          if ((txt === TAGS_CLOSE[endTag] || txt === '>') && pos > beginPos) {
+            break
+          }
+          ++pos
         }
-        if (inBeginTags.length > 0 && TAGS_CLOSE[inBeginTags[inBeginTags.length - 1]] === txt) {
-          inBeginTags.pop()
-        } else if (TAGS.indexOf(txt) !== -1 && txt !== ' ') {
-          inBeginTags.push(txt)
+      } else {
+        while (pos <= lineText.length && pos >= 0) {
+          let txt = lineText[pos]
+          if (inBeginTags.length === 0 && (txt === TAGS_CLOSE[endTag] || txt === '>') && pos > beginPos) {
+            break
+          }
+          if (inBeginTags.length > 0 && TAGS_CLOSE[inBeginTags[inBeginTags.length - 1]] === txt) {
+            inBeginTags.pop()
+          } else if (TAGS.indexOf(txt) !== -1 && txt !== ' ') {
+            inBeginTags.push(txt)
+          }
+  
+          ++pos
         }
-
-        ++pos
       }
     }
     includeTags ? (endPos = pos + 1) : (endPos = pos)
@@ -466,17 +484,22 @@ export class App {
     } else if (lineText.length > 0 && startPosition.character < lineText.length && lineText[startPosition.character] === '{') {
       this.selectJsBlock(editor, lineText.substring(startPosition.character, lineText.length), startPosition, 'json')
     } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<' && startPosition.character <= lineText.indexOf('<')) {
+      console.log('1')
       lineText = lineText.substring(startPosition.character, lineText.length)
       this.selectHtmlBlock(editor, lineText, startPosition)
     } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<' && startPosition.character <= lineText.indexOf('<')) {
+      console.log(2)
       lineText = lineText.substring(startPosition.character, lineText.length)
       this.selectHtmlBlock(editor, lineText, startPosition)
     } else if (/^\s*[\sa-zA-Z:_-]*\s*\[\s*$/gi.test(lineText)) {
+      console.log(3)
       this.selectJsBlock(editor, lineText, new Position(startPosition.line, lineText.length - lineText.replace(/\s*/, '').length), 'array')
     } else if ((lineText.trim().length > 0 && /(function|if|for|while)?.+\(.*\)\s*{/gi.test(lineText) && /^\s*(function|if|for|while)?\s*$/g.test(lineText.substr(0, startPosition.character)))
       || (/^(\s*[\sa-zA-Z_-]*\([\sa-zA-Z_-]*\)\s*{\s*)|(\s*[\sa-zA-Z:_-]*\s*{\s*)$/gi.test(lineText)) && /^\s*(function|if|for|while)?\s*$/g.test(lineText.substr(0, startPosition.character))) {
+        console.log(4)
       this.selectJsBlock(editor, lineText, new Position(startPosition.line, lineText.length - lineText.replace(/\s*/, '').length), 'function')
     } else {
+      console.log('lineSelect')
       // 在本行选择
       this.selectLineBlock(editor, lineText, startPosition)
     }
