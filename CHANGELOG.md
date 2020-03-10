@@ -1,4 +1,4 @@
-## release 2.2.1 notes
+## release 2.2.2 notes
 solve short cut (backspace) can not delete in seach extention, or search.
 now only work in editor.
 
