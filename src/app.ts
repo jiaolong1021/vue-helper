@@ -50,7 +50,8 @@ export class App {
             return commands.executeCommand('tab');
           }
       case 'backspace':
-        return commands.executeCommand('deleteLeft');
+        return commands.
+        ('deleteLeft');
     }
   }
 
