@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // 函数补全函数
     let functionCompletionDisposable = vscode.commands.registerCommand('vue-helper.functionCompletion', () => {
-        app.getLineText()
+        app.autoComplement()
     })
 
     // 删除处理函数

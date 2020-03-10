@@ -1,5 +1,5 @@
 import { TextDocument, Position, CancellationToken, ProviderResult, DefinitionProvider, 
-  Definition, Location, TextLine, Range, Uri, workspace } from 'vscode'
+  Definition, Location, TextLine, Uri, workspace } from 'vscode'
 const path = require('path');
 const fs = require('fs')
 const paramCamse = require('param-case')

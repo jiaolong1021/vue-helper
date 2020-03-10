@@ -1,3 +1,7 @@
+## release 2.2.1 notes
+solve short cut (backspace) can not delete in seach extention, or search.
+now only work in editor.
+
 ## release 2.2.0 notes
 1. optimize block select function.
 2. remove some unused code.

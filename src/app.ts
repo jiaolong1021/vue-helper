@@ -72,8 +72,8 @@ export class App {
     }
   }
 
-  // 获取本行内容
-  getLineText() {
+  // 自动补全
+  autoComplement() {
     let editor = window.activeTextEditor;
     if (!editor) { return; }
     let txt = editor.document.lineAt(editor.selection.anchor.line).text
