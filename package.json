@@ -2,7 +2,7 @@
   "name": "vue-helper",
   "displayName": "vue-helper",
   "description": "vue enhance，extension for Element-UI, VUX, IVIEW",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/vs/vue-helper"

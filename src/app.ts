@@ -50,8 +50,7 @@ export class App {
             return commands.executeCommand('tab');
           }
       case 'backspace':
-        return commands.
-        ('deleteLeft');
+        return commands.executeCommand('deleteLeft');
     }
   }
 
@@ -293,7 +292,6 @@ export class App {
       }
 
       // 2. 有关闭标签就用最后一个标签来匹配栈中最后标签，如果匹配就移除栈，不匹配也移除栈，继续匹配，直到栈为空退出
-      console.log(tagStack.length === 1, tagStack[0].indexOf('<img') === 0, lineText.indexOf('>') > 0)
       let tagCloseArr = lineText.match(tagCloseReg)
       if (tagCloseArr) {
         let closeTagPos = 0
@@ -384,8 +382,12 @@ export class App {
 
       if (braceLeftCount === 0) {
         let extra = 0
+        let textExtra = editor.document.lineAt(lineCurrent).text
         if (lineCurrent === startPosition.line) {
-          extra = editor.document.lineAt(lineCurrent).text.indexOf(lineText)
+          extra = textExtra.indexOf(lineText)
+        }
+        if (type === 'function' && textExtra[pos + extra - 1] === '}' && textExtra[pos + extra] === ')') {
+          extra += 1
         }
         editor.selection = new Selection(startPosition, new Position(lineCurrent, pos + extra))
         return
@@ -485,22 +487,17 @@ export class App {
     } else if (lineText.length > 0 && startPosition.character < lineText.length && lineText[startPosition.character] === '{') {
       this.selectJsBlock(editor, lineText.substring(startPosition.character, lineText.length), startPosition, 'json')
     } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<' && startPosition.character <= lineText.indexOf('<')) {
-      console.log('1')
       lineText = lineText.substring(startPosition.character, lineText.length)
       this.selectHtmlBlock(editor, lineText, startPosition)
     } else if (lineText.trim().length > 0 && lineText.trim()[0] === '<' && startPosition.character <= lineText.indexOf('<')) {
-      console.log(2)
       lineText = lineText.substring(startPosition.character, lineText.length)
       this.selectHtmlBlock(editor, lineText, startPosition)
     } else if (/^\s*[\sa-zA-Z:_-]*\s*\[\s*$/gi.test(lineText)) {
-      console.log(3)
       this.selectJsBlock(editor, lineText, new Position(startPosition.line, lineText.length - lineText.replace(/\s*/, '').length), 'array')
     } else if ((lineText.trim().length > 0 && /(function|if|for|while)?.+\(.*\)\s*{/gi.test(lineText) && /^\s*(function|if|for|while)?\s*$/g.test(lineText.substr(0, startPosition.character)))
       || (/^(\s*[\sa-zA-Z_-]*\([\sa-zA-Z_-]*\)\s*{\s*)|(\s*[\sa-zA-Z:_-]*\s*{\s*)$/gi.test(lineText)) && /^\s*(function|if|for|while)?\s*$/g.test(lineText.substr(0, startPosition.character))) {
-        console.log(4)
       this.selectJsBlock(editor, lineText, new Position(startPosition.line, lineText.length - lineText.replace(/\s*/, '').length), 'function')
     } else {
-      console.log('lineSelect')
       // 在本行选择
       this.selectLineBlock(editor, lineText, startPosition)
     }

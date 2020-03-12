@@ -2,9 +2,8 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
-## release 2.2.3 notes
-solve short cut (backspace) can not delete in seach extention, or search.
-now only work in editor.
+## release 2.2.4 notes
+optimize  block selection
 
 ## release 2.1.16 notes
 optimize jump to definition
