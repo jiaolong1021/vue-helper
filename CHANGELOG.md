@@ -1,3 +1,6 @@
+## release 2.2.5 notes
+solve short cut (backspace) can not delete in seach extention, or search.
+
 ## release 2.2.4 notes
 optimize  block selection
 
