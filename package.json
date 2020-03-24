@@ -2,7 +2,7 @@
   "name": "vue-helper",
   "displayName": "vue-helper",
   "description": "vue enhance，extension for Element-UI, VUX, IVIEW",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/vs/vue-helper"
@@ -109,6 +109,25 @@
         "vue-helper.tips": {
           "type": "string",
           "default": "tips.json"
+        },
+        "vue-helper.componentIgnore": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "vue-helper.componentPath": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "vue-helper.componentPrefix": {
+          "type": "object",
+          "default": {
+            "alias": "@",
+            "path": "src"
+          }
         },
         "vue-helper.language": {
           "type": "string",

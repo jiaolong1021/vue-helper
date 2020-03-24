@@ -1,3 +1,7 @@
+## release 2.2.6 notes
+support internal component tips.
+![](./examples/components.png)
+
 ## release 2.2.5 notes
 solve short cut (backspace) can not delete in seach extention, or search.
 

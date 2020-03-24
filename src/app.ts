@@ -8,6 +8,8 @@ import TAGS from './vue-tags'
 import ATTRS from './vue-attributes'
 import Documents from './documents'
 import DocumentsAttr from './documents-attr'
+const fs = require('fs')
+const path = require('path')
 
 const prettyHTML = require('pretty');
 export const SCHEME = 'vue-helper';
@@ -582,6 +584,20 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     let suggestions = [];
 
     let id = 100;
+    // 添加vue组件提示
+    let vueFiles = this.traverse()
+    for (let i = 0; i < vueFiles.length; i++) {
+      const vf = vueFiles[i]
+      suggestions.push({
+        label: vf.name,
+        sortText: `1000${i}${vf.name}`,
+        insertText: new SnippetString(`${vf.name}'$0${vf.path}'></${vf.name}>`),
+        kind: CompletionItemKind.Module,
+        detail: 'vue component',
+        documentation: 'internal component: ' + vf.path
+      })
+    }
+
     for (let tag in TAGS) {
       suggestions.push(this.buildTagSuggestion(tag, TAGS[tag], id));
       id++;
@@ -802,6 +818,85 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
       });
       let newPosition = window.activeTextEditor.selection.active.translate(0, 0)
       window.activeTextEditor.selection = new Selection(newPosition, newPosition);
+    }
+  }
+
+  // 遍历组件
+  traverse() {
+    const config = workspace.getConfiguration('vue-helper')
+    let vueFiles = []
+    let cond = null
+    if (config.componentPath && Array.isArray(config.componentPath) && config.componentPath.length > 0) {
+      console.log(1, config.componentPath)
+      cond = function (rootPath) {
+        return config.componentPath.indexOf(rootPath) !== -1
+      }
+    } else {
+      let ignore = config.componentIgnore || []
+      if (!Array.isArray(ignore)) {
+        ignore = [ignore]
+      }
+      ignore = ignore.concat(['node_modules', 'dist', 'build'])
+      cond = function (rootPath) {
+        return !(rootPath.charAt(0) === '.' || ignore.indexOf(rootPath) !== -1)
+      }
+    }
+    let rootPathes = fs.readdirSync(workspace.rootPath)
+    let prefix = config.componentPrefix
+    
+    for (let i = 0; i < rootPathes.length; i++) {
+      const rootPath = rootPathes[i]
+      if (cond(rootPath)) {
+        let stat = fs.statSync(path.join(workspace.rootPath, rootPath))
+        if (stat.isDirectory()) {
+          this.traverseHandle(rootPath, vueFiles, prefix)
+        } else {
+          if (rootPath.endsWith('.vue')) {
+            let name = rootPath.replace(/([A-Z_])/g, (_, c) => {
+              if (c === '_') {
+                return '-'
+              } else {
+                return c ? ('-' + c.toLowerCase()) : ''
+              }
+            }).replace(/-?(.*).vue$/gi, '$1')
+            vueFiles.push({
+              name: name,
+              path: name.replace(new RegExp('^' + prefix.path), prefix.alias)
+            })
+          }
+        }
+      }
+    }
+    return vueFiles;
+  }
+
+  // 遍历处理
+  traverseHandle(postPath: String, vueFiles, prefix) {
+    let fileDirs = fs.readdirSync(path.join(workspace.rootPath, postPath))
+    for (let i = 0; i < fileDirs.length; i++) {
+      const rootPath = fileDirs[i]
+      if (!(rootPath.charAt(0) === '.')) {
+        let dir = path.join(postPath, rootPath)
+        let stat = fs.statSync(path.join(workspace.rootPath, dir))
+        if (stat.isDirectory()) {
+          this.traverseHandle(dir, vueFiles, prefix)
+        } else {
+          if (rootPath.endsWith('.vue')) {
+            let name = rootPath.replace(/([A-Z_])/g, (_, c) => {
+              if (c === '_') {
+                return '-'
+              } else {
+                return c ? ('-' + c.toLowerCase()) : ''
+              }
+            }).replace(/-?(.*).vue$/gi, '$1')
+            dir = dir.replace(/-?(.*).vue$/gi, '$1')
+            vueFiles.push({
+              name: name,
+              path: dir.replace(new RegExp('^' + prefix.path), prefix.alias)
+            })
+          }
+        }
+      }
     }
   }
 
