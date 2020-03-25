@@ -34,6 +34,7 @@ export function decodeDocsUri(uri: Uri): Query {
 export class App {
   private _disposable: Disposable;
   public WORD_REG: RegExp = /(-?\d*\.\d\w*)|([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)/gi;
+  public static vueFiles = []
 
   asNormal(key: string, modifiers?: string) {
     switch (key) {
@@ -74,12 +75,134 @@ export class App {
     }
   }
 
+  // 组件自动导入
+  autoImport(txt, editor: TextEditor, line) {
+    let tag = txt.trim().replace(/<([\w-]*)[\s>].*/gi, '$1')
+    for (let i = 0; i < App.vueFiles.length; i++) {
+      const vf = App.vueFiles[i];
+      if (tag === vf.name) {
+        let countLine = editor.document.lineCount
+        while (!/^\s*<script.*>\s*$/.test(<string>editor.document.lineAt(line).text)) {
+          if (countLine > line) {
+            line++
+          } else {
+            break
+          }
+        }
+        line += 2
+        if (countLine < line) {
+          return
+        }
+        while (/import /gi.test(editor.document.lineAt(line).text.trim())) {
+          if (countLine > line) {
+            line++
+          } else {
+            break
+          }
+        }
+        let name = vf.name.replace(/(-[a-z])/g, (_, c) => {
+          return c ? c.toUpperCase() : ''
+        }).replace(/-/gi, '').replace(/^(\w)/, (_, c) => { return c.toUpperCase() })
+        let importString = `import ${name} from '${vf.path}'\n`
+        let importLine = line
+
+        // if (line < countLine) {
+        //   editor.edit((editBuilder) => {
+        //     editBuilder.insert(new Position(line, 0), importString);
+        //   });
+        // }
+        if (line < countLine) {
+          let prorityInsertLine = 0
+          let secondInsertLine = 0
+          let hasComponents = false
+          let baseEmpty = ''
+          while(!/\s*<\/script>\s*/gi.test(editor.document.lineAt(line).text.trim())) {
+            if (/\s*components\s*:\s*{.*}.*/gi.test(editor.document.lineAt(line).text.trim())) {
+              let text = editor.document.lineAt(line).text
+              let preText = text.replace(/\s*}.*$/, '')
+              let insertPos = preText.length
+              editor.edit((editBuilder) => {
+                editBuilder.insert(new Position(importLine, 0), importString);
+                editBuilder.insert(new Position(line, insertPos), ', ' + name);
+              });
+              break
+            }
+            if (hasComponents && /\s*},?\s*$/gi.test(editor.document.lineAt(line).text.trim())) {
+              let text = editor.document.lineAt(line - 1).text
+              let insertPos = text.indexOf(text.trim())
+              let empty = ''
+              for (let i = 0; i < insertPos; i++) {
+                empty += ' '         
+              }
+              editor.edit((editBuilder) => {
+                editBuilder.insert(new Position(importLine, 0), importString);
+                editBuilder.insert(new Position(line - 1, editor.document.lineAt(line - 1).text.length), ',\n' + empty + name);
+              });
+              break
+            }
+            if (/\s*components\s*:\s*{\s*$/gi.test(editor.document.lineAt(line).text.trim())) {
+              hasComponents = true
+            }
+            if (/\s*export\s*default\s*{\s*/gi.test(editor.document.lineAt(line).text.trim())) {
+              secondInsertLine = line
+            }
+            if (/\s*data\s*\(\s*\)\s*{\s*/gi.test(editor.document.lineAt(line).text.trim())) {
+              let text = editor.document.lineAt(line).text
+              let insertPos = text.indexOf(text.trim())
+              for (let i = 0; i < insertPos; i++) {
+                baseEmpty += ' '         
+              }
+              prorityInsertLine = line
+            }
+            if (countLine > line) {
+              line++
+            } else {
+              break
+            }
+          }
+          if (prorityInsertLine > 0) {
+            editor.edit((editBuilder) => {
+              editBuilder.insert(new Position(importLine, 0), importString);
+              editBuilder.insert(new Position(prorityInsertLine - 1, editor.document.lineAt(prorityInsertLine - 1).text.length), `\n${baseEmpty}components: { ${name} },`);
+            });
+            break
+          }
+          if (secondInsertLine > 0) {
+            let veturConfig = workspace.getConfiguration('vetur')
+            const tabSize = workspace.getConfiguration('editor').tabSize
+            let spaceAdd = ''
+            if (veturConfig) {
+              for (let i = 0; i < veturConfig.format.options.tabSize; i++) {
+                spaceAdd += ' '
+              }
+            } else {
+              for (let i = 0; i < tabSize; i++) {
+                spaceAdd += ' '
+              }
+            }
+            editor.edit((editBuilder) => {
+              editBuilder.insert(new Position(importLine, 0), importString);
+              editBuilder.insert(new Position(secondInsertLine, editor.document.lineAt(secondInsertLine).text.length),  `\n${spaceAdd}components: { ${name} },`);
+            });
+          }
+        }
+
+        break
+      }
+    }
+  }
+
   // 自动补全
   autoComplement() {
     let editor = window.activeTextEditor;
     if (!editor) { return; }
     let txt = editor.document.lineAt(editor.selection.anchor.line).text
     if(editor.document.lineCount <= editor.selection.anchor.line + 1) { return; }
+    // 组件自动导入
+    if (/<.*>\s?<\/.*>/gi.test(txt.trim())) {
+      this.autoImport(txt, editor, editor.selection.anchor.line)
+      return
+    }
     let nextLineTxt = editor.document.lineAt(editor.selection.anchor.line + 1).text
     let veturConfig = workspace.getConfiguration('vetur')
     const tabSize = workspace.getConfiguration('editor').tabSize
@@ -586,12 +709,13 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     let id = 100;
     // 添加vue组件提示
     let vueFiles = this.traverse()
+    App.vueFiles = vueFiles
     for (let i = 0; i < vueFiles.length; i++) {
       const vf = vueFiles[i]
       suggestions.push({
         label: vf.name,
         sortText: `1000${i}${vf.name}`,
-        insertText: new SnippetString(`${vf.name}'$0${vf.path}'></${vf.name}>`),
+        insertText: new SnippetString(`${vf.name}$0></${vf.name}>`),
         kind: CompletionItemKind.Module,
         detail: 'vue component',
         documentation: 'internal component: ' + vf.path
@@ -827,7 +951,6 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     let vueFiles = []
     let cond = null
     if (config.componentPath && Array.isArray(config.componentPath) && config.componentPath.length > 0) {
-      console.log(1, config.componentPath)
       cond = function (rootPath) {
         return config.componentPath.indexOf(rootPath) !== -1
       }

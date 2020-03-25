@@ -1,6 +1,12 @@
+## release 2.3.0 notes
+support internal component tips.
+![](https://common.xxpie.com/helper-components.png)
+alt + shift + enter to auto import
+![](https://common.xxpie.com/helper-components-auto.png)
+
 ## release 2.2.6 notes
 support internal component tips.
-![](./examples/components.png)
+![](https://common.xxpie.com/helper-components.png)
 
 ## release 2.2.5 notes
 solve short cut (backspace) can not delete in seach extention, or search.
@@ -32,7 +38,7 @@ optimize some bugs.
 + enhance element-ui tips.
 [el-timeline, el-timeline-item, el-divider, el-calendar, el-image, el-backtop, el-drawer]
 + object key value optimize. [alt + shift + enter]
-![](./examples/key-value.gif)
+![](https://common.xxpie.com/helper-key-value.gif)
 
 ## release 2.1.10 notes
 add common code snippets for vue
@@ -145,7 +151,7 @@ optimize block select function.
 
 ## release 2.0.1 notes
 optimize tips for javascript
-![](./examples/tips-opt.gif)
+![](https://common.xxpie.com/helper-tips-opt.gif)
 tips.json
 ```
 {
@@ -176,9 +182,9 @@ tips.json
 ### release 2.0.0 notes
 support tips for javascript through local json file.
 you can config like this:
-![](./examples/tips-config.png)
+![](https://common.xxpie.com/helper-tips-config.png)
 tips result like this:
-![](./examples/tips.gif)
+![](https://common.xxpie.com/helper-tips.gif)
 
 ### release 1.7.2 notes
 go to definition supports auto add index path
@@ -190,7 +196,7 @@ detail config see release 1.4.2 notes
 ### release 1.7.0 notes 
 1. optimize choice for code block
 2. add vue html attr select function. shortkey(**alt + x**)
-![](./examples/choice-attr.gif)
+![](https://common.xxpie.com/helper-choice-attr.gif)
 
 ### release 1.6.12 notes
 optimize write snippet
@@ -215,7 +221,7 @@ enhance select block ability for css select.
 
 ### release 1.6.5 notes
 support select variable for obj and array.  shortkey(**alt + x**)
-![](./examples/variable-block.gif)
+![](https://common.xxpie.com/helper-variable-block.gif)
 
 ### release 1.6.4 notes
 optimize select function
@@ -232,20 +238,20 @@ fixed relative path jump.
 ### release 1.6.0 notes
 add select block fucntion. shortkey(**alt + x**) <br>
 now support function, html tag, if, for, while, json, array block select
-![](./examples/selectBlock.gif)
+![](https://common.xxpie.com/helper-selectBlock.gif)
 
 ### release 1.5.1 notes
 fix bug jump to definition with postfix
 
 ### release 1.5.0 notes
 exchange rem to px or exchange px to rem for all file through command
-![](./examples/rem-file.gif)
+![](https://common.xxpie.com/helper-rem-file.gif)
 
 ### release 1.4.5 notes
 rem px exchange, shortkey (**alt + z**)
-![](./examples/rem.gif)
+![](https://common.xxpie.com/helper-rem.gif)
 rem px exchange setting
-![](./examples/rem-config.png)
+![](https://common.xxpie.com/helper-rem-config.png)
 
 ### release 1.4.4 notes
 1. optimize go to definition function
@@ -253,15 +259,15 @@ rem px exchange setting
 
 ### release 1.4.3 notes
 1. support path ignore index
-![](./examples/path-index.gif)
+![](https://common.xxpie.com/helper-path-index.gif)
 2. iview Input add on-search method tip
 
  ### release 1.4.2 notes
 support add alias through user settings. (use for jump to definition function)
 alias support relative path
-![](./examples/setting-alias.png)
+![](https://common.xxpie.com/helper-setting-alias.png)
 support iview, element-ui tag jump to definition
-![](./examples/iview-jump.gif)
+![](https://common.xxpie.com/helper-iview-jump.gif)
 
 ### release 1.4.1 notes
 solve issue: 
@@ -271,7 +277,7 @@ solve issue:
 jump to definition function support self define component.
 not supoort global component, must import by import or require.
 the jump path support begin with @ and relation path
-![](./examples/definition-file-jump.gif)
+![](https://common.xxpie.com/helper-definition-file-jump.gif)
 
 ### release 1.3.10 notes
 optimize jump to definition function
@@ -301,26 +307,26 @@ add iview form, rules snippets
 ### release 1.3.2 notes
 1. optimize go to definition method
 2. add iview form code snippets.
-![](./examples/iv-form.gif)
+![](https://common.xxpie.com/helper-iv-form.gif)
 
 ### release 1.3.0 notes
 property or method go to definiton in current page (keyword: cmd(mac) | ctrl(win))
-![](./examples/go-to-define.gif)
+![](https://common.xxpie.com/helper-go-to-define.gif)
 
 ### release 1.2.1 notes
 optimize backspace handle
 
 ### release 1.2.0 notes
 1. now support element tag see document through hover.
-![](./examples/element-tag.gif)
+![](https://common.xxpie.com/helper-element-tag.gif)
 2. enhance tag close function
-![](./examples/tag-slip.gif)
+![](https://common.xxpie.com/helper-tag-slip.gif)
 3. fix bugs
 
 ### release 1.1.8 notes
 1. optimize attribute hover
 2. add line empty delete funciton(enter backspace key).
-![](./examples/line-delete.gif)
+![](https://common.xxpie.com/helper-line-delete.gif)
 
 ### release 1.1.5 notes
 optimize close tag function、 {{}} function, add change log.
@@ -331,33 +337,33 @@ optimize columns tip and message snippet show
 ### 1.1.3
 ---
 auto close tag optinize, table columns attribute tips
-![](./examples/columns.gif)
-![](./examples/columns2.gif)
+![](https://common.xxpie.com/helper-columns.gif)
+![](https://common.xxpie.com/helper-columns2.gif)
 
 ### version 1.1.2
 #### 1. vue hook function tip
-![](./examples/hook-function.gif)
+![](https://common.xxpie.com/helper-hook-function.gif)
 #### 2. method completion snippets (keyboard shortcut: alt + shift + enter)
-![](./examples/methods.gif)
+![](https://common.xxpie.com/helper-methods.gif)
 #### 3. autoclose html tag
-![](./examples/autoclose.gif)
+![](https://common.xxpie.com/helper-autoclose.gif)
 #### 4. {{}} completion in vue template
-![](./examples/{{}}.gif)
+![](https://common.xxpie.com/helper-{{}}.gif)
 
 ### version 1.0.0
 ## basic functions introduce
 ---
 ### 1. see document detail through hover tag (**now only support iview**)
-![](./examples/document.gif)
+![](https://common.xxpie.com/helper-document.gif)
 
 ### 2. edit through tag name (friendly tip tag name about framework <code>element-ui</code>、<code>vux</code>、<code>iview</code>)
-![](./examples/tag.gif)
+![](https://common.xxpie.com/helper-tag.gif)
 
 ### 3. tag attribute tip
-![](./examples/attr.gif)
+![](https://common.xxpie.com/helper-attr.gif)
 
 ### 4. method tip (tip begin: element -> <code>el-</code>、iview -> <code>iv-</code>)
-![](./examples/method.gif)
+![](https://common.xxpie.com/helper-method.gif)
 
 ### questions feedback 
 if you has any questions or good idea, you can feedback through issue.
