@@ -2,10 +2,10 @@
   "name": "vue-helper",
   "displayName": "vue-helper",
   "description": "vue enhance，extension for Element-UI, VUX, IVIEW",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "publisher": "shenjiaolong",
   "repository": {
-    "url": "https://github.com/vs/vue-helper"
+    "url": "https://github.com/jiaolong1021/vue-helper"
   },
   "engines": {
     "vscode": "^1.25.0"
@@ -112,18 +112,21 @@
         },
         "vue-helper.componentIgnore": {
           "type": "array",
+          "description": "assign which dir ignore search componennt",
           "items": {
             "type": "string"
           }
         },
         "vue-helper.componentPath": {
           "type": "array",
+          "description": "assign which dir to search component",
           "items": {
             "type": "string"
           }
         },
         "vue-helper.componentPrefix": {
           "type": "object",
+          "description": "assign prefix to replace in the file path",
           "default": {
             "alias": "@",
             "path": "src"

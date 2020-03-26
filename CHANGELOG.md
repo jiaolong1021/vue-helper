@@ -1,3 +1,14 @@
+## release 2.3.1 notes
+1. support internal component tips.
+alt + shift + enter to auto import
+![](https://common.xxpie.com/helps-internalComponent.gif)
+2. support import file tips
+![](https://common.xxpie.com/helps-import.gif)
+you can set vue-helper.componentIgnore to ignore files to search component.<br>
+set vue-helper.componentPath to assign the search dir. <br>
+set vue-helper.componentPrefix to replace prefix in file path.
+![](https://common.xxpie.com/helps-componentSet.png)
+
 ## release 2.3.0 notes
 support internal component tips.
 ![](https://common.xxpie.com/helper-components.png)

@@ -192,6 +192,85 @@ export class App {
     }
   }
 
+  // 遍历组件
+  static traverse(poster, search) {
+    const config = workspace.getConfiguration('vue-helper')
+    let vueFiles = []
+    let cond = null
+    if (config.componentPath && Array.isArray(config.componentPath) && config.componentPath.length > 0) {
+      cond = function (rootPath) {
+        return config.componentPath.indexOf(rootPath) !== -1
+      }
+    } else {
+      let ignore = config.componentIgnore || []
+      if (!Array.isArray(ignore)) {
+        ignore = [ignore]
+      }
+      ignore = ignore.concat(['node_modules', 'dist', 'build'])
+      cond = function (rootPath) {
+        return !(rootPath.charAt(0) === '.' || ignore.indexOf(rootPath) !== -1)
+      }
+    }
+    let rootPathes = fs.readdirSync(workspace.rootPath)
+    let prefix = config.componentPrefix
+    
+    for (let i = 0; i < rootPathes.length; i++) {
+      const rootPath = rootPathes[i]
+      if (cond(rootPath)) {
+        let stat = fs.statSync(path.join(workspace.rootPath, rootPath))
+        if (stat.isDirectory()) {
+          App.traverseHandle(rootPath, vueFiles, prefix, poster, search)
+        } else {
+          App.traverseAdd(rootPath, rootPath, vueFiles, prefix, poster, search)
+        }
+      }
+    }
+    return vueFiles;
+  }
+
+  // 遍历处理
+  static traverseHandle(postPath: String, vueFiles, prefix, poster, search) {
+    let fileDirs = fs.readdirSync(path.join(workspace.rootPath, postPath))
+    for (let i = 0; i < fileDirs.length; i++) {
+      const rootPath = fileDirs[i]
+      if (!(rootPath.charAt(0) === '.')) {
+        let dir = path.join(postPath, rootPath)
+        let stat = fs.statSync(path.join(workspace.rootPath, dir))
+        if (stat.isDirectory()) {
+          App.traverseHandle(dir, vueFiles, prefix, poster, search)
+        } else {
+          App.traverseAdd(rootPath, dir, vueFiles, prefix, poster, search)
+        }
+      }
+    }
+  }
+
+  // 遍历添加
+  static traverseAdd(rootPath, dir, vueFiles, prefix, poster, search) {
+    if (rootPath.endsWith(poster)) {
+      let posterReg = new RegExp('-?(.*)' + (poster ? poster : '\\.\\w*') + '$', 'gi')
+      let name = rootPath
+      if (poster === '.vue') {
+        name = name.replace(/([A-Z_])/g, (_, c) => {
+          if (c === '_') {
+            return '-'
+          } else {
+            return c ? ('-' + c.toLowerCase()) : ''
+          }
+        }).replace(posterReg, '$1')
+      } else {
+        name = name.replace(posterReg, '$1')
+      }
+      dir = dir.replace(posterReg, '$1')
+      if (!search || (search && dir.includes(search))) {
+        vueFiles.push({
+          name: name,
+          path: dir.replace(new RegExp('^' + prefix.path), prefix.alias)
+        })
+      }
+    }
+  }
+
   // 自动补全
   autoComplement() {
     let editor = window.activeTextEditor;
@@ -203,6 +282,36 @@ export class App {
       this.autoImport(txt, editor, editor.selection.anchor.line)
       return
     }
+    // 本地文件自动导入
+    let line = editor.selection.anchor.line
+    let isLocalImport = line === 0
+    let prevExplore = line > 3 ? 3 : line
+    for (let i = 0; i < prevExplore; i++) {
+      if (/.*(<script|import|require).*/.test(editor.document.lineAt(line - i).text)) {
+        isLocalImport = true
+        break
+      }
+    }
+    if (isLocalImport) {
+      let search = editor.document.lineAt(line).text.trim()
+      if (search) {
+        let vueFiles = App.traverse('', search)
+        console.log('vueFiles', vueFiles)
+        let suggestions = []
+        vueFiles.forEach(vf => {
+          suggestions.push({
+            label: vf.name,
+            sortText: `1000${vf.name}`,
+            insertText: new SnippetString(`${vf.name}$0></${vf.name}>`),
+            kind: CompletionItemKind.Module,
+            detail: 'import internal file',
+            documentation: 'import internal file: ' + vf.path
+          })
+        })
+      }
+      return
+    }
+
     let nextLineTxt = editor.document.lineAt(editor.selection.anchor.line + 1).text
     let veturConfig = workspace.getConfiguration('vetur')
     const tabSize = workspace.getConfiguration('editor').tabSize
@@ -708,7 +817,7 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
 
     let id = 100;
     // 添加vue组件提示
-    let vueFiles = this.traverse()
+    let vueFiles = App.traverse('.vue', '')
     App.vueFiles = vueFiles
     for (let i = 0; i < vueFiles.length; i++) {
       const vf = vueFiles[i]
@@ -945,82 +1054,31 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     }
   }
 
-  // 遍历组件
-  traverse() {
-    const config = workspace.getConfiguration('vue-helper')
-    let vueFiles = []
-    let cond = null
-    if (config.componentPath && Array.isArray(config.componentPath) && config.componentPath.length > 0) {
-      cond = function (rootPath) {
-        return config.componentPath.indexOf(rootPath) !== -1
-      }
-    } else {
-      let ignore = config.componentIgnore || []
-      if (!Array.isArray(ignore)) {
-        ignore = [ignore]
-      }
-      ignore = ignore.concat(['node_modules', 'dist', 'build'])
-      cond = function (rootPath) {
-        return !(rootPath.charAt(0) === '.' || ignore.indexOf(rootPath) !== -1)
-      }
-    }
-    let rootPathes = fs.readdirSync(workspace.rootPath)
-    let prefix = config.componentPrefix
-    
-    for (let i = 0; i < rootPathes.length; i++) {
-      const rootPath = rootPathes[i]
-      if (cond(rootPath)) {
-        let stat = fs.statSync(path.join(workspace.rootPath, rootPath))
-        if (stat.isDirectory()) {
-          this.traverseHandle(rootPath, vueFiles, prefix)
-        } else {
-          if (rootPath.endsWith('.vue')) {
-            let name = rootPath.replace(/([A-Z_])/g, (_, c) => {
-              if (c === '_') {
-                return '-'
-              } else {
-                return c ? ('-' + c.toLowerCase()) : ''
-              }
-            }).replace(/-?(.*).vue$/gi, '$1')
-            vueFiles.push({
-              name: name,
-              path: name.replace(new RegExp('^' + prefix.path), prefix.alias)
-            })
-          }
-        }
-      }
-    }
-    return vueFiles;
+  // 判断是否是导入
+  isImport() {
+    let lineTxt = this._document.lineAt(this._position.line).text.trim()
+    return /^import.*/.test(lineTxt)
   }
 
-  // 遍历处理
-  traverseHandle(postPath: String, vueFiles, prefix) {
-    let fileDirs = fs.readdirSync(path.join(workspace.rootPath, postPath))
-    for (let i = 0; i < fileDirs.length; i++) {
-      const rootPath = fileDirs[i]
-      if (!(rootPath.charAt(0) === '.')) {
-        let dir = path.join(postPath, rootPath)
-        let stat = fs.statSync(path.join(workspace.rootPath, dir))
-        if (stat.isDirectory()) {
-          this.traverseHandle(dir, vueFiles, prefix)
-        } else {
-          if (rootPath.endsWith('.vue')) {
-            let name = rootPath.replace(/([A-Z_])/g, (_, c) => {
-              if (c === '_') {
-                return '-'
-              } else {
-                return c ? ('-' + c.toLowerCase()) : ''
-              }
-            }).replace(/-?(.*).vue$/gi, '$1')
-            dir = dir.replace(/-?(.*).vue$/gi, '$1')
-            vueFiles.push({
-              name: name,
-              path: dir.replace(new RegExp('^' + prefix.path), prefix.alias)
-            })
-          }
-        }
-      }
+  // 导入建议
+  importSuggestion() {
+    let search = this._document.lineAt(this._position.line).text.trim()
+    search = search.replace(/^import/, '').trim()
+    let suggestions = []
+    if (search) {
+      let vueFiles = App.traverse('', search)
+      vueFiles.forEach(vf => {
+        suggestions.push({
+          label: vf.name,
+          sortText: `0${vf.name}`,
+          insertText: new SnippetString(`${vf.name} from '${vf.path}'`),
+          kind: CompletionItemKind.Folder,
+          detail: vf.name,
+          documentation: `import ${vf.name} from ${vf.path}`
+        })
+      })
     }
+    return suggestions
   }
 
   // 提供完成项(提示入口)
@@ -1056,6 +1114,8 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
           // todo
           return this.getTagSuggestion();
       }
+    } else if (this.isImport()) {
+      return this.importSuggestion()
     } else { return []; }
   }
 }
