@@ -1,3 +1,11 @@
+## release 2.3.3 notes
+fixed bug
+[issue9](https://github.com/jiaolong1021/vue-helper/issues/9)
+
+## release 2.3.2 notes
+alt + shift + enter to auto import
+bug fixed
+
 ## release 2.3.1 notes
 1. support internal component tips.
 alt + shift + enter to auto import

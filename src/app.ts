@@ -122,6 +122,7 @@ export class App {
               let preText = text.replace(/\s*}.*$/, '')
               let insertPos = preText.length
               editor.edit((editBuilder) => {
+                importString = importString.replace(/\\/gi, '/')
                 editBuilder.insert(new Position(importLine, 0), importString);
                 editBuilder.insert(new Position(line, insertPos), ', ' + name);
               });
@@ -135,6 +136,7 @@ export class App {
                 empty += ' '         
               }
               editor.edit((editBuilder) => {
+                importString = importString.replace(/\\/gi, '/')
                 editBuilder.insert(new Position(importLine, 0), importString);
                 editBuilder.insert(new Position(line - 1, editor.document.lineAt(line - 1).text.length), ',\n' + empty + name);
               });
@@ -162,6 +164,7 @@ export class App {
           }
           if (prorityInsertLine > 0) {
             editor.edit((editBuilder) => {
+              importString = importString.replace(/\\/gi, '/')
               editBuilder.insert(new Position(importLine, 0), importString);
               editBuilder.insert(new Position(prorityInsertLine - 1, editor.document.lineAt(prorityInsertLine - 1).text.length), `\n${baseEmpty}components: { ${name} },`);
             });
@@ -181,6 +184,7 @@ export class App {
               }
             }
             editor.edit((editBuilder) => {
+              importString = importString.replace(/\\/gi, '/')
               editBuilder.insert(new Position(importLine, 0), importString);
               editBuilder.insert(new Position(secondInsertLine, editor.document.lineAt(secondInsertLine).text.length),  `\n${spaceAdd}components: { ${name} },`);
             });
@@ -1068,13 +1072,14 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     if (search) {
       let vueFiles = App.traverse('', search)
       vueFiles.forEach(vf => {
+        let filePath = vf.path.replace(/\\/gi, '/')
         suggestions.push({
           label: vf.name,
           sortText: `0${vf.name}`,
-          insertText: new SnippetString(`${vf.name} from '${vf.path}'`),
+          insertText: new SnippetString(`${vf.name} from '${filePath}'`),
           kind: CompletionItemKind.Folder,
           detail: vf.name,
-          documentation: `import ${vf.name} from ${vf.path}`
+          documentation: `import ${vf.name} from ${filePath}`
         })
       })
     }

@@ -2,7 +2,7 @@
   "name": "vue-helper",
   "displayName": "vue-helper",
   "description": "vue enhance，extension for Element-UI, VUX, IVIEW",
-  "version": "2.3.1",
+  "version": "2.3.3",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/jiaolong1021/vue-helper"
@@ -35,6 +35,10 @@
       {
         "command": "vue-helper.remToPx",
         "title": "vue-helper.remToPx"
+      },
+      {
+        "command": "vue-helper.deleteComplete",
+        "title": "vue-helper.deleteComplete"
       }
     ],
     "keybindings": [
@@ -42,11 +46,6 @@
         "command": "vue-helper.functionCompletion",
         "key": "shift+alt+enter",
         "when": "editorTextFocus"
-      },
-      {
-        "key": "backspace",
-        "command": "vue-helper.deleteComplete",
-        "when": "textInputFocus && !sideBarFocus"
       },
       {
         "key": "alt+z",

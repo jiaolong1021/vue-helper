@@ -2,6 +2,10 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
+## release 2.3.3 notes
+fixed bug
+[issue9](https://github.com/jiaolong1021/vue-helper/issues/9)
+
 ## release 2.3.1 notes
 1. support internal component tips.
 alt + shift + enter to auto import
