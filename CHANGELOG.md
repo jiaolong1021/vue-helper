@@ -1,3 +1,7 @@
+## release 2.3.4 notes
+fixed bug
+[issue9](https://github.com/jiaolong1021/vue-helper/issues/9)
+
 ## release 2.3.3 notes
 fixed bug
 [issue9](https://github.com/jiaolong1021/vue-helper/issues/9)
