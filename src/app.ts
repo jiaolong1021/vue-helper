@@ -282,7 +282,7 @@ export class App {
     let txt = editor.document.lineAt(editor.selection.anchor.line).text
     if(editor.document.lineCount <= editor.selection.anchor.line + 1) { return; }
     // 组件自动导入
-    if (/<.*>\s?<\/.*>/gi.test(txt.trim())) {
+    if (/<.*>\s?<\/.*>/gi.test(txt.trim()) || /<.*\/>/gi.test(txt.trim())) {
       this.autoImport(txt, editor, editor.selection.anchor.line)
       return
     }
