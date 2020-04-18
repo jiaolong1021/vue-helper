@@ -516,19 +516,10 @@ export class App {
         if (comment.test(lineText)) {
           let commentIndex = lineText.indexOf(commentEnd)
           while(commentIndex === -1 && lineCurrent < lineCount) {
-            lineText = editor.document.lineAt(++lineCurrent).text()
+            lineText = editor.document.lineAt(++lineCurrent).text
             commentIndex = lineText.indexOf(commentEnd)
           }
           lineText = lineText.substr(commentIndex + 3, lineText.length)
-        }
-        // 一行最前面是否有 />
-        if (lineText.indexOf('/>') !== -1) {
-          let tagCloseIndex = lineText.indexOf('/>')
-          let prevText = lineText.substr(0, tagCloseIndex)
-          let tagReg = /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*(\/)?>/gim
-          if (!prevText.test(tagReg)) {
-            tagStack.pop()
-          }
         }
         const endTagMatch = lineText.match(endTag)
         if (endTagMatch) {
@@ -580,19 +571,19 @@ export class App {
               isNoIncludeTag = true
             }
           }
-          // 计算行内是否有 />
-          if (/^<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*(\/)>/gim.test(lineText)) {
-            if (tagStack.length === 1) {
-              col += lineText.indexOf('/>') + 2
-              editor.selection = new Selection(beginPosition, new Position(lineCurrent, col))
-              break
-            } else {
-              tagStack.pop()
-            }
-          }
           const startAdvance = lineText.indexOf(startTagMatch[1]) + startTagMatch[1].length
           col += startAdvance
           lineText = lineText.substr(startAdvance, lineText.length)
+        }
+        if (lineText.indexOf('/>') !== -1 && Array.isArray(tagStack) && tagStack.length === 1) {
+          let tagCloseIndex = lineText.indexOf('/>')
+          let prevText = lineText.substr(0, tagCloseIndex + 2)
+          let tagReg = /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*(\/)?>/gim
+          if (!tagReg.test(prevText)) {
+            tagStack.pop()
+          }
+          editor.selection = new Selection(beginPosition, new Position(lineCurrent, col + tagCloseIndex + 2))
+          break
         }
         if (!lineText && lineCurrent < lineCount && tagStack.length > 0) {
           do {
@@ -625,6 +616,19 @@ export class App {
         col += textTagPos
       } else if (textTagPos < 0) {
         if (lineCurrent < lineCount) {
+          // 一行最前面是否有 />
+          if (lineText.indexOf('/>') !== -1 && Array.isArray(tagStack) && tagStack.length > 0) {
+            let tagCloseIndex = lineText.indexOf('/>')
+            let prevText = lineText.substr(0, tagCloseIndex + 2)
+            let tagReg = /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*(\/)?>/gim
+            if (!tagReg.test(prevText)) {
+              tagStack.pop()
+            }
+            if(tagStack.length === 0) {
+              editor.selection = new Selection(beginPosition, new Position(lineCurrent, col + tagCloseIndex + 2))
+              break
+            }
+          }
           do {
             ++lineCurrent
             lineText = editor.document.lineAt(lineCurrent).text

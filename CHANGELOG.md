@@ -1,3 +1,6 @@
+## release 2.3.5 notes
+optimize html block select
+
 ## release 2.3.4 notes
 fixed bug
 [issue9](https://github.com/jiaolong1021/vue-helper/issues/9)
