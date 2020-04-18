@@ -300,7 +300,6 @@ export class App {
       let search = editor.document.lineAt(line).text.trim()
       if (search) {
         let vueFiles = App.traverse('', search)
-        console.log('vueFiles', vueFiles)
         let suggestions = []
         vueFiles.forEach(vf => {
           suggestions.push({
@@ -493,86 +492,148 @@ export class App {
 
   // 选择html代码块
   selectHtmlBlock(editor, lineText, startPosition) {
-    let tagReg = /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*(\/)?>/gim
-    let tagRegNoClose = /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*/gim
-    let tagCloseReg = /(<\/[\w-]*>)|(\/>)/gim
-    // 标签栈，用于匹配标签
-    let tagStack = []
-    let isBegin = false
-    let lineCount = editor.document.lineCount
-    // 标记位置
+    const ncname = '[a-zA-Z_][\\w\\-\\.]*'
+    const qnameCapture = '((?:' + ncname + '\\:)?' + ncname + ')'
+    const startTagOpen = new RegExp('^<' + qnameCapture)
+    const endTag = new RegExp('^(<\\/' + qnameCapture + '[^>]*>)')
+    const comment = /^<!--/
+    const commentEnd = '-->'
+    const lineCount = editor.document.lineCount
     let lineCurrent = startPosition.line
-    let beginPosition = new Position(startPosition.line, startPosition.character + lineText.length - lineText.replace(/\s*(.*)/, '$1').length)
-    // 选择html代码块
-    while((!isBegin || tagStack.length > 0) && lineCurrent < lineCount) {
-      isBegin = true
-      // 1. 将标签放入栈
-      let tagArr = null
-      if (lineText.trim().endsWith('>')) {
-        tagArr = lineText.match(tagReg)
-      } else {
-        tagArr = lineText.match(tagRegNoClose)
-        let tagPos = 0
-        if (tagArr) {
-          for (let i = 0; i < tagArr.length; i++) {
-            const tag = tagArr[i];
-            tagPos = lineText.indexOf(tag, tagPos) + tag.length
-          }
-        }
-        let subLineText = lineText.substr(tagPos, lineText.length)
-        let subTagArr = subLineText.match(tagRegNoClose)
-        if (subTagArr) {
-          tagStack = tagStack.concat(subTagArr)              
-        }
-      }
-      if (tagArr) {
-        tagStack = tagStack.concat(tagArr)
-      }
 
-      // 2. 有关闭标签就用最后一个标签来匹配栈中最后标签，如果匹配就移除栈，不匹配也移除栈，继续匹配，直到栈为空退出
-      let tagCloseArr = lineText.match(tagCloseReg)
-      if (tagCloseArr) {
-        let closeTagPos = 0
-        for (let i = 0; i < tagCloseArr.length; i++) {
-          let isRemoveCloseTag = false
-          const tagCloseItem = tagCloseArr[i];
-          closeTagPos = lineText.indexOf(tagCloseItem ,closeTagPos) + tagCloseItem.length
-          if (tagStack.length > 0) {
-            let endTag = tagStack[tagStack.length - 1]
-            while(tagStack.length > 0 && !isRemoveCloseTag) {
-              let endTagName = endTag.replace(/<([\w-]+)(\s.*)?>?/gi, '$1')
-              if (endTagName === tagCloseItem.replace(/<\/([\w-]+)>/gi, '$1') || tagCloseItem.endsWith('/>')) {
-                isRemoveCloseTag = true
-              }
-              tagStack.pop()
-              endTag = tagStack[tagStack.length - 1]
-            }
-            // 匹配完成
-            if (tagStack.length === 0) {
-              // 同一行闭环
-              if (lineCurrent === beginPosition.line) {
-                closeTagPos += beginPosition.character
-              }
-              editor.selection = new Selection(beginPosition, new Position(lineCurrent, closeTagPos))
-              return
-            }
+    let isNoIncludeTag = false
+    let tagStack = null
+    let col = lineText.indexOf(lineText.trim()) + startPosition.character
+    let beginPosition = new Position(startPosition.line, startPosition.character + lineText.length - lineText.replace(/\s*(.*)/, '$1').length)
+    lineText = lineText.trim()
+    let noIncludeTags = ['input', 'img']
+
+    while(lineText) {
+      let textTagPos = lineText.indexOf('<')
+      if (textTagPos === 0) {
+        let hasEndTag = false
+        let hasTag = false
+        if (comment.test(lineText)) {
+          let commentIndex = lineText.indexOf(commentEnd)
+          while(commentIndex === -1 && lineCurrent < lineCount) {
+            lineText = editor.document.lineAt(++lineCurrent).text()
+            commentIndex = lineText.indexOf(commentEnd)
+          }
+          lineText = lineText.substr(commentIndex + 3, lineText.length)
+        }
+        // 一行最前面是否有 />
+        if (lineText.indexOf('/>') !== -1) {
+          let tagCloseIndex = lineText.indexOf('/>')
+          let prevText = lineText.substr(0, tagCloseIndex)
+          let tagReg = /<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*(\/)?>/gim
+          if (!prevText.test(tagReg)) {
+            tagStack.pop()
           }
         }
-      } else if (tagStack.length === 1 && (tagStack[0].indexOf('<img') === 0 || tagStack[0].indexOf('<input') === 0) && lineText.indexOf('>') > 0) {
-        // 图片和input处理
-        let closeTagPos = 0
-        if (lineCurrent === beginPosition.line) {
-          closeTagPos = beginPosition.character + lineText.indexOf('>') + 1
-        } else {
-          closeTagPos = lineText.indexOf('>') + 1
+        const endTagMatch = lineText.match(endTag)
+        if (endTagMatch) {
+          hasEndTag = true
+          if (Array.isArray(tagStack)) {
+            let tagIndex = tagStack.length
+            if (tagIndex > 0) {
+              let isTagMatch = false
+              while(tagIndex > 0 && !isTagMatch) {
+                let tag = tagStack[tagIndex - 1]
+                if (tag === endTagMatch[2]) {
+                  isTagMatch = true
+                }
+                tagStack.pop()
+                --tagIndex
+              }
+            }
+          }
+          let endAdvance = lineText.indexOf(endTagMatch[1]) + endTagMatch[1].length
+          col += endAdvance
+          lineText = lineText.substr(endAdvance, lineText.length)
         }
-        editor.selection = new Selection(beginPosition, new Position(lineCurrent, closeTagPos))
-        return
-      }
-      // 3. 取下一行数据
-      ++lineCurrent
-      if (lineCount >= lineCurrent) {
-        lineText = editor.document.lineAt(lineCurrent).text
+
+        if (Array.isArray(tagStack) && tagStack.length === 0) {
+          editor.selection = new Selection(beginPosition, new Position(lineCurrent, col))
+          break
+        }
+
+        const startTagMatch = lineText.match(startTagOpen)
+        if (startTagMatch) {
+          hasTag = true
+          if (isNoIncludeTag) {
+            let lineTextCur = editor.document.lineAt(lineCurrent).text
+            lineText = lineTextCur.substr(0, col)
+            let indexLast = lineText.lastIndexOf('>')
+            while (indexLast === -1  && lineCurrent > 0) {
+              --lineCurrent
+              lineText = editor.document.lineAt(lineCurrent).text
+              indexLast = lineText.lastIndexOf('>')
+            }
+            editor.selection = new Selection(beginPosition, new Position(lineCurrent, indexLast + 2))
+            break
+          }
+          if (Array.isArray(tagStack)) {
+            tagStack.push(startTagMatch[1])
+          } else {
+            tagStack = [startTagMatch[1]]
+            if (noIncludeTags.indexOf(startTagMatch[1]) !== -1) {
+              isNoIncludeTag = true
+            }
+          }
+          // 计算行内是否有 />
+          if (/^<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*(\/)>/gim.test(lineText)) {
+            if (tagStack.length === 1) {
+              col += lineText.indexOf('/>') + 2
+              editor.selection = new Selection(beginPosition, new Position(lineCurrent, col))
+              break
+            } else {
+              tagStack.pop()
+            }
+          }
+          const startAdvance = lineText.indexOf(startTagMatch[1]) + startTagMatch[1].length
+          col += startAdvance
+          lineText = lineText.substr(startAdvance, lineText.length)
+        }
+        if (!lineText && lineCurrent < lineCount && tagStack.length > 0) {
+          do {
+            ++lineCurrent
+            lineText = editor.document.lineAt(lineCurrent).text
+          } while (!lineText && lineCurrent < lineCount)
+          col = lineText.indexOf(lineText.trim())
+          lineText = lineText.trim()
+          continue
+        }
+        if (!hasTag && !hasEndTag && lineText.length > 0) {
+          let noTagIndex = lineText.indexOf(lineText, 1)
+          if (noTagIndex === -1) {
+            if (lineCurrent < lineCount) {
+              do {
+                ++lineCurrent
+                lineText = editor.document.lineAt(lineCurrent).text
+              } while (!lineText && lineCurrent < lineCount)
+              col = lineText.indexOf(lineText.trim())
+              lineText = lineText.trim()
+            } else {
+              break
+            }
+          } else {
+            lineText = lineText.substr(noTagIndex, lineText.length)
+          }
+        }
+      } else if (textTagPos > 0) {
+        lineText = lineText.substr(textTagPos, lineText.length)
+        col += textTagPos
+      } else if (textTagPos < 0) {
+        if (lineCurrent < lineCount) {
+          do {
+            ++lineCurrent
+            lineText = editor.document.lineAt(lineCurrent).text
+          } while (!lineText && lineCurrent < lineCount)
+          col = lineText.indexOf(lineText.trim())
+          lineText = lineText.trim()
+        } else {
+          lineText = ''
+        }
       }
     }
   }

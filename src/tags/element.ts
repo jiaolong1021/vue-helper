@@ -111,12 +111,12 @@ export default {
     "framework": "element-ui"
   },
   "el-time-picker": {
-    "attributes": ["readonly", "editable", "disabled", "clearable", "size", "placeholder", "start-placeholde", "end-placeholde", "value", "align", "picker-options", "range-separator", "popper-class", "is-range", "arrow-control", "value-format", "default-value", "change", "blur", "focus"],
+    "attributes": ["readonly", "editable", "disabled", "clearable", "size", "placeholder", "start-placeholder", "end-placeholder", "value", "align", "picker-options", "range-separator", "popper-class", "is-range", "arrow-control", "value-format", "default-value", "change", "blur", "focus"],
     "defaults": ["v-model", "placeholder"],
     "framework": "element-ui"
   },
   "el-date-picker": {
-    "attributes": ["readonly", "editable", "disabled", "clearable", "size", "placeholder", "start-placeholde", "end-placeholde", "time-arrow-control", "type", "format", "align", "popper-class", "picker-options", "range-separator", "default-value", "default-time", "value-format", "name", "unlink-panels", "prefix-icon", "clear-icon", "change"],
+    "attributes": ["readonly", "editable", "disabled", "clearable", "size", "placeholder", "start-placeholder", "end-placeholder", "time-arrow-control", "type", "format", "align", "popper-class", "picker-options", "range-separator", "default-value", "default-time", "value-format", "name", "unlink-panels", "prefix-icon", "clear-icon", "change"],
     "defaults": ["v-model", "placeholder"],
     "framework": "element-ui"
   },
