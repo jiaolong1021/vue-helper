@@ -143,9 +143,10 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
   getDefinitionPosition(lineText: string) {
     const pathRegs = [
       /import\s+.*\s+from\s+['"](.*)['"]/,
-      /import\s*\(['"](.*)['"]\)/,
-      /require\s*\(['"](.*)['"]\)/,
-      /import\s+['"](.*)['"]/
+      /import\s*[^'"]*\(['"](.*)['"]\)[^'"]*/,
+      /.*require\s*\([^'"]*['"](.*)['"][^'"]*\)/,
+      /import\s+['"](.*)['"]/,
+      /import\s*\([^'"]*(?:\/\*.*\*\/)\s*['"](.*)['"][^'"]\)*/
     ];
     let execResult: RegExpMatchArray;
     for (const pathReg of pathRegs) {

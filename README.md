@@ -2,8 +2,9 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
-## release 2.3.5 notes
-optimize html block select
+## release 2.3.6 notes
+support router definition jump
+![](https://common.xxpie.com/router-jump.gif)
 
 ## release 2.3.4 notes
 fixed bug

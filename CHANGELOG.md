@@ -1,3 +1,7 @@
+## release 2.3.6 notes
+support router definition jump
+![](https://common.xxpie.com/router-jump.gif)
+
 ## release 2.3.5 notes
 optimize html block select
 
