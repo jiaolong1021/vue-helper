@@ -1138,13 +1138,16 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
       let vueFiles = App.traverse('', search)
       vueFiles.forEach(vf => {
         let filePath = vf.path.replace(/\\/gi, '/')
+        let camelName = vf.name.replace(/(-[a-z])/g, (_, c) => {
+          return c ? c.toUpperCase() : ''
+        }).replace(/-/gi, '')
         suggestions.push({
           label: vf.name,
           sortText: `0${vf.name}`,
-          insertText: new SnippetString(`${vf.name} from '${filePath}'`),
+          insertText: new SnippetString(`${camelName} from '${filePath}'`),
           kind: CompletionItemKind.Folder,
           detail: vf.name,
-          documentation: `import ${vf.name} from ${filePath}`
+          documentation: `import ${camelName} from ${filePath}`
         })
       })
     }
