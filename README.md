@@ -2,7 +2,7 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
-## release 2.3.7 notes
+## release 2.3.8 notes
 support local file property and methods tips through showQuickFix (default ctrl + space).
 ![](https://common.xxpie.com/local-tips.gif)
 

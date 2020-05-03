@@ -1164,7 +1164,14 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
       tagPath = tagPath.replace(/(.*['"])/, '')
       const config = workspace.getConfiguration('vue-helper')
       tagPath = tagPath.replace(config.componentPrefix.alias, config.componentPrefix.path)
-      tagPath = path.join(workspace.rootPath, tagPath + '.vue')
+      if (!tagPath.endsWith('.vue')) {
+        tagPath += '.vue'
+      }
+      if (tagPath.indexOf('./') > 0 || tagPath.indexOf('../') > 0) {
+        tagPath = path.join(this._document.fileName, '../', tagPath)
+      } else {
+        tagPath = path.join(workspace.rootPath, tagPath)
+      }
       documentText = fs.readFileSync(tagPath, 'utf8')
     } else {
       return
@@ -1218,6 +1225,7 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
         }
       }
     }
+    
     let emitReg = documentText.match(/\$emit\(\s?['"](\w*)/g)
     if (emitReg && emitReg.length > 0) {
       for (let i = 0; i < emitReg.length; i++) {
