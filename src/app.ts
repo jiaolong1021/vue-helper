@@ -1151,6 +1151,90 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     return suggestions
   }
 
+  // 获取props属性值
+  getPropAttr(documentText, tagName) {
+    // 1. 找出标签所在路径
+    let tagNameUpper = tagName.replace(/(-[a-z])/g, (_, c) => {
+      return c ? c.toUpperCase() : ''
+    }).replace(/-/gi, '')
+    let pathReg = RegExp('import\\\s+(' + tagName + '|' + tagNameUpper + ')\\\s+from\\\s+[\'\"]([^\'\"]*)', 'g')
+    let pathRegArr = documentText.match(pathReg)
+    if (pathRegArr && pathRegArr.length > 0) {
+      let tagPath = pathRegArr[0]
+      tagPath = tagPath.replace(/(.*['"])/, '')
+      const config = workspace.getConfiguration('vue-helper')
+      tagPath = tagPath.replace(config.componentPrefix.alias, config.componentPrefix.path)
+      tagPath = path.join(workspace.rootPath, tagPath + '.vue')
+      documentText = fs.readFileSync(tagPath, 'utf8')
+    } else {
+      return
+    }
+
+    // 2. 获取标签文件中的prop属性
+    let props = []
+    let scriptIndex = documentText.indexOf('<script')
+    if (scriptIndex) {
+      let docText = documentText.substr(scriptIndex, documentText.length)
+      let propIndex = docText.indexOf('props')
+      let propStack = 0
+      if (propIndex) {
+        docText = docText.substr(propIndex, docText.length)
+        let braceBeforeIndex = docText.indexOf('{')
+        let braceAfterIndex = 0
+        if (braceBeforeIndex) {
+          ++propStack
+          docText = docText.substr(braceBeforeIndex + 1, docText.length)
+        }
+        let propText = ''
+        while(propStack > 0 && docText.length > 0) {
+          braceBeforeIndex = docText.indexOf('{')
+          braceAfterIndex = docText.indexOf('}')
+          if (braceBeforeIndex < braceAfterIndex) {
+            if (propStack === 1) {
+              propText += docText.substr(0, braceBeforeIndex)
+            }
+            ++propStack
+            docText = docText.substr(braceBeforeIndex > 0 ? braceBeforeIndex + 1 : 0, docText.length)
+          } else {
+            --propStack
+            docText = docText.substr(braceAfterIndex > 0 ? braceAfterIndex + 1 : 0, docText.length)
+          }
+        }
+        let propMatch = propText.match(/\s[\w-]*:/gi)
+        if (propMatch.length > 0) {
+          propMatch.forEach((propItem, propIndex) => {
+            propItem = propItem.substr(1, propItem.length - 2)
+            propItem = propItem.replace(/([A-Z])/g, (_, c) => {
+              return c ? '-' + c.toLowerCase() : ''
+            })
+            props.push({
+              label: propItem,
+              sortText: '0' + propIndex,
+              insertText: new SnippetString(`:${propItem}="$0"`),
+              kind: CompletionItemKind.Property,
+              documentation: ''
+            })
+          })
+        }
+      }
+    }
+    let emitReg = documentText.match(/\$emit\(\s?['"](\w*)/g)
+    if (emitReg && emitReg.length > 0) {
+      for (let i = 0; i < emitReg.length; i++) {
+        let emitName = emitReg[i];
+        emitName = emitName.replace(/(.*['"])/, '')
+        props.push({
+          label: emitName,
+          sortText: '0' + (props.length + 1),
+          insertText: new SnippetString(`@${emitName}="$0"`),
+          kind: CompletionItemKind.Method,
+          documentation: ''
+        })
+      }
+    }
+    return props
+  }
+
   // 提供完成项(提示入口)
   provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<CompletionItem[] | CompletionList> {
     this._document = document;
@@ -1175,7 +1259,12 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     if (this.isAttrValueStart(tag, attr)) { // 属性值开始
       return this.getAttrValueSuggestion(tag.text, attr);
     } else if (this.isAttrStart(tag)) { // 属性开始
-      return this.getAttrSuggestion(tag.text);
+      if (TAGS[tag.text]) {
+        // 插件提供
+        return this.getAttrSuggestion(tag.text);
+      } else {
+        return this.getPropAttr(this._document.getText(), tag.text)
+      }
     } else if (this.isTagStart()) { // 标签开始
       switch (document.languageId) {
         case 'vue':
