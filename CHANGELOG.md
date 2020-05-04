@@ -1,3 +1,6 @@
+## release 2.4.1 notes
+vue file support js tips
+
 ## release 2.4.0 notes
 optimize local file import
 

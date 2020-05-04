@@ -12,12 +12,24 @@ export class JsCompletionItemProvider implements CompletionItemProvider {
       let ret = []
       for (const fieldKey in fieldObj.field) {
         if (fieldObj.field.hasOwnProperty(fieldKey)) {
-          ret.push(new CompletionItem(fieldKey, CompletionItemKind.Field))
+          // ret.push(new CompletionItem(fieldKey, CompletionItemKind.Field))
+          ret.push({
+            label: fieldKey,
+            sortText: `00` + (ret.length),
+            insertText: fieldKey,
+            kind: CompletionItemKind.Field
+          })
         }
       }
       for (const methodKey in fieldObj.method) {
         if (fieldObj.method.hasOwnProperty(methodKey)) {
-          ret.push(new CompletionItem(methodKey, CompletionItemKind.Method))
+          ret.push({
+            label: methodKey,
+            sortText: `00` + (ret.length),
+            insertText: methodKey,
+            kind: CompletionItemKind.Field
+          })
+          // ret.push(new CompletionItem(methodKey, CompletionItemKind.Method))
         }
       }
       return ret

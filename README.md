@@ -2,8 +2,8 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
-## release 2.4.0 notes
-optimize local file import
+## release 2.4.1 notes
+vue file support js tips
 
 ## release 2.3.8 notes
 support local file property and methods tips through showQuickFix (default ctrl + space).
