@@ -2,7 +2,7 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
-## release 2.4.1 notes
+## release 2.4.2 notes
 vue file support js tips
 
 ## release 2.3.8 notes

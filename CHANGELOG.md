@@ -1,4 +1,4 @@
-## release 2.4.1 notes
+## release 2.4.2 notes
 vue file support js tips
 
 ## release 2.4.0 notes

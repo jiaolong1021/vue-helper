@@ -27,7 +27,7 @@ export class JsCompletionItemProvider implements CompletionItemProvider {
             label: methodKey,
             sortText: `00` + (ret.length),
             insertText: methodKey,
-            kind: CompletionItemKind.Field
+            kind: CompletionItemKind.Method
           })
           // ret.push(new CompletionItem(methodKey, CompletionItemKind.Method))
         }
