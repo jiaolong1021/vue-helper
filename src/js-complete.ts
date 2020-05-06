@@ -1,4 +1,4 @@
-import { CompletionItemProvider, workspace, TextDocument, Position, CancellationToken, CompletionContext, 
+import { CompletionItemProvider, workspace, TextDocument, Position, CancellationToken, SnippetString, 
   ProviderResult, CompletionItem, CompletionList, CompletionItemKind} from "vscode";
 const fs = require('fs')
 const path = require('path')
@@ -56,10 +56,20 @@ export class JsCompletionItemProvider implements CompletionItemProvider {
                   if (keyMethod === ret && obj.method[keyMethod].params) {
                     if (Array.isArray(obj.method[keyMethod].params)) {
                       return obj.method[keyMethod].params.map(keyItem => {
-                        return new CompletionItem(keyItem, CompletionItemKind.Field)
+                        return {
+                          label: keyItem,
+                          sortText: `00` + (ret.length),
+                          insertText: new SnippetString(keyItem),
+                          kind: CompletionItemKind.Field
+                        }
                       })
                     } else {
-                      return [new CompletionItem(obj.method[keyMethod].params, CompletionItemKind.Field)]
+                      return [{
+                        label: obj.method[keyMethod].params,
+                        sortText: `00` + (ret.length),
+                        insertText: new SnippetString(obj.method[keyMethod].params),
+                        kind: CompletionItemKind.Field
+                      }]
                     }
                   }
                 }

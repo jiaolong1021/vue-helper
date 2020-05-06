@@ -2,7 +2,7 @@
   "name": "vue-helper",
   "displayName": "vue-helper",
   "description": "vue enhance，extension for Element-UI, VUX, IVIEW",
-  "version": "2.4.2",
+  "version": "2.4.4",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/jiaolong1021/vue-helper"
@@ -131,28 +131,13 @@
             "path": "src"
           }
         },
-        "vue-helper.language": {
+        "vue-helper.tagNameWay": {
+          "description": "dictate the rule of vue component name in html section",
           "type": "string",
-          "default": "zh-CN",
-          "description": "Document Language of Element UI",
+          "default": "kebabCase",
           "enum": [
-            "zh-CN",
-            "en-US",
-            "es"
-          ]
-        },
-        "vue-helper.version": {
-          "type": "string",
-          "default": "2.4",
-          "description": "Document version of Element UI",
-          "enum": [
-            "1.4",
-            "2.0",
-            "2.1",
-            "2.2",
-            "2.3",
-            "2.4",
-            "2.5"
+            "kebabCase",
+            "camelCase"
           ]
         },
         "vue-helper.indent-size": {

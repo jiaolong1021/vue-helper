@@ -2,8 +2,9 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
-## release 2.4.2 notes
-vue file support js tips
+## release 2.4.4 notes
+resolve issue [11](https://github.com/jiaolong1021/vue-helper/issues/11) <br>
+optimize some bug.
 
 ## release 2.3.8 notes
 support local file property and methods tips through showQuickFix (default ctrl + space).

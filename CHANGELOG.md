@@ -1,4 +1,8 @@
-## release 2.4.2 notes
+## release 2.4.4 notes
+resolve issue [11](https://github.com/jiaolong1021/vue-helper/issues/11) <br>
+optimize some bug.
+
+## release 2.4.3 notes
 vue file support js tips
 
 ## release 2.4.0 notes

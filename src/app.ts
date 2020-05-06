@@ -35,6 +35,7 @@ export class App {
   private _disposable: Disposable;
   public WORD_REG: RegExp = /(-?\d*\.\d\w*)|([^\`\~\!\@\$\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s]+)/gi;
   public static vueFiles = []
+  public static tagNameWay = 'kebabCase'
 
   asNormal(key: string, modifiers?: string) {
     switch (key) {
@@ -217,6 +218,7 @@ export class App {
     }
     let rootPathes = fs.readdirSync(workspace.rootPath)
     let prefix = config.componentPrefix
+    App.tagNameWay = config.tagNameWay
     
     for (let i = 0; i < rootPathes.length; i++) {
       const rootPath = rootPathes[i]
@@ -255,22 +257,35 @@ export class App {
       let posterReg = new RegExp('-?(.*)' + (poster ? poster : '\\.\\w*') + '$', 'gi')
       let name = rootPath
       if (poster === '.vue') {
-        name = name.replace(/([A-Z_])/g, (_, c) => {
-          if (c === '_') {
-            return '-'
-          } else {
-            return c ? ('-' + c.toLowerCase()) : ''
-          }
-        }).replace(posterReg, '$1')
+        if (App.tagNameWay === 'kebabCase') {
+          name = name.replace(/([A-Z_])/g, (_, c) => {
+            if (c === '_') {
+              return '-'
+            } else {
+              return c ? ('-' + c.toLowerCase()) : ''
+            }
+          }).replace(posterReg, '$1') 
+        } else {
+          name = name.replace(/(-[a-z])/g, (_, c) => {
+            return c ? c.toUpperCase() : ''
+          }).replace(/-/gi, '').replace(posterReg, '$1')
+        }
       } else {
         name = name.replace(posterReg, '$1')
-      }
+      } 
       dir = dir.replace(posterReg, '$1')
       if (!search || (search && dir.includes(search))) {
-        vueFiles.push({
-          name: name,
-          path: dir.replace(new RegExp('^' + prefix.path), prefix.alias)
-        })
+        if (prefix.path === './' || prefix.path === '') {
+          vueFiles.push({
+            name: name,
+            path: prefix.alias + '/' + dir
+          })
+        } else {
+          vueFiles.push({
+            name: name,
+            path: dir.replace(new RegExp('^' + prefix.path), prefix.alias)
+          })
+        }
       }
     }
   }
@@ -1199,15 +1214,17 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
         while(propStack > 0 && docText.length > 0) {
           braceBeforeIndex = docText.indexOf('{')
           braceAfterIndex = docText.indexOf('}')
-          if (braceBeforeIndex < braceAfterIndex) {
+          if (braceBeforeIndex === -1) {
+            docText = ''
+          } else if (braceBeforeIndex < braceAfterIndex) {
             if (propStack === 1) {
               propText += docText.substr(0, braceBeforeIndex)
             }
             ++propStack
-            docText = docText.substr(braceBeforeIndex > 0 ? braceBeforeIndex + 1 : 0, docText.length)
+            docText = docText.substr(braceBeforeIndex > 0 ? braceBeforeIndex + 1 : 1, docText.length)
           } else {
             --propStack
-            docText = docText.substr(braceAfterIndex > 0 ? braceAfterIndex + 1 : 0, docText.length)
+            docText = docText.substr(braceAfterIndex > 0 ? braceAfterIndex + 1 : 1, docText.length)
           }
         }
         let propMatch = propText.match(/\s[\w-]*:/gi)
@@ -1228,7 +1245,6 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
         }
       }
     }
-    
     let emitReg = documentText.match(/\$emit\(\s?['"](\w*)/g)
     if (emitReg && emitReg.length > 0) {
       for (let i = 0; i < emitReg.length; i++) {
