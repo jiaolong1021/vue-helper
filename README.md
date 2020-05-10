@@ -2,8 +2,8 @@
 this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
 ## detail function can see change log.
 
-## release 2.4.5 notes
-optimize some bug.
+## release 2.4.6 notes
+add $refs tips
 
 ## release 2.4.4 notes
 resolve issue [11](https://github.com/jiaolong1021/vue-helper/issues/11) <br>

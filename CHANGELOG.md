@@ -1,3 +1,6 @@
+## release 2.4.6 notes
+add $refs tips
+
 ## release 2.4.5 notes
 optimize some bug.
 
