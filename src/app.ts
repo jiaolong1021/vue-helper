@@ -103,7 +103,7 @@ export class App {
         }
         let name = vf.name.replace(/(-[a-z])/g, (_, c) => {
           return c ? c.toUpperCase() : ''
-        }).replace(/-/gi, '').replace(/^(\w)/, (_, c) => { return c.toUpperCase() })
+        }).replace(/-/gi, '')
         let importString = `import ${name} from '${vf.path}'\n`
         let importLine = line
 
@@ -166,8 +166,8 @@ export class App {
           if (prorityInsertLine > 0) {
             editor.edit((editBuilder) => {
               importString = importString.replace(/\\/gi, '/')
-              editBuilder.insert(new Position(importLine, 0), importString);
-              editBuilder.insert(new Position(prorityInsertLine - 1, editor.document.lineAt(prorityInsertLine - 1).text.length), `\n${baseEmpty}components: { ${name} },`);
+              editBuilder.insert(new Position(importLine - 1, 0), importString);
+              editBuilder.insert(new Position(prorityInsertLine - 1, editor.document.lineAt(prorityInsertLine - 1).text.length), `\n\t${baseEmpty}components: { ${name} },`);
             });
             break
           }

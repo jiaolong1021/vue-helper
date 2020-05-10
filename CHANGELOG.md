@@ -1,3 +1,6 @@
+## release 2.4.5 notes
+optimize some bug.
+
 ## release 2.4.4 notes
 resolve issue [11](https://github.com/jiaolong1021/vue-helper/issues/11) <br>
 optimize some bug.
