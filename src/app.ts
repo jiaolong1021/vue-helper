@@ -83,6 +83,7 @@ export class App {
       const vf = App.vueFiles[i];
       if (tag === vf.name) {
         let countLine = editor.document.lineCount
+        // 找script位置
         while (!/^\s*<script.*>\s*$/.test(<string>editor.document.lineAt(line).text)) {
           if (countLine > line) {
             line++
@@ -94,6 +95,7 @@ export class App {
         if (countLine < line) {
           return
         }
+        // 找import位置
         while (/import /gi.test(editor.document.lineAt(line).text.trim())) {
           if (countLine > line) {
             line++
@@ -265,10 +267,17 @@ export class App {
               return c ? ('-' + c.toLowerCase()) : ''
             }
           }).replace(posterReg, '$1') 
-        } else {
+        } else if (App.tagNameWay === 'camelCase') {
           name = name.replace(/(-[a-z])/g, (_, c) => {
             return c ? c.toUpperCase() : ''
           }).replace(/-/gi, '').replace(posterReg, '$1')
+        }  else if (App.tagNameWay === 'CamelCase') {
+          name = name.replace(/(-[a-z])/g, (_, c) => {
+            return c ? c.toUpperCase() : ''
+          }).replace(/-/gi, '').replace(posterReg, '$1')
+          if (name && name.length > 0) {
+            name = name[0].toUpperCase() + name.substr(1, name.length)
+          }
         }
       } else {
         name = name.replace(posterReg, '$1')
@@ -647,6 +656,9 @@ export class App {
           do {
             ++lineCurrent
             lineText = editor.document.lineAt(lineCurrent).text
+            if (lineText.replace(/\s/gi, '') === '') {
+              lineText = ''
+            }
           } while (!lineText && lineCurrent < lineCount)
           col = lineText.indexOf(lineText.trim())
           lineText = lineText.trim()

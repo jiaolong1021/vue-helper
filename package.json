@@ -2,7 +2,7 @@
   "name": "vue-helper",
   "displayName": "vue-helper",
   "description": "vue enhance，extension for Element-UI, VUX, IVIEW",
-  "version": "2.4.6",
+  "version": "2.4.7",
   "publisher": "shenjiaolong",
   "repository": {
     "url": "https://github.com/jiaolong1021/vue-helper"
@@ -137,7 +137,8 @@
           "default": "kebabCase",
           "enum": [
             "kebabCase",
-            "camelCase"
+            "camelCase",
+            "CamelCase"
           ]
         },
         "vue-helper.indent-size": {

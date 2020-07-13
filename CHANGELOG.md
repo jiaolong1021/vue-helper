@@ -1,3 +1,9 @@
+## release 2.4.7 notes
+resolve issue [14](https://github.com/jiaolong1021/vue-helper/issues/14)
+resolve issue [15](https://github.com/jiaolong1021/vue-helper/issues/15)
+resolve issue [16](https://github.com/jiaolong1021/vue-helper/issues/16)
+optimize block select function.
+
 ## release 2.4.6 notes
 add $refs tips
 

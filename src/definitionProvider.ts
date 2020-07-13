@@ -53,7 +53,7 @@ async function getPlugin(plugin: any) {
       if (err) reject(err)
       // 数组则是获取框架
       let ret = ''
-      let p = {}
+      let p: any = {}
       try {
         p = JSON.parse(data)
       } catch(e) {
@@ -93,7 +93,7 @@ async function getMain(rootPath:string) {
   return await new Promise((resolve, reject) => {
     fs.readFile(rootPath + 'package.json', 'utf8', (err, data) => {
       if (err) reject(err)
-      let p = {}
+      let p: any = {}
       try {
         p = JSON.parse(data)
       } catch(e) {
