@@ -182,7 +182,7 @@
     "typescript": "^2.6.1",
     "vscode": "^1.1.32",
     "webpack": "^4.32.1",
-    "webpack-cli": "^3.3.2"
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.1",
