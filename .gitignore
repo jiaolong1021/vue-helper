@@ -5,3 +5,4 @@ node_modules
 resources/element/versions.json
 resources/app.log
 dist
+.vscode-test
