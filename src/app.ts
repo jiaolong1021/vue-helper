@@ -13,7 +13,6 @@ const path = require('path')
 
 const prettyHTML = require('pretty');
 export const SCHEME = 'vue-helper';
-
 export interface Query {
   keyword: string
 };
@@ -1131,25 +1130,6 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     }
   }
 
-  // 判断是否是{}括号开始
-  isBrace() {
-    let startPosition = new Position(this._position.line, this._position.character - 2)
-    return /[^{]{/gi.test(this._document.getText(new Range(startPosition, this._position)))
-  }
-
-  // {}括号自动补全，只有行内html标签的地方需要补全
-  braceSuggestion() {
-    let txt = this.getTextBeforePosition(this._position).trim()
-    let lineTxt = this._document.lineAt(this._position.line).text.trim()
-    if(/<\w.*$/.test(txt) && lineTxt !== (txt + '}')) {
-      window.activeTextEditor.edit((editBuilder) => {
-        editBuilder.insert(this._position, '}');
-      });
-      let newPosition = window.activeTextEditor.selection.active.translate(0, 0)
-      window.activeTextEditor.selection = new Selection(newPosition, newPosition);
-    }
-  }
-
   // 判断是否是导入
   isImport() {
     let lineTxt = this._document.lineAt(this._position.line).text.trim()
@@ -1279,11 +1259,6 @@ export class ElementCompletionItemProvider implements CompletionItemProvider {
     this._document = document;
     this._position = position;
 
-    // {}补全处理
-    if(this.isBrace()) {
-      this.braceSuggestion()
-      return null
-    }
     if (this.isCloseTag()) { // 标签关闭标签
       this.getCloseTagSuggestion()
       return null

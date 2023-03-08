@@ -6,3 +6,4 @@ resources/element/versions.json
 resources/app.log
 dist
 .vscode-test
+*.vsix
