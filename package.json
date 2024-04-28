@@ -1,196 +1,498 @@
 {
-  "name": "vue-helper",
-  "displayName": "vue-helper",
-  "description": "vue enhance，extension for Element-UI, VUX, IVIEW",
-  "version": "2.4.7",
+  "name": "vue-helpers",
+  "version": "3.4.1",
+  "description": "every thing for speed",
+  "keywords": [
+    "vue-helpers",
+    "vue",
+    "vscode"
+  ],
+  "icon": "asset/logo.png",
   "publisher": "shenjiaolong",
+  "author": "shenjiaolong",
+  "homepage": "https://vuehelpers.80fight.cn/",
+  "license": "ISC",
+  "main": "dist/client",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npm.taobao.org/"
+  },
   "repository": {
-    "url": "https://github.com/jiaolong1021/vue-helper"
+    "type": "git",
+    "url": "https://github.com/jiaolong1021/vue-helpers.git"
+  },
+  "scripts": {
+    "prebuild": "cd ../.. && npm run build",
+    "build": "tsc -b tsconfig.build.json",
+    "build:node": "node scripts/build-node",
+    "watch": "npm run watch:base && npm run watch:vscode",
+    "watch:base": "tsc -b tsconfig.build.json -w",
+    "watch:vscode": "npm run build:node -- --watch",
+    "prepack:node": "npm run prebuild && npm run build:node -- --minify",
+    "release": "npm run release:node",
+    "release:node": "npm run prepack:node && npm run publish",
+    "publish": "vsce package",
+    "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "engines": {
-    "vscode": "^1.25.0"
+    "vscode": "^1.74.0"
   },
-  "categories": [
-    "Snippets",
-    "Other"
-  ],
   "activationEvents": [
-    "onLanguage:html",
-    "onLanguage:vue",
-    "onCommand:vue-helper.functionCompletion",
-    "onCommand:vue-helper.deleteComplete",
-    "onCommand:vue-helper.blockSelect",
-    "onCommand:vue-helper.pxRem",
-    "onCommand:vue-helper.pxToRem",
-    "onCommand:vue-helper.remToPx"
+    "*",
+    "onLanguage:vue"
   ],
-  "main": "./out/src/extension",
-  "icon": "logo.png",
   "contributes": {
     "commands": [
       {
-        "command": "vue-helper.pxToRem",
-        "title": "vue-helper.pxToRem"
+        "command": "meteor.searchFile",
+        "title": "meteor: searchFile"
       },
       {
-        "command": "vue-helper.remToPx",
-        "title": "vue-helper.remToPx"
+        "command": "meteor.backspace",
+        "title": "meteor: backspace"
       },
       {
-        "command": "vue-helper.deleteComplete",
-        "title": "vue-helper.deleteComplete"
+        "command": "meteor.blockSelect",
+        "title": "meteor: blockSelect"
+      },
+      {
+        "command": "meteor.funcEnhance",
+        "title": "meteor: funcEnhance"
+      },
+      {
+        "command": "meteor.encrypt",
+        "title": "加密"
+      },
+      {
+        "command": "meteor.newProject",
+        "title": "新建工程"
+      },
+      {
+        "command": "meteor.componentUpload",
+        "title": "上传",
+        "icon": {
+          "light": "asset/light/upload.svg",
+          "dark": "asset/dark/upload.svg"
+        }
+      },
+      {
+        "command": "meteor.componentSee",
+        "title": "查看",
+        "icon": {
+          "light": "asset/light/eye.svg",
+          "dark": "asset/dark/eye.svg"
+        }
+      },
+      {
+        "command": "meteor.componentSync",
+        "title": "同步",
+        "icon": {
+          "light": "asset/light/sync.svg",
+          "dark": "asset/dark/sync.svg"
+        }
+      },
+      {
+        "command": "meteor.explain",
+        "title": "使用说明",
+        "icon": {
+          "light": "asset/light/eye.svg",
+          "dark": "asset/dark/eye.svg"
+        }
+      },
+      {
+        "command": "meteor.generateLocalConfig",
+        "title": "生成本地配置",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "meteor.interfaceSync",
+        "title": "更新",
+        "icon": {
+          "light": "asset/light/sync.svg",
+          "dark": "asset/dark/sync.svg"
+        }
+      },
+      {
+        "command": "meteor.interfaceSetting",
+        "title": "设置",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "meteor.interfaceVisit",
+        "title": "swagger访问",
+        "icon": {
+          "light": "asset/light/publish.svg",
+          "dark": "asset/dark/publish.svg"
+        }
+      },
+      {
+        "command": "meteor.packageSetting",
+        "title": "设置",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "meteor.packageRun",
+        "title": "运行",
+        "icon": "$(run)"
+      },
+      {
+        "command": "meteor.packageVisit",
+        "title": "jenkins访问",
+        "icon": {
+          "light": "asset/light/publish.svg",
+          "dark": "asset/dark/publish.svg"
+        }
+      },
+      {
+        "command": "meteor.packageVersion",
+        "title": "获取jenkins最新版本",
+        "icon": {
+          "light": "asset/light/ok.svg",
+          "dark": "asset/dark/ok.svg"
+        }
+      },
+      {
+        "command": "meteor.deploySetting",
+        "title": "设置",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "meteor.deploySync",
+        "title": "环境信息同步",
+        "icon": "$(search-refresh)"
+      },
+      {
+        "command": "meteor.deployUpload",
+        "title": "配置集上传",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "meteor.deployDownload",
+        "title": "配置集下载",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "meteor.deployRun",
+        "title": "运行",
+        "icon": "$(run)"
+      },
+      {
+        "command": "meteor.setting",
+        "title": "设置",
+        "icon": {
+          "light": "asset/light/esetting.svg",
+          "dark": "asset/dark/esetting.svg"
+        }
+      },
+      {
+        "command": "meteor.envDev",
+        "title": "开发环境"
+      },
+      {
+        "command": "meteor.envTest",
+        "title": "测试环境"
+      },
+      {
+        "command": "meteor.envProduct",
+        "title": "生产环境"
+      },
+      {
+        "command": "meteor.deployVisit",
+        "title": "容器云访问",
+        "icon": {
+          "light": "asset/light/publish.svg",
+          "dark": "asset/dark/publish.svg"
+        }
+      },
+      {
+        "command": "meteor.deployWebVisit",
+        "title": "Web网页访问",
+        "icon": {
+          "light": "asset/light/eye.svg",
+          "dark": "asset/dark/eye.svg"
+        }
+      },
+      {
+        "command": "meteor.libraryVisit",
+        "title": "仓库访问",
+        "icon": {
+          "light": "asset/light/publish.svg",
+          "dark": "asset/dark/publish.svg"
+        }
+      },
+      {
+        "command": "meteor.libraryAddress",
+        "title": "获取仓库地址",
+        "icon": {
+          "light": "asset/light/ok.svg",
+          "dark": "asset/dark/ok.svg"
+        }
+      },
+      {
+        "command": "meteor.generatePage",
+        "title": "添加页面"
+      },
+      {
+        "command": "meteor.openComponentAddDialog",
+        "title": "添加组件"
+      },
+      {
+        "command": "meteor.openComposiableAddDialog",
+        "title": "添加文件"
+      },
+      {
+        "command": "meteor.newForm",
+        "title": "添加表单页面"
+      },
+      {
+        "command": "meteor.uploadFilePlugin",
+        "title": "上传插件"
+      },
+      {
+        "command": "meteor.openUploadPluginPage",
+        "title": "上传插件"
+      },
+      {
+        "command": "meteor.addPluginFile",
+        "title": "添加插件文件"
       }
     ],
+    "views": {
+      "explorer": [
+        {
+          "id": "meteor",
+          "name": "meteor",
+          "icon": "$(json)",
+          "visibility": "visible",
+          "contextualTitle": "meteor"
+        }
+      ]
+    },
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "meteor.generatePage",
+          "group": "0_meteor_add"
+        },
+        {
+          "command": "meteor.openComponentAddDialog",
+          "group": "0_meteor_add"
+        },
+        {
+          "command": "meteor.openComposiableAddDialog",
+          "group": "0_meteor_add"
+        },
+        {
+          "command": "meteor.newForm",
+          "group": "0_meteor_add"
+        },
+        {
+          "command": "meteor.uploadFilePlugin",
+          "group": "0_meteor"
+        },
+        {
+          "command": "meteor.addPluginFile",
+          "group": "0_meteor"
+        }
+      ],
+      "editor/context": [
+        {
+          "when": "!inOutput",
+          "command": "meteor.openUploadPluginPage",
+          "group": "navigation"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "meteor.setting",
+          "group": "navigation",
+          "when": "view == meteor"
+        },
+        {
+          "command": "meteor.explain",
+          "group": "navigation",
+          "when": "view == meteor"
+        },
+        {
+          "command": "meteor.generateLocalConfig",
+          "group": "navigation",
+          "when": "view == meteor"
+        },
+        {
+          "command": "meteor.envDev",
+          "when": "view == meteor"
+        },
+        {
+          "command": "meteor.envTest",
+          "when": "view == meteor"
+        },
+        {
+          "command": "meteor.envProduct",
+          "when": "view == meteor"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "meteor.componentSee",
+          "group": "inline",
+          "when": "view == meteor && viewItem == componentTreeItem"
+        },
+        {
+          "command": "meteor.componentUpload",
+          "group": "inline",
+          "when": "view == meteor && viewItem == componentTreeItem"
+        },
+        {
+          "command": "meteor.componentSync",
+          "group": "inline",
+          "when": "view == meteor && viewItem == componentTreeItem"
+        },
+        {
+          "command": "meteor.interfaceSync",
+          "group": "inline",
+          "when": "view == meteor && viewItem == interfaceTreeItem"
+        },
+        {
+          "command": "meteor.interfaceSetting",
+          "group": "inline",
+          "when": "view == meteor && viewItem == interfaceTreeItem"
+        },
+        {
+          "command": "meteor.interfaceVisit",
+          "group": "inline",
+          "when": "view == meteor && viewItem == interfaceTreeItem"
+        },
+        {
+          "command": "meteor.packageSetting",
+          "group": "inline",
+          "when": "view == meteor && viewItem == packageTreeItem"
+        },
+        {
+          "command": "meteor.packageRun",
+          "group": "inline",
+          "when": "view == meteor && viewItem == packageTreeItem"
+        },
+        {
+          "command": "meteor.packageVisit",
+          "group": "inline",
+          "when": "view == meteor && viewItem == packageTreeItem"
+        },
+        {
+          "command": "meteor.packageVersion",
+          "group": "inline",
+          "when": "view == meteor && viewItem == packageTreeItem"
+        },
+        {
+          "command": "meteor.deploySetting",
+          "group": "inline",
+          "when": "view == meteor && viewItem == deployTreeItem"
+        },
+        {
+          "command": "meteor.deploySync",
+          "group": "inline",
+          "when": "view == meteor && viewItem == deployTreeItem"
+        },
+        {
+          "command": "meteor.deployDownload",
+          "group": "inline",
+          "when": "view == meteor && viewItem == deployTreeItem"
+        },
+        {
+          "command": "meteor.deployUpload",
+          "group": "inline",
+          "when": "view == meteor && viewItem == deployTreeItem"
+        },
+        {
+          "command": "meteor.deployRun",
+          "group": "inline",
+          "when": "view == meteor && viewItem == deployTreeItem"
+        },
+        {
+          "command": "meteor.deployVisit",
+          "group": "inline",
+          "when": "view == meteor && viewItem == deployTreeItem"
+        },
+        {
+          "command": "meteor.deployWebVisit",
+          "group": "inline",
+          "when": "view == meteor && viewItem == deployTreeItem"
+        },
+        {
+          "command": "meteor.libraryVisit",
+          "group": "inline",
+          "when": "view == meteor && viewItem == libraryTreeItem"
+        },
+        {
+          "command": "meteor.libraryAddress",
+          "group": "inline",
+          "when": "view == meteor && viewItem == libraryTreeItem"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "meteor",
+      "type": "object",
+      "properties": {
+        "meteor.user": {
+          "type": "string",
+          "default": ""
+        },
+        "meteor.projectTemplate": {
+          "type": "string",
+          "default": ""
+        },
+        "meteor.chromePath": {
+          "type": "string",
+          "default": ""
+        }
+      }
+    },
     "keybindings": [
       {
-        "command": "vue-helper.functionCompletion",
-        "key": "shift+alt+enter",
-        "when": "editorTextFocus"
-      },
-      {
-        "key": "alt+z",
-        "command": "vue-helper.pxRem",
+        "key": "alt+f",
+        "command": "meteor.searchFile",
         "when": "editorTextFocus"
       },
       {
         "key": "alt+x",
-        "command": "vue-helper.blockSelect",
+        "command": "meteor.blockSelect",
+        "when": "editorTextFocus"
+      },
+      {
+        "key": "shift+alt+enter",
+        "command": "meteor.funcEnhance",
         "when": "editorTextFocus"
       }
-    ],
-    "snippets": [
-      {
-        "language": "javascript",
-        "path": "./snippets/element.json"
-      },
-      {
-        "language": "javascript",
-        "path": "./snippets/iview2.json"
-      },
-      {
-        "language": "javascript",
-        "path": "./snippets/vue.json"
-      },
-      {
-        "language": "vue-html",
-        "path": "./snippets/iview-html.json"
-      },
-      {
-        "language": "vue-html",
-        "path": "./snippets/element-html.json"
-      },
-      {
-        "language": "vue-html",
-        "path": "./snippets/vue-html.json"
-      }
-    ],
-    "configuration": {
-      "type": "object",
-      "title": "Vue Helper",
-      "properties": {
-        "vue-helper.alias": {
-          "type": "object",
-          "default": {
-            "@": "."
-          },
-          "description": "webpack alias"
-        },
-        "vue-helper.rem-px": {
-          "type": "number",
-          "default": 16,
-          "description": "1rem equal px value"
-        },
-        "vue-helper.rem-decimal-length": {
-          "type": "integer",
-          "default": 4,
-          "description": "decimal length"
-        },
-        "vue-helper.tips": {
-          "type": "string",
-          "default": "tips.json"
-        },
-        "vue-helper.componentIgnore": {
-          "type": "array",
-          "description": "assign which dir ignore search componennt",
-          "items": {
-            "type": "string"
-          }
-        },
-        "vue-helper.componentPath": {
-          "type": "array",
-          "description": "assign which dir to search component",
-          "items": {
-            "type": "string"
-          }
-        },
-        "vue-helper.componentPrefix": {
-          "type": "object",
-          "description": "assign prefix to replace in the file path",
-          "default": {
-            "alias": "@",
-            "path": "src"
-          }
-        },
-        "vue-helper.tagNameWay": {
-          "description": "dictate the rule of vue component name in html section",
-          "type": "string",
-          "default": "kebabCase",
-          "enum": [
-            "kebabCase",
-            "camelCase",
-            "CamelCase"
-          ]
-        },
-        "vue-helper.indent-size": {
-          "type": "number",
-          "default": 2,
-          "description": "Indentation size of snippets"
-        },
-        "vue-helper.quotes": {
-          "type": "string",
-          "default": "double",
-          "description": "Normal quotes of autocomplete",
-          "enum": [
-            "single",
-            "double"
-          ]
-        },
-        "vue-helper.pug-quotes": {
-          "type": "string",
-          "default": "single",
-          "description": "Pug quotes of autocomplete",
-          "enum": [
-            "single",
-            "double"
-          ]
-        }
-      }
-    }
-  },
-  "scripts": {
-    "vscode:prepublish": "webpack --mode production",
-    "compile": "webpack --mode none",
-    "watch": "webpack --mode none --watch",
-    "test-compile": "tsc -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    ]
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.7",
-    "@types/node": "^10.12.12",
-    "ts-loader": "^6.0.1",
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.32",
-    "webpack": "^4.32.1",
-    "webpack-cli": "^3.3.2"
-  },
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.1",
-    "glob": "^7.1.3",
-    "hoek": "^5.0.3",
-    "lodash": "^4.17.15",
-    "param-case": "^2.1.1",
+    "@types/node": "^20.12.2",
+    "@types/pg": "^8.11.4",
+    "@types/uuid": "^9.0.0",
+    "@types/vscode": "^1.74.0",
+    "axios": "^0.21.1",
+    "camelcase": "^7.0.1",
+    "crypto-js": "^4.1.1",
+    "esbuild": "0.15.18",
+    "esbuild-plugin-copy": "^2.0.2",
+    "execa": "^6.1.0",
+    "find-chrome-bin": "^1.0.2",
+    "jsonc-parser": "^3.2.0",
+    "mitt": "^3.0.0",
+    "opn": "^6.0.0",
     "pretty": "^2.0.0",
-    "shelljs": "^0.8.3"
+    "puppeteer-core": "^19.7.0",
+    "uuid": "^9.0.0",
+    "vsce": "latest"
+  },
+  "gitHead": "b1cc40df44b9cd73ba96d8b7f0369cc3ce690c45",
+  "dependencies": {
+    "glob": "^10.3.12",
+    "minio": "^7.1.3",
+    "mysql2": "^3.9.3",
+    "pg": "^8.11.3"
   }
 }

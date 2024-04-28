@@ -1,5 +1,5 @@
 # vue-helper
-this plugin main enhance ability for write vue and extension for Element-UI, VUX, IVIEW
+this plugin main enhance ability for write vue and extension for Element-UI, Element-Plus, Ant Design Vue
 ## detail function can see change log.
 
 ## release 2.4.7 notes
