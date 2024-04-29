@@ -27,15 +27,12 @@
   },
   "gitHead": "b1cc40df44b9cd73ba96d8b7f0369cc3ce690c45",
   "scripts": {
-    "prebuild": "cd ../.. && npm run build",
-    "build": "tsc -b tsconfig.build.json",
-    "build:node": "node scripts/build-node",
-    "watch": "npm run watch:base & npm run watch:vscode",
-    "watch:base": "tsc -b tsconfig.build.json -w",
-    "watch:vscode": "npm run build:node -- --watch",
+    "dev": "concurrently \"npm:dev-tsc\" \"npm:dev-build\"",
+    "dev-tsc": "tsc -b tsconfig.build.json -w",
+    "dev-build": "node scripts/build -- --watch",
+    "build": "node scripts/build",
     "prepack:node": "npm run prebuild && npm run build:node -- --minify",
-    "release": "npm run release:node",
-    "release:node": "npm run prepack:node && npm run publish",
+    "release": "npm run prepack:node && npm run publish",
     "publish": "vsce package",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
@@ -101,6 +98,7 @@
   },
   "dependencies": {
     "@vscode/l10n": "^0.0.18",
+    "concurrently": "^8.2.2",
     "glob": "^10.3.12",
     "minio": "^7.1.3",
     "mysql2": "^3.9.3",

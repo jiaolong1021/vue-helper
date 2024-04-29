@@ -31,35 +31,6 @@ require('esbuild').build({
 				})
 			},
 		},
-		// require('esbuild-plugin-copy').copy({
-		// 	resolveFrom: 'cwd',
-		// 	assets: {
-		// 		from: ['./node_modules/@volar/preview/bin/**/*'],
-		// 		to: ['./dist/preview-bin'],
-		// 	},
-		// 	keepStructure: true,
-		// }),
-		// require('esbuild-plugin-copy').copy({
-		// 	resolveFrom: 'cwd',
-		// 	assets: {
-		// 		from: ['./node_modules/@volar/vue-language-core/schemas/**/*'],
-		// 		to: ['./dist/schemas'],
-		// 	},
-		// 	keepStructure: true,
-		// }),
-		// {
-		// 	name: 'meta',
-		// 	setup(build) {
-		// 		build.onEnd((result) => {
-		// 			if (result.metafile && result.errors.length === 0) {
-		// 				fs.writeFileSync(
-		// 					path.resolve(__dirname, '../meta.json'),
-		// 					JSON.stringify(result.metafile),
-		// 				);
-		// 			}
-		// 		});
-		// 	},
-		// },
 	],
 }).then(() => {
 }).catch(() => process.exit(1))

@@ -15,7 +15,7 @@
 		},
 		{
 			"type": "npm",
-			"script": "watch",
+			"script": "dev",
 			"isBackground": true,
 			"group": {
 				"kind": "build",

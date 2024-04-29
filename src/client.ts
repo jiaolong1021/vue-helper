@@ -1,13 +1,17 @@
-import { ExtensionContext, workspace, l10n, window } from 'vscode';
+import { ExtensionContext, workspace } from 'vscode';
+import ExplorerProvider from './explorer';
+import FrameworkProvider from './framework';
 
 export function activate(context: ExtensionContext) {
-  const message = l10n.t('Hello');
-  window.showInformationMessage(message)
   if (workspace.workspaceFolders) {
     init(context)
   }
 }
 
 function init(context: ExtensionContext) {
-  console.log(context)
+  const explorer = new ExplorerProvider(context)
+
+  const framework = new FrameworkProvider(explorer)
+  framework.register()
+
 }
