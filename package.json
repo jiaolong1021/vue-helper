@@ -1,18 +1,19 @@
 {
-  "name": "vue-helpers",
-  "version": "3.4.1",
+  "name": "vue-vue-helper",
+  "version": "2.5.0",
   "description": "every thing for speed",
   "keywords": [
-    "vue-helpers",
+    "vue-vue-helper",
     "vue",
     "vscode"
   ],
   "icon": "asset/logo.png",
   "publisher": "shenjiaolong",
   "author": "shenjiaolong",
-  "homepage": "https://vuehelpers.80fight.cn/",
-  "license": "ISC",
+  "homepage": "https://vue-vue-helper.80fight.cn/",
+  "license": "MIT",
   "main": "dist/client",
+  "l10n": "./l10n",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -22,13 +23,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jiaolong1021/vue-helpers.git"
+    "url": "https://github.com/jiaolong1021/vue-vue-helper.git"
   },
+  "gitHead": "b1cc40df44b9cd73ba96d8b7f0369cc3ce690c45",
   "scripts": {
     "prebuild": "cd ../.. && npm run build",
     "build": "tsc -b tsconfig.build.json",
     "build:node": "node scripts/build-node",
-    "watch": "npm run watch:base && npm run watch:vscode",
+    "watch": "npm run watch:base & npm run watch:vscode",
     "watch:base": "tsc -b tsconfig.build.json -w",
     "watch:vscode": "npm run build:node -- --watch",
     "prepack:node": "npm run prebuild && npm run build:node -- --minify",
@@ -47,423 +49,31 @@
   "contributes": {
     "commands": [
       {
-        "command": "meteor.searchFile",
-        "title": "meteor: searchFile"
+        "command": "vue-helper.searchFile",
+        "title": "%extentions.searchFile%"
       },
       {
-        "command": "meteor.backspace",
-        "title": "meteor: backspace"
+        "command": "vue-helper.backspace",
+        "title": "vue-helper: backspace"
       },
       {
-        "command": "meteor.blockSelect",
-        "title": "meteor: blockSelect"
+        "command": "vue-helper.blockSelect",
+        "title": "vue-helper: blockSelect"
       },
       {
-        "command": "meteor.funcEnhance",
-        "title": "meteor: funcEnhance"
-      },
-      {
-        "command": "meteor.encrypt",
-        "title": "加密"
-      },
-      {
-        "command": "meteor.newProject",
-        "title": "新建工程"
-      },
-      {
-        "command": "meteor.componentUpload",
-        "title": "上传",
-        "icon": {
-          "light": "asset/light/upload.svg",
-          "dark": "asset/dark/upload.svg"
-        }
-      },
-      {
-        "command": "meteor.componentSee",
-        "title": "查看",
-        "icon": {
-          "light": "asset/light/eye.svg",
-          "dark": "asset/dark/eye.svg"
-        }
-      },
-      {
-        "command": "meteor.componentSync",
-        "title": "同步",
-        "icon": {
-          "light": "asset/light/sync.svg",
-          "dark": "asset/dark/sync.svg"
-        }
-      },
-      {
-        "command": "meteor.explain",
-        "title": "使用说明",
-        "icon": {
-          "light": "asset/light/eye.svg",
-          "dark": "asset/dark/eye.svg"
-        }
-      },
-      {
-        "command": "meteor.generateLocalConfig",
-        "title": "生成本地配置",
-        "icon": "$(cloud-download)"
-      },
-      {
-        "command": "meteor.interfaceSync",
-        "title": "更新",
-        "icon": {
-          "light": "asset/light/sync.svg",
-          "dark": "asset/dark/sync.svg"
-        }
-      },
-      {
-        "command": "meteor.interfaceSetting",
-        "title": "设置",
-        "icon": "$(settings-gear)"
-      },
-      {
-        "command": "meteor.interfaceVisit",
-        "title": "swagger访问",
-        "icon": {
-          "light": "asset/light/publish.svg",
-          "dark": "asset/dark/publish.svg"
-        }
-      },
-      {
-        "command": "meteor.packageSetting",
-        "title": "设置",
-        "icon": "$(settings-gear)"
-      },
-      {
-        "command": "meteor.packageRun",
-        "title": "运行",
-        "icon": "$(run)"
-      },
-      {
-        "command": "meteor.packageVisit",
-        "title": "jenkins访问",
-        "icon": {
-          "light": "asset/light/publish.svg",
-          "dark": "asset/dark/publish.svg"
-        }
-      },
-      {
-        "command": "meteor.packageVersion",
-        "title": "获取jenkins最新版本",
-        "icon": {
-          "light": "asset/light/ok.svg",
-          "dark": "asset/dark/ok.svg"
-        }
-      },
-      {
-        "command": "meteor.deploySetting",
-        "title": "设置",
-        "icon": "$(settings-gear)"
-      },
-      {
-        "command": "meteor.deploySync",
-        "title": "环境信息同步",
-        "icon": "$(search-refresh)"
-      },
-      {
-        "command": "meteor.deployUpload",
-        "title": "配置集上传",
-        "icon": "$(cloud-upload)"
-      },
-      {
-        "command": "meteor.deployDownload",
-        "title": "配置集下载",
-        "icon": "$(cloud-download)"
-      },
-      {
-        "command": "meteor.deployRun",
-        "title": "运行",
-        "icon": "$(run)"
-      },
-      {
-        "command": "meteor.setting",
-        "title": "设置",
-        "icon": {
-          "light": "asset/light/esetting.svg",
-          "dark": "asset/dark/esetting.svg"
-        }
-      },
-      {
-        "command": "meteor.envDev",
-        "title": "开发环境"
-      },
-      {
-        "command": "meteor.envTest",
-        "title": "测试环境"
-      },
-      {
-        "command": "meteor.envProduct",
-        "title": "生产环境"
-      },
-      {
-        "command": "meteor.deployVisit",
-        "title": "容器云访问",
-        "icon": {
-          "light": "asset/light/publish.svg",
-          "dark": "asset/dark/publish.svg"
-        }
-      },
-      {
-        "command": "meteor.deployWebVisit",
-        "title": "Web网页访问",
-        "icon": {
-          "light": "asset/light/eye.svg",
-          "dark": "asset/dark/eye.svg"
-        }
-      },
-      {
-        "command": "meteor.libraryVisit",
-        "title": "仓库访问",
-        "icon": {
-          "light": "asset/light/publish.svg",
-          "dark": "asset/dark/publish.svg"
-        }
-      },
-      {
-        "command": "meteor.libraryAddress",
-        "title": "获取仓库地址",
-        "icon": {
-          "light": "asset/light/ok.svg",
-          "dark": "asset/dark/ok.svg"
-        }
-      },
-      {
-        "command": "meteor.generatePage",
-        "title": "添加页面"
-      },
-      {
-        "command": "meteor.openComponentAddDialog",
-        "title": "添加组件"
-      },
-      {
-        "command": "meteor.openComposiableAddDialog",
-        "title": "添加文件"
-      },
-      {
-        "command": "meteor.newForm",
-        "title": "添加表单页面"
-      },
-      {
-        "command": "meteor.uploadFilePlugin",
-        "title": "上传插件"
-      },
-      {
-        "command": "meteor.openUploadPluginPage",
-        "title": "上传插件"
-      },
-      {
-        "command": "meteor.addPluginFile",
-        "title": "添加插件文件"
+        "command": "vue-helper.funcEnhance",
+        "title": "vue-helper: funcEnhance"
       }
     ],
-    "views": {
-      "explorer": [
-        {
-          "id": "meteor",
-          "name": "meteor",
-          "icon": "$(json)",
-          "visibility": "visible",
-          "contextualTitle": "meteor"
-        }
-      ]
-    },
-    "menus": {
-      "explorer/context": [
-        {
-          "command": "meteor.generatePage",
-          "group": "0_meteor_add"
-        },
-        {
-          "command": "meteor.openComponentAddDialog",
-          "group": "0_meteor_add"
-        },
-        {
-          "command": "meteor.openComposiableAddDialog",
-          "group": "0_meteor_add"
-        },
-        {
-          "command": "meteor.newForm",
-          "group": "0_meteor_add"
-        },
-        {
-          "command": "meteor.uploadFilePlugin",
-          "group": "0_meteor"
-        },
-        {
-          "command": "meteor.addPluginFile",
-          "group": "0_meteor"
-        }
-      ],
-      "editor/context": [
-        {
-          "when": "!inOutput",
-          "command": "meteor.openUploadPluginPage",
-          "group": "navigation"
-        }
-      ],
-      "view/title": [
-        {
-          "command": "meteor.setting",
-          "group": "navigation",
-          "when": "view == meteor"
-        },
-        {
-          "command": "meteor.explain",
-          "group": "navigation",
-          "when": "view == meteor"
-        },
-        {
-          "command": "meteor.generateLocalConfig",
-          "group": "navigation",
-          "when": "view == meteor"
-        },
-        {
-          "command": "meteor.envDev",
-          "when": "view == meteor"
-        },
-        {
-          "command": "meteor.envTest",
-          "when": "view == meteor"
-        },
-        {
-          "command": "meteor.envProduct",
-          "when": "view == meteor"
-        }
-      ],
-      "view/item/context": [
-        {
-          "command": "meteor.componentSee",
-          "group": "inline",
-          "when": "view == meteor && viewItem == componentTreeItem"
-        },
-        {
-          "command": "meteor.componentUpload",
-          "group": "inline",
-          "when": "view == meteor && viewItem == componentTreeItem"
-        },
-        {
-          "command": "meteor.componentSync",
-          "group": "inline",
-          "when": "view == meteor && viewItem == componentTreeItem"
-        },
-        {
-          "command": "meteor.interfaceSync",
-          "group": "inline",
-          "when": "view == meteor && viewItem == interfaceTreeItem"
-        },
-        {
-          "command": "meteor.interfaceSetting",
-          "group": "inline",
-          "when": "view == meteor && viewItem == interfaceTreeItem"
-        },
-        {
-          "command": "meteor.interfaceVisit",
-          "group": "inline",
-          "when": "view == meteor && viewItem == interfaceTreeItem"
-        },
-        {
-          "command": "meteor.packageSetting",
-          "group": "inline",
-          "when": "view == meteor && viewItem == packageTreeItem"
-        },
-        {
-          "command": "meteor.packageRun",
-          "group": "inline",
-          "when": "view == meteor && viewItem == packageTreeItem"
-        },
-        {
-          "command": "meteor.packageVisit",
-          "group": "inline",
-          "when": "view == meteor && viewItem == packageTreeItem"
-        },
-        {
-          "command": "meteor.packageVersion",
-          "group": "inline",
-          "when": "view == meteor && viewItem == packageTreeItem"
-        },
-        {
-          "command": "meteor.deploySetting",
-          "group": "inline",
-          "when": "view == meteor && viewItem == deployTreeItem"
-        },
-        {
-          "command": "meteor.deploySync",
-          "group": "inline",
-          "when": "view == meteor && viewItem == deployTreeItem"
-        },
-        {
-          "command": "meteor.deployDownload",
-          "group": "inline",
-          "when": "view == meteor && viewItem == deployTreeItem"
-        },
-        {
-          "command": "meteor.deployUpload",
-          "group": "inline",
-          "when": "view == meteor && viewItem == deployTreeItem"
-        },
-        {
-          "command": "meteor.deployRun",
-          "group": "inline",
-          "when": "view == meteor && viewItem == deployTreeItem"
-        },
-        {
-          "command": "meteor.deployVisit",
-          "group": "inline",
-          "when": "view == meteor && viewItem == deployTreeItem"
-        },
-        {
-          "command": "meteor.deployWebVisit",
-          "group": "inline",
-          "when": "view == meteor && viewItem == deployTreeItem"
-        },
-        {
-          "command": "meteor.libraryVisit",
-          "group": "inline",
-          "when": "view == meteor && viewItem == libraryTreeItem"
-        },
-        {
-          "command": "meteor.libraryAddress",
-          "group": "inline",
-          "when": "view == meteor && viewItem == libraryTreeItem"
-        }
-      ]
-    },
-    "configuration": {
-      "title": "meteor",
-      "type": "object",
-      "properties": {
-        "meteor.user": {
-          "type": "string",
-          "default": ""
-        },
-        "meteor.projectTemplate": {
-          "type": "string",
-          "default": ""
-        },
-        "meteor.chromePath": {
-          "type": "string",
-          "default": ""
-        }
-      }
-    },
     "keybindings": [
       {
-        "key": "alt+f",
-        "command": "meteor.searchFile",
-        "when": "editorTextFocus"
-      },
-      {
         "key": "alt+x",
-        "command": "meteor.blockSelect",
+        "command": "vue-helper.blockSelect",
         "when": "editorTextFocus"
       },
       {
         "key": "shift+alt+enter",
-        "command": "meteor.funcEnhance",
+        "command": "vue-helper.funcEnhance",
         "when": "editorTextFocus"
       }
     ]
@@ -473,6 +83,7 @@
     "@types/pg": "^8.11.4",
     "@types/uuid": "^9.0.0",
     "@types/vscode": "^1.74.0",
+    "@vscode/l10n-dev": "^0.0.35",
     "axios": "^0.21.1",
     "camelcase": "^7.0.1",
     "crypto-js": "^4.1.1",
@@ -488,8 +99,8 @@
     "uuid": "^9.0.0",
     "vsce": "latest"
   },
-  "gitHead": "b1cc40df44b9cd73ba96d8b7f0369cc3ce690c45",
   "dependencies": {
+    "@vscode/l10n": "^0.0.18",
     "glob": "^10.3.12",
     "minio": "^7.1.3",
     "mysql2": "^3.9.3",

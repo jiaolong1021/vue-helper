@@ -1,0 +1,8 @@
+{
+  "Hello": "中文",
+  "Hello {0}": "Hello {0}",
+  "Hello {0}/This is a comment": {
+    "message": "Hello {0}",
+    "comment": ["This is a comment"]
+  }
+}
