@@ -26311,6 +26311,7 @@ var require_framework = __commonJS({
         this.TAGSJs = {};
         this.SNIPPETS = {};
         this.GlobalAttrs = {};
+        this.tagReg = /<([\w-]+)\s+/g;
         this.frameworkProvider = frameworkProvider;
         this.vueFiles = this.frameworkProvider.explorer.traverse.search(".vue", "");
         this.TAGS = (0, index_1.getTags)(this.frameworkProvider.frameworks);
@@ -26339,10 +26340,68 @@ var require_framework = __commonJS({
         }
         return false;
       }
+      getCloseTagSuggestion(document, position) {
+        let txtInfo = document.lineAt(position.line);
+        let txtArr = txtInfo.text.match(/<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim);
+        let tag = "div";
+        if (txtArr) {
+          tag = txtArr[txtArr.length - 1].replace(/<([\w-]+)(\s*|(\s+[\w-_:@\.]+(=("[^"]*"|'[^']*'))?)+)\s*>/gim, "$1");
+        }
+        let exclude = ["br", "img"];
+        if (exclude.indexOf(tag) === -1 && vscode_12.window.activeTextEditor) {
+          vscode_12.window.activeTextEditor.edit((editBuilder) => {
+            editBuilder.insert(position, "</" + tag + ">");
+          });
+          let newPosition = vscode_12.window.activeTextEditor.selection.active.translate(0, 0);
+          if (newPosition) {
+            vscode_12.window.activeTextEditor.selection = new vscode_12.Selection(newPosition, newPosition);
+          }
+        }
+      }
+      getTextBeforePosition(position, document) {
+        var start = new vscode_12.Position(position.line, 0);
+        var range = new vscode_12.Range(start, position);
+        return document.getText(range);
+      }
+      matchTag(reg, txt, line, document, position) {
+        let match;
+        let arr = [];
+        if (/<\/?[-\w]+[^<>]*>[\s\w]*<?\s*[\w-]*$/.test(txt) || position.line === line && (/^\s*[^<]+\s*>[^<\/>]*$/.test(txt) || /[^<>]*<$/.test(txt[txt.length - 1]))) {
+          return "break";
+        }
+        while (match = reg.exec(txt)) {
+          arr.push({
+            text: match[1],
+            offset: document.offsetAt(new vscode_12.Position(line, match.index))
+          });
+        }
+        return arr.pop();
+      }
+      getPreTag(document, position) {
+        let line = position.line;
+        let tag;
+        let txt = this.getTextBeforePosition(position, document);
+        while (position.line - line < 10 && line >= 0) {
+          if (line !== position.line) {
+            txt = document.lineAt(line).text;
+          }
+          tag = this.matchTag(this.tagReg, txt, line, document, position);
+          if (tag === "break") {
+            return;
+          }
+          if (tag) {
+            return tag;
+          }
+          line--;
+        }
+        return;
+      }
       provideCompletionItems(document, position, token, context) {
         console.log(token);
         console.log(context);
         if (this.isCloseTag(document, position)) {
+          this.getCloseTagSuggestion(document, position);
+          return [];
         }
         return [];
       }

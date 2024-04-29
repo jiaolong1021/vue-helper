@@ -1,4 +1,4 @@
-import { workspace } from 'vscode'
+import { workspace, TextDocument, Position } from 'vscode'
 import * as os from 'os'
 
 // windows根路径处理
@@ -33,4 +33,13 @@ export function getTabSize() {
     space = '  '
   }
   return space
+}
+
+export function getCurrentWord(document: TextDocument, position: Position) {
+  let i = position.character - 1;
+  const text = document.lineAt(position.line).text;
+  while (i >= 0 && ' \t\n\r\v":{[,'.indexOf(text.charAt(i)) === -1) {
+    i--;
+  }
+  return text.substring(i + 1, position.character);
 }
