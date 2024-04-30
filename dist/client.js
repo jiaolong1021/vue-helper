@@ -9,7 +9,7 @@ var require_util = __commonJS({
   "out/util/util.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.getTabSize = exports2.getWorkspaceRoot = exports2.winRootPathHandle = void 0;
+    exports2.getCurrentWord = exports2.getTabSize = exports2.getWorkspaceRoot = exports2.winRootPathHandle = void 0;
     var vscode_12 = require("vscode");
     var os = require("os");
     function winRootPathHandle(pagePath) {
@@ -46,6 +46,15 @@ var require_util = __commonJS({
       return space;
     }
     exports2.getTabSize = getTabSize;
+    function getCurrentWord(document, position) {
+      let i = position.character - 1;
+      const text = document.lineAt(position.line).text;
+      while (i >= 0 && ' 	\n\r\v":{[,'.indexOf(text.charAt(i)) === -1) {
+        i--;
+      }
+      return text.substring(i + 1, position.character);
+    }
+    exports2.getCurrentWord = getCurrentWord;
   }
 });
 
@@ -26290,6 +26299,10 @@ var require_framework = __commonJS({
     var FrameworkProvider = class {
       constructor(explorer) {
         this.frameworks = [];
+        this.pathAlias = {
+          alias: "",
+          path: ""
+        };
         this.explorer = explorer;
         try {
           const pkg = fs.readFileSync((0, util_1.winRootPathHandle)(path.join(this.explorer.projectRootPath, "package.json")), "utf-8");
@@ -26312,6 +26325,7 @@ var require_framework = __commonJS({
         this.SNIPPETS = {};
         this.GlobalAttrs = {};
         this.tagReg = /<([\w-]+)\s+/g;
+        this.attrReg = /(?:\(|\s*)((\w(-)?)*)=['"][^'"]*/;
         this.frameworkProvider = frameworkProvider;
         this.vueFiles = this.frameworkProvider.explorer.traverse.search(".vue", "");
         this.TAGS = (0, index_1.getTags)(this.frameworkProvider.frameworks);
@@ -26396,12 +26410,190 @@ var require_framework = __commonJS({
         }
         return;
       }
+      getPreAttr(document, position) {
+        let txt = this.getTextBeforePosition(position, document).replace(/"[^'"]*(\s*)[^'"]*$/, "");
+        let end = position.character;
+        let start = txt.lastIndexOf(" ", end) + 1;
+        let parsedTxt = document.getText(new vscode_12.Range(position.line, start, position.line, end));
+        return this.matchAttr(this.attrReg, parsedTxt);
+      }
+      matchAttr(reg, txt) {
+        let match;
+        match = reg.exec(txt);
+        return !/"[^"]*"/.test(txt) && match && match[1];
+      }
+      isAttrValueStart(tag, attr) {
+        return tag && attr;
+      }
+      getAttrValues(tag, attr) {
+        let attrValues = [];
+        if (this.GlobalAttrs[attr]) {
+          attrValues = this.GlobalAttrs[attr].values;
+        }
+        if (this.TAGS[tag] && this.TAGS[tag][attr]) {
+          attrValues = this.TAGS[tag][attr].values;
+        }
+        return attrValues;
+      }
+      getAttrValueSuggestion(tag, attr) {
+        console.log("tag", tag);
+        let suggestions = [];
+        const values = this.getAttrValues(tag, attr);
+        values.forEach((value) => {
+          suggestions.push({
+            sortText: `000${value}`,
+            label: value,
+            kind: vscode_12.CompletionItemKind.Value,
+            detail: "vue-helper detail",
+            documentation: "vue-helper document"
+          });
+        });
+        return suggestions;
+      }
+      getAttrSuggestion(tag, document, position) {
+        let suggestions = [];
+        let tagAttrs = this.getTagAttrs(tag);
+        let preText = this.getTextBeforePosition(position, document);
+        let prefix = preText.replace(/['"]([^'"]*)['"]$/, "").split(/\s|\(+/).pop();
+        const type = prefix[0] === "@" ? "method" : "attribute";
+        tagAttrs.forEach((attr) => {
+          if (attr.type === type) {
+            suggestions.push(this.buildAttrSuggestion(attr));
+          }
+        });
+        for (let attr in this.GlobalAttrs) {
+          let gAttr = this.GlobalAttrs[attr];
+          if (gAttr.type === type) {
+            suggestions.push(this.buildAttrSuggestion(Object.assign({ name: attr }, gAttr)));
+          }
+        }
+        return suggestions;
+      }
+      buildAttrSuggestion(attr) {
+        const completionItem = new vscode_12.CompletionItem(attr.name);
+        completionItem.sortText = `000${attr.name}`;
+        completionItem.insertText = attr.name;
+        completionItem.kind = attr.type === "method" ? vscode_12.CompletionItemKind.Method : vscode_12.CompletionItemKind.Property;
+        completionItem.documentation = attr.description;
+        return completionItem;
+      }
+      getTagAttrs(tag) {
+        let attrs = [];
+        if (this.TAGS[tag]) {
+          for (const key in this.TAGS[tag]) {
+            if (key !== "_self") {
+              attrs.push(Object.assign({ name: key }, this.TAGS[tag][key]));
+            }
+          }
+        }
+        return attrs;
+      }
+      getPropAttr(document, tagName) {
+        let documentText = document.getText();
+        let tagNameUpper = tagName.replace(/(-[a-z])/g, (_, c) => {
+          return c ? c.toUpperCase() : "";
+        }).replace(/-/gi, "");
+        let pathReg = RegExp("import\\s+(" + tagName + "|" + tagNameUpper + `)\\s+from\\s+['"]([^'"]*)`, "g");
+        let pathRegArr = documentText.match(pathReg);
+        if (pathRegArr && pathRegArr.length > 0) {
+          let tagPath = pathRegArr[0];
+          tagPath = tagPath.replace(/(.*['"])/, "");
+          tagPath = tagPath.replace(this.frameworkProvider.pathAlias.alias, this.frameworkProvider.pathAlias.path);
+          if (!tagPath.endsWith(".vue")) {
+            tagPath += ".vue";
+          }
+          if (tagPath.indexOf("./") > 0 || tagPath.indexOf("../") > 0) {
+            tagPath = path.join(document.fileName, "../", tagPath);
+          } else {
+            tagPath = path.join(vscode_12.workspace.rootPath || "", tagPath);
+          }
+          documentText = fs.readFileSync(tagPath, "utf8");
+        } else {
+          return;
+        }
+        let props = [];
+        let scriptIndex = documentText.indexOf("<script");
+        if (scriptIndex) {
+          let docText = documentText.substr(scriptIndex, documentText.length);
+          let propIndex = docText.indexOf("props");
+          let propStack = 0;
+          if (propIndex) {
+            docText = docText.substr(propIndex, docText.length);
+            let braceBeforeIndex = docText.indexOf("{");
+            let braceAfterIndex = 0;
+            if (braceBeforeIndex) {
+              ++propStack;
+              docText = docText.substr(braceBeforeIndex + 1, docText.length);
+            }
+            let propText = "";
+            while (propStack > 0 && docText.length > 0) {
+              braceBeforeIndex = docText.indexOf("{");
+              braceAfterIndex = docText.indexOf("}");
+              if (braceBeforeIndex === -1) {
+                docText = "";
+              } else if (braceBeforeIndex < braceAfterIndex) {
+                if (propStack === 1) {
+                  propText += docText.substr(0, braceBeforeIndex);
+                }
+                ++propStack;
+                docText = docText.substr(braceBeforeIndex > 0 ? braceBeforeIndex + 1 : 1, docText.length);
+              } else {
+                --propStack;
+                docText = docText.substr(braceAfterIndex > 0 ? braceAfterIndex + 1 : 1, docText.length);
+              }
+            }
+            let propMatch = propText.match(/\s[\w-]*:/gi);
+            if (propMatch && propMatch.length > 0) {
+              propMatch.forEach((propItem, propIndex2) => {
+                propItem = propItem.substr(1, propItem.length - 2);
+                propItem = propItem.replace(/([A-Z])/g, (_, c) => {
+                  return c ? "-" + c.toLowerCase() : "";
+                });
+                props.push({
+                  label: propItem,
+                  sortText: "0" + propIndex2,
+                  insertText: new vscode_12.SnippetString(`:${propItem}="$0"`),
+                  kind: vscode_12.CompletionItemKind.Property,
+                  documentation: ""
+                });
+              });
+            }
+          }
+        }
+        let emitReg = documentText.match(/\$emit\(\s?['"](\w*)/g);
+        if (emitReg && emitReg.length > 0) {
+          for (let i = 0; i < emitReg.length; i++) {
+            let emitName = emitReg[i];
+            emitName = emitName.replace(/(.*['"])/, "");
+            props.push({
+              label: emitName,
+              sortText: "0" + (props.length + 1),
+              insertText: new vscode_12.SnippetString(`@${emitName}="$0"`),
+              kind: vscode_12.CompletionItemKind.Method,
+              documentation: ""
+            });
+          }
+        }
+        return props;
+      }
       provideCompletionItems(document, position, token, context) {
         console.log(token);
         console.log(context);
         if (this.isCloseTag(document, position)) {
           this.getCloseTagSuggestion(document, position);
           return [];
+        }
+        let tag = this.getPreTag(document, position);
+        let attr = this.getPreAttr(document, position);
+        console.log(tag, attr);
+        if (tag && attr && this.isAttrValueStart(tag, attr)) {
+          return this.getAttrValueSuggestion(tag.text, attr);
+        } else if (tag) {
+          if (this.TAGS[tag.text]) {
+            return this.getAttrSuggestion(tag.text, document, position);
+          } else {
+            return this.getPropAttr(document, tag.text);
+          }
         }
         return [];
       }

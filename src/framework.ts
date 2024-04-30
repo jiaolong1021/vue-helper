@@ -1,9 +1,9 @@
 import { CancellationToken, CompletionContext, CompletionItem, CompletionItemProvider, CompletionList, Position, ProviderResult, TextDocument, 
-  languages, workspace, Range, window, Selection, CompletionItemKind } from "vscode";
+  languages, workspace, Range, window, Selection, CompletionItemKind, SnippetString } from "vscode";
 import ExplorerProvider from './explorer'
 import * as fs from 'fs'
 import * as path from 'path'
-import { winRootPathHandle, getCurrentWord } from './util/util'
+import { winRootPathHandle } from './util/util'
 import { getJsTags, getTags } from './tags/index'
 import { getSnippets } from "./snippets";
 import { getGlobalAttrs } from './globalAttribute/index'
@@ -16,6 +16,10 @@ export interface TagObject {
 export default class FrameworkProvider {
   public explorer: ExplorerProvider
   public frameworks: string[] = []
+  public pathAlias = {
+    alias: '',
+    path: ''
+  }
 
   constructor(explorer: ExplorerProvider) {
     this.explorer = explorer
@@ -169,18 +173,167 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     return attrValues
   }
 
-   // 获取建议属性值
+   // 属性值建议值
    getAttrValueSuggestion(tag: string, attr: string): CompletionItem[] {
-    let suggestions: any[] = [];
+    console.log('tag', tag)
+    let suggestions: CompletionItem[] = [];
     const values = this.getAttrValues(tag, attr);
     values.forEach((value: string) => {
       suggestions.push({
         sortText: `000${value}`,
         label: value,
-        kind: CompletionItemKind.Value
+        kind: CompletionItemKind.Value,
+        detail: 'vue-helper detail',
+        documentation: 'vue-helper document'
       });
     });
     return suggestions;
+  }
+
+  // 属性建议值
+  getAttrSuggestion(tag: string, document: TextDocument, position: Position) {
+    let suggestions: any[] = [];
+    let tagAttrs = this.getTagAttrs(tag);
+
+    let preText = this.getTextBeforePosition(position, document);
+    let prefix: any = preText.replace(/['"]([^'"]*)['"]$/, '').split(/\s|\(+/).pop();
+    // 方法属性
+    const type = prefix[0] === '@' ? 'method' : 'attribute';
+
+    tagAttrs.forEach((attr: any) => {
+      if (attr.type === type) {
+        suggestions.push(this.buildAttrSuggestion(attr))
+      }
+    });
+
+    for (let attr in this.GlobalAttrs) {
+      let gAttr = this.GlobalAttrs[attr]
+      if (gAttr.type === type) {
+        suggestions.push(this.buildAttrSuggestion({
+          name: attr,
+          ...gAttr
+        }))
+      }
+    }
+    return suggestions;
+  }
+
+  buildAttrSuggestion(attr: any) {
+    const completionItem = new CompletionItem(attr.name)
+    completionItem.sortText = `000${attr.name}`
+    completionItem.insertText = attr.name
+    completionItem.kind = attr.type === 'method' ? CompletionItemKind.Method : CompletionItemKind.Property
+    completionItem.documentation = attr.description
+    return completionItem
+  }
+
+  // 获取标签包含的属性
+  getTagAttrs(tag: string) {
+    let attrs: any = []
+    if (this.TAGS[tag]) {
+      for (const key in this.TAGS[tag]) {
+        if (key !== '_self') {
+          attrs.push({
+            name: key,
+            ...this.TAGS[tag][key]
+          })
+        }
+      }
+    }
+    return attrs
+  }
+
+  // 获取props属性值
+  getPropAttr(document: TextDocument, tagName: any) {
+    let documentText = document.getText()
+    // 1. 找出标签所在路径
+    let tagNameUpper = tagName.replace(/(-[a-z])/g, (_: any, c: any) => {
+      return c ? c.toUpperCase() : '';
+    }).replace(/-/gi, '');
+    let pathReg = RegExp('import\\\s+(' + tagName + '|' + tagNameUpper + ')\\\s+from\\\s+[\'\"]([^\'\"]*)', 'g');
+    let pathRegArr = documentText.match(pathReg);
+    if (pathRegArr && pathRegArr.length > 0) {
+      let tagPath = pathRegArr[0];
+      tagPath = tagPath.replace(/(.*['"])/, '');
+      tagPath = tagPath.replace(this.frameworkProvider.pathAlias.alias, this.frameworkProvider.pathAlias.path);
+      if (!tagPath.endsWith('.vue')) {
+        tagPath += '.vue';
+      }
+      if (tagPath.indexOf('./') > 0 || tagPath.indexOf('../') > 0) {
+        tagPath = path.join(document.fileName, '../', tagPath);
+      } else {
+        tagPath = path.join(workspace.rootPath || '', tagPath);
+      }
+      documentText = fs.readFileSync(tagPath, 'utf8');
+    } else {
+      return;
+    }
+
+    // 2. 获取标签文件中的prop属性
+    let props: CompletionItem[] = [];
+    let scriptIndex = documentText.indexOf('<script');
+    if (scriptIndex) {
+      let docText = documentText.substr(scriptIndex, documentText.length);
+      let propIndex = docText.indexOf('props');
+      let propStack = 0;
+      if (propIndex) {
+        docText = docText.substr(propIndex, docText.length);
+        let braceBeforeIndex = docText.indexOf('{');
+        let braceAfterIndex = 0;
+        if (braceBeforeIndex) {
+          ++propStack;
+          docText = docText.substr(braceBeforeIndex + 1, docText.length);
+        }
+        let propText = '';
+        while(propStack > 0 && docText.length > 0) {
+          braceBeforeIndex = docText.indexOf('{');
+          braceAfterIndex = docText.indexOf('}');
+          if (braceBeforeIndex === -1) {
+            docText = '';
+          } else if (braceBeforeIndex < braceAfterIndex) {
+            if (propStack === 1) {
+              propText += docText.substr(0, braceBeforeIndex);
+            }
+            ++propStack;
+            docText = docText.substr(braceBeforeIndex > 0 ? braceBeforeIndex + 1 : 1, docText.length);
+          } else {
+            --propStack;
+            docText = docText.substr(braceAfterIndex > 0 ? braceAfterIndex + 1 : 1, docText.length);
+          }
+        }
+        let propMatch = propText.match(/\s[\w-]*:/gi);
+        if (propMatch && propMatch.length > 0) {
+          propMatch.forEach((propItem, propIndex) => {
+            propItem = propItem.substr(1, propItem.length - 2);
+            propItem = propItem.replace(/([A-Z])/g, (_, c) => {
+              return c ? '-' + c.toLowerCase() : '';
+            });
+            props.push({
+              label: propItem,
+              sortText: '0' + propIndex,
+              insertText: new SnippetString(`:${propItem}="$0"`),
+              kind: CompletionItemKind.Property,
+              documentation: ''
+            });
+          });
+        }
+      }
+    }
+    let emitReg = documentText.match(/\$emit\(\s?['"](\w*)/g);
+    if (emitReg && emitReg.length > 0) {
+      for (let i = 0; i < emitReg.length; i++) {
+        let emitName = emitReg[i];
+        emitName = emitName.replace(/(.*['"])/, '');
+        props.push({
+          label: emitName,
+          sortText: '0' + (props.length + 1),
+          insertText: new SnippetString(`@${emitName}="$0"`),
+          kind: CompletionItemKind.Method,
+          documentation: ''
+        });
+      }
+    }
+    return props;
   }
 
   provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): ProviderResult<CompletionItem[] | CompletionList<CompletionItem>> {
@@ -196,12 +349,20 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     // 标签、属性
     let tag: TagObject | string | undefined = this.getPreTag(document, position);
     let attr = this.getPreAttr(document, position);
-    let word = getCurrentWord(document, position)
-    let hasSquareQuote = document.lineAt(position.line).text.includes('<')
+    // let word = getCurrentWord(document, position)
+    // let hasSquareQuote = document.lineAt(position.line).text.includes('<')
+    console.log(tag, attr)
 
     if (tag && attr && this.isAttrValueStart(tag, attr)) {
       // 属性值开始
       return this.getAttrValueSuggestion(tag.text, attr);
+    } else if (tag) {
+      // 属性开始
+      if (this.TAGS[tag.text]) {
+        return this.getAttrSuggestion(tag.text, document, position);
+      } else {
+        return this.getPropAttr(document, tag.text);
+      }
     }
 
     return []
