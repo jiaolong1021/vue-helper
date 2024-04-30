@@ -3,7 +3,7 @@ import { CancellationToken, CompletionContext, CompletionItem, CompletionItemPro
 import ExplorerProvider from './explorer'
 import * as fs from 'fs'
 import * as path from 'path'
-import { winRootPathHandle } from './util/util'
+import { winRootPathHandle, getRelativePath, getCurrentWord } from './util/util'
 import { getJsTags, getTags } from './tags/index'
 import { getSnippets } from "./snippets";
 import { getGlobalAttrs } from './globalAttribute/index'
@@ -336,6 +336,113 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     return props;
   }
 
+  // 判断是否是导入
+  isImport(document: TextDocument, position: Position) {
+    let lineTxt = document.lineAt(position.line).text.trim();
+    return /^\s*import.*/.test(lineTxt);
+  }
+
+  // 导入建议
+  importSuggestion(document: TextDocument, position: Position) {
+    let search = document.lineAt(position.line).text.trim();
+    search = search.replace(/^import/, '').trim();
+    let suggestions: CompletionItem[] = [];
+    if (search) {
+      let files = this.frameworkProvider.explorer.traverse.search('', search);
+      let pathAlias = this.frameworkProvider.pathAlias
+      files.forEach(vf => {
+        let filePath = '';
+        if (pathAlias.alias) {
+          filePath = vf.path
+        } else {
+          filePath = getRelativePath(document.uri.path, path.join(this.frameworkProvider.explorer.projectRootPath, vf.path))
+        }
+        let camelName = vf.name
+        let insertPath = filePath
+        if (filePath.endsWith('.ts')) {
+          insertPath = filePath.substring(0, filePath.length - 3)
+        }
+        suggestions.push({
+          label: vf.name,
+          sortText: `0${vf.name}`,
+          insertText: new SnippetString(`\${1:${camelName}} from '${insertPath}'`),
+          kind: CompletionItemKind.Reference,
+          detail: vf.name,
+          documentation: `import ${camelName} from ${filePath}`
+        });
+      });
+    }
+    return suggestions;
+  }
+
+  // vue文件只在template里面提示，已script作为标记
+  notInTemplate(document: TextDocument, position: Position): boolean {
+    let line = position.line;
+    while (line) {
+      if (/^\s*<script.*>\s*$/.test(<string>document.lineAt(line).text)) {
+        return true;
+      }
+      line--;
+    }
+    return false;
+  }
+
+   // 编译建议标签
+   buildTagSuggestion(tag: string, tagVal: any, id: number) {
+    return {
+      label: tag,
+      sortText: `00${id}${tag}`,
+      insertText: new SnippetString(tagVal),
+      kind: CompletionItemKind.Snippet,
+      detail: `meteor`,
+      documentation: ''
+    };
+  }
+
+  // 获取js代码提示
+  getTagJsSuggestion() {
+    let suggestions: any[] = [];
+    let id = 1;
+    try {
+      for (let tag in this.TAGSJs) {
+        suggestions.push(this.buildTagSuggestion(tag, this.TAGSJs[tag], id));
+        id++;
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    return suggestions
+  }
+
+  // 获取建议标签
+  getTagSuggestion() {
+    let suggestions: CompletionItem[] = [];
+    let id = 1;
+    // 添加vue组件提示
+    for (let i = 0; i < this.vueFiles.length; i++) {
+      const vf = this.vueFiles[i];
+      suggestions.push({
+        label: vf.name,
+        sortText: `0${i}${vf.name}`,
+        insertText: new SnippetString(`${vf.name}$0></${vf.name}>`),
+        kind: CompletionItemKind.Folder,
+        detail: 'meteor',
+        documentation: `import ${vf.name} from '${vf.path}'`,
+        command: { command: 'meteor.funcEnhance', title: 'meteor: funcEnhance' }
+      });
+    }
+
+    try {
+      for (let tag in this.SNIPPETS) {
+        suggestions.push(this.buildTagSuggestion(tag, this.SNIPPETS[tag], id));
+        id++;
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    return suggestions;
+  }
+
   provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): ProviderResult<CompletionItem[] | CompletionList<CompletionItem>> {
     console.log(token)
     console.log(context)
@@ -349,7 +456,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     // 标签、属性
     let tag: TagObject | string | undefined = this.getPreTag(document, position);
     let attr = this.getPreAttr(document, position);
-    // let word = getCurrentWord(document, position)
+    let word = getCurrentWord(document, position)
     // let hasSquareQuote = document.lineAt(position.line).text.includes('<')
     console.log(tag, attr)
 
@@ -363,6 +470,10 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
       } else {
         return this.getPropAttr(document, tag.text);
       }
+    } else if (this.isImport(document, position)) {
+      return this.importSuggestion(document, position);
+    } else if (word.includes('e') || word.includes('a')) {
+      return this.notInTemplate(document, position) ? this.getTagJsSuggestion() : this.getTagSuggestion()
     }
 
     return []

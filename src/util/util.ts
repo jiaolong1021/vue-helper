@@ -1,5 +1,6 @@
 import { workspace, TextDocument, Position } from 'vscode'
 import * as os from 'os'
+import * as path from 'path'
 
 // windows根路径处理
 export function winRootPathHandle(pagePath: string) {
@@ -42,4 +43,13 @@ export function getCurrentWord(document: TextDocument, position: Position) {
     i--;
   }
   return text.substring(i + 1, position.character);
+}
+
+export function getRelativePath(src: string, dist: string) {
+  let vfPath = path.relative(winRootPathHandle(src), dist)
+  vfPath = vfPath.replace(/\\/gi, '/')
+  if (vfPath.startsWith('../')) {
+    vfPath = vfPath.substr(1, vfPath.length)
+  }
+  return vfPath
 }
