@@ -1,8 +1,17 @@
 {
-  "Hello": "heelo",
-  "Hello {0}": "Hello {0}",
-  "Hello {0}/This is a comment": {
-    "message": "Hello {0}",
-    "comment": ["This is a comment"]
-  }
+  "placeholder": "Please Input",
+  "placeholder:select": "Please select",
+  "placeholder:time": "Arbitrary time",
+  "el-autocomplete:placeholder": "Please Input",
+  "el-date-picker:placeholder": "Pick a day",
+  "el-date-picker.to": "To",
+  "el-date-picker.start-placeholder": "Start date",
+  "el-date-picker.end-placeholder": "End date",
+  "el-time-picker.to": "To",
+  "el-time-picker.start-placeholder": "Start time",
+  "el-time-picker.end-placeholder": "End time",
+  "el-time-select.placeholder": "Select time",
+  "el-transfer.placeholder": "Please Input",
+  "el-upload.drop": "Drop file here or",
+  "el-upload.click": "click to upload"
 }

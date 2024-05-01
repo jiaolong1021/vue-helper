@@ -1,8 +1,17 @@
 {
-  "Hello": "中文",
-  "Hello {0}": "Hello {0}",
-  "Hello {0}/This is a comment": {
-    "message": "Hello {0}",
-    "comment": ["This is a comment"]
-  }
+  "placeholder": "请输入",
+  "placeholder:select": "请选择",
+  "placeholder:time": "时间",
+  "el-autocomplete:placeholder": "请输入",
+  "el-date-picker:placeholder": "选择日期",
+  "el-date-picker.to": "到",
+  "el-date-picker.start-placeholder": "开始日期",
+  "el-date-picker.end-placeholder": "结束日期",
+  "el-time-picker.to": "到",
+  "el-time-picker.start-placeholder": "开始时间",
+  "el-time-picker.end-placeholder": "结束时间",
+  "el-time-select.placeholder": "选择时间",
+  "el-transfer.placeholder": "请输入",
+  "el-upload.drop": "拖文件至此或",
+  "el-upload.click": "点击上传"
 }
