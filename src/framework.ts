@@ -52,7 +52,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     this.frameworkProvider = frameworkProvider
     this.vueFiles = this.frameworkProvider.explorer.traverse.search('.vue', '')
     this.TAGS = getTags(this.frameworkProvider.frameworks)
-    this.SNIPPETS = getSnippets(this.frameworkProvider.frameworks)
+    this.SNIPPETS = getSnippets(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
     this.TAGSJs = getJsTags(this.frameworkProvider.frameworks)
     this.GlobalAttrs = getGlobalAttrs(this.frameworkProvider.frameworks)
     if (workspace.workspaceFolders) {
@@ -175,7 +175,6 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
 
    // 属性值建议值
    getAttrValueSuggestion(tag: string, attr: string): CompletionItem[] {
-    console.log('tag', tag)
     let suggestions: CompletionItem[] = [];
     const values = this.getAttrValues(tag, attr);
     values.forEach((value: string) => {
@@ -394,8 +393,6 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
       sortText: `00${id}${tag}`,
       insertText: new SnippetString(tagVal),
       kind: CompletionItemKind.Snippet,
-      detail: `meteor`,
-      documentation: ''
     };
   }
 
@@ -414,11 +411,9 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     return suggestions
   }
 
-  // 获取建议标签
-  getTagSuggestion() {
+  // 添加工程内vue组件提示
+  addLocalComponentSuggestions() {
     let suggestions: CompletionItem[] = [];
-    let id = 1;
-    // 添加vue组件提示
     for (let i = 0; i < this.vueFiles.length; i++) {
       const vf = this.vueFiles[i];
       suggestions.push({
@@ -426,11 +421,19 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
         sortText: `0${i}${vf.name}`,
         insertText: new SnippetString(`${vf.name}$0></${vf.name}>`),
         kind: CompletionItemKind.Folder,
-        detail: 'meteor',
+        detail: 'vue-helper',
         documentation: `import ${vf.name} from '${vf.path}'`,
-        command: { command: 'meteor.funcEnhance', title: 'meteor: funcEnhance' }
+        command: { command: 'vue-helper.funcEnhance', title: 'vue-helper: funcEnhance' }
       });
     }
+    return suggestions
+  }
+  
+
+  // 标签提示项
+  getTagSuggestion() {
+    let suggestions: CompletionItem[] = this.addLocalComponentSuggestions();
+    let id = 1;
 
     try {
       for (let tag in this.SNIPPETS) {
@@ -443,10 +446,47 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     return suggestions;
   }
 
-  provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): ProviderResult<CompletionItem[] | CompletionList<CompletionItem>> {
-    console.log(token)
-    console.log(context)
+  getElementTagLabelSuggestion() {
+    let suggestions: CompletionItem[] = [];
+    let id = 1;
+    // 添加vue组件提示
+    for (let i = 0; i < this.vueFiles.length; i++) {
+      const vf = this.vueFiles[i];
+      suggestions.push({
+        label: vf.name,
+        sortText: `0${i}${vf.name}`,
+        insertText: new SnippetString(`${vf.name}$0></${vf.name}>`),
+        kind: CompletionItemKind.Folder,
+        detail: 'vue-helper',
+        documentation: `import ${vf.name} from '${vf.path}'`,
+        command: { command: 'vue-helper.funcEnhance', title: 'vue-helper: funcEnhance' }
+      });
+    }
 
+    try {
+      let labels: string[] = []
+      for (let tag in this.TAGS) {
+        let label = tag.replace(/:.*/gi, '')
+        if (!labels.includes(label)) {
+          labels.push(label)
+          suggestions.push({
+            label: label,
+            sortText: `00${id}${label}`,
+            insertText: new SnippetString(`${label}$0></${label}>`),
+            kind: CompletionItemKind.Snippet,
+            detail: `vue-helper`,
+            documentation: this.TAGS[tag]._self.description
+          });
+          id++;
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    return suggestions;
+  }
+
+  provideCompletionItems(document: TextDocument, position: Position, _token: CancellationToken, _context: CompletionContext): ProviderResult<CompletionItem[] | CompletionList<CompletionItem>> {
     // 关闭标签
     if (this.isCloseTag(document, position)) {
       this.getCloseTagSuggestion(document, position);
@@ -457,13 +497,14 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     let tag: TagObject | string | undefined = this.getPreTag(document, position);
     let attr = this.getPreAttr(document, position);
     let word = getCurrentWord(document, position)
-    // let hasSquareQuote = document.lineAt(position.line).text.includes('<')
-    console.log(tag, attr)
+    let hasSquareQuote = document.lineAt(position.line).text.includes('<')
 
     if (tag && attr && this.isAttrValueStart(tag, attr)) {
+      console.log(1)
       // 属性值开始
       return this.getAttrValueSuggestion(tag.text, attr);
     } else if (tag) {
+      console.log(2)
       // 属性开始
       if (this.TAGS[tag.text]) {
         return this.getAttrSuggestion(tag.text, document, position);
@@ -471,17 +512,25 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
         return this.getPropAttr(document, tag.text);
       }
     } else if (this.isImport(document, position)) {
+      console.log(3)
       return this.importSuggestion(document, position);
-    } else if (word.includes('e') || word.includes('a')) {
+    } else if (word[0] === 'e' || word[0] === 'a') {
+      // 标签
+      console.log(4)
       return this.notInTemplate(document, position) ? this.getTagJsSuggestion() : this.getTagSuggestion()
+    } else if (word.includes('v')) {
+      console.log(5)
+      return this.getTagSuggestion()
+    } else if (!tag && hasSquareQuote) {
+      console.log(6)
+      return this.notInTemplate(document, position) ? [] : this.getElementTagLabelSuggestion()
     }
 
     return []
   }
-  resolveCompletionItem?(item: CompletionItem, token: CancellationToken): ProviderResult<CompletionItem> {
-    console.log('resolveCompletionItem', item)
-    console.log(token)
-    throw new Error("Method not implemented.");
-  }
+  // resolveCompletionItem?(_item: CompletionItem, _token: CancellationToken): ProviderResult<CompletionItem> {
+  //   console.log('resolveCompletionItem')
+  //   throw new Error("Method not implemented.");
+  // }
 
 }

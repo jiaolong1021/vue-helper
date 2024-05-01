@@ -2,23 +2,23 @@ import ant from './ant-desigin-vue-text';
 import elementPlus from './element-plus-text';
 import element from './element-text';
 
-export function getSnippets(version: string[]) {
+export function getSnippets(frameworks: string[], tabSize: string) {
   let ret = {}
-  if (version.includes('element-ui')) {
+  if (frameworks.includes('element-ui')) {
     ret = Object.assign(ret, element)
   }
-  if (version.includes('element-plus')) {
-    ret = Object.assign(ret, elementPlus)
+  if (frameworks.includes('element-plus')) {
+    ret = Object.assign(ret, elementPlus(tabSize))
   }
-  if (version.includes('ant-design-vue')) {
+  if (frameworks.includes('ant-design-vue')) {
     ret = Object.assign(ret, ant)
   }
-  // if (version.includes('vant')) {
+  // if (frameworks.includes('vant')) {
   //   ret = Object.assign(ret, vant)
   // }
   return ret
 }
 
-// export function getJsTip(version: string) {
+// export function getJsTip(frameworks: string) {
 //   return {}
 // }
