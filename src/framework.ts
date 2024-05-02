@@ -1,5 +1,6 @@
 import { CancellationToken, CompletionContext, CompletionItem, CompletionItemProvider, CompletionList, Position, ProviderResult, TextDocument, 
-  languages, workspace, Range, window, Selection, CompletionItemKind, SnippetString } from "vscode";
+  languages, workspace, Range, window, Selection, CompletionItemKind, SnippetString, 
+  l10n} from "vscode";
 import ExplorerProvider from './explorer'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -218,11 +219,12 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
   }
 
   buildAttrSuggestion(attr: any) {
+    console.log(l10n.t(attr.description))
     const completionItem = new CompletionItem(attr.name)
     completionItem.sortText = `000${attr.name}`
     completionItem.insertText = attr.name
     completionItem.kind = attr.type === 'method' ? CompletionItemKind.Method : CompletionItemKind.Property
-    completionItem.documentation = attr.description
+    completionItem.documentation = l10n.t(attr.description)
     return completionItem
   }
 
@@ -507,6 +509,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
       console.log(2)
       // 属性开始
       if (this.TAGS[tag.text]) {
+        // 框架属性
         return this.getAttrSuggestion(tag.text, document, position);
       } else {
         return this.getPropAttr(document, tag.text);
