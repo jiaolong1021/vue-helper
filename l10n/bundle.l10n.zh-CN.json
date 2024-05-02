@@ -13,5 +13,12 @@
   "el-time-select.placeholder": "选择时间",
   "el-transfer.placeholder": "请输入",
   "el-upload.drop": "拖文件至此或",
-  "el-upload.click": "点击上传"
+  "el-upload.click": "点击上传",
+  "el-page-header.title": "返回",
+  "el-dialog.cancel": "取消",
+  "el-dialog.confirm": "确定",
+  "el-popconfirm.title": "确定删除?",
+  "el-popconfirm.button-text": "删除",
+  "el-popconfirm.confirm-text": "确定",
+  "el-popconfirm.cancel-text": "取消"
 }

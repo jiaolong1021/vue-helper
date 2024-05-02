@@ -13,5 +13,12 @@
   "el-time-select.placeholder": "Select time",
   "el-transfer.placeholder": "Please Input",
   "el-upload.drop": "Drop file here or",
-  "el-upload.click": "click to upload"
+  "el-upload.click": "click to upload",
+  "el-page-header.title": "Back",
+  "el-dialog.cancel": "Cancel",
+  "el-dialog.confirm": "Confirm",
+  "el-popconfirm.title": "Are you sure to delete this?",
+  "el-popconfirm.button-text": "Delete",
+  "el-popconfirm.confirm-text": "OK",
+  "el-popconfirm.cancel-text": "Cancel"
 }
