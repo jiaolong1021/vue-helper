@@ -5,9 +5,7 @@ import ExplorerProvider from './explorer'
 import * as fs from 'fs'
 import * as path from 'path'
 import { winRootPathHandle, getRelativePath, getCurrentWord } from './util/util'
-import { getJsTags, getTags } from './tags/index'
-import { getSnippets } from "./snippets";
-import { getGlobalAttrs } from './globalAttribute/index'
+import { getJsTag, getTag, getAttribute, getGlobalAttribute } from "./frameworks";
 
 export interface TagObject {
   text: string,
@@ -42,20 +40,20 @@ export default class FrameworkProvider {
 class FrameworkCompletionItemProvider implements CompletionItemProvider {
   public frameworkProvider: FrameworkProvider
   public vueFiles: any = []
-  public TAGS: any = {}
-  public TAGSJs: any = {}
-  public SNIPPETS: any = {}
-  public GlobalAttrs: any = {}
+  public attribute: any = {}
+  public jsTag: any = {}
+  public tag: any = {}
+  public globalAttribute: any = {}
   public tagReg: RegExp = /<([\w-]+)\s+/g;
   public attrReg: RegExp = /(?:\(|\s*)((\w(-)?)*)=['"][^'"]*/;  // 能够匹配 left-right 属性
 
   constructor(frameworkProvider: FrameworkProvider) {
     this.frameworkProvider = frameworkProvider
     this.vueFiles = this.frameworkProvider.explorer.traverse.search('.vue', '')
-    this.TAGS = getTags(this.frameworkProvider.frameworks)
-    this.SNIPPETS = getSnippets(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
-    this.TAGSJs = getJsTags(this.frameworkProvider.frameworks)
-    this.GlobalAttrs = getGlobalAttrs(this.frameworkProvider.frameworks)
+    this.attribute = getAttribute(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
+    this.tag = getTag(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
+    this.jsTag = getJsTag(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
+    this.globalAttribute = getGlobalAttribute(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
     if (workspace.workspaceFolders) {
       const watcher = workspace.createFileSystemWatcher('**/*.vue')
       watcher.onDidCreate(() => { this.vueFiles = this.frameworkProvider.explorer.traverse.search('.vue', '') })
@@ -163,12 +161,12 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
   getAttrValues(tag: string, attr: string) {
     let attrValues: string[] = []
     // 全局
-    if (this.GlobalAttrs[attr]) {
-      attrValues = this.GlobalAttrs[attr].values
+    if (this.globalAttribute[attr]) {
+      attrValues = this.globalAttribute[attr].values
     }
 
-    if (this.TAGS[tag] && this.TAGS[tag][attr]) {
-      attrValues = this.TAGS[tag][attr].values
+    if (this.attribute[tag] && this.attribute[tag][attr]) {
+      attrValues = this.attribute[tag][attr].values
     }
 
     return attrValues
@@ -206,8 +204,8 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
       }
     });
 
-    for (let attr in this.GlobalAttrs) {
-      let gAttr = this.GlobalAttrs[attr]
+    for (let attr in this.globalAttribute) {
+      let gAttr = this.globalAttribute[attr]
       if (gAttr.type === type) {
         suggestions.push(this.buildAttrSuggestion({
           name: attr,
@@ -219,7 +217,6 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
   }
 
   buildAttrSuggestion(attr: any) {
-    console.log(l10n.t(attr.description))
     const completionItem = new CompletionItem(attr.name)
     completionItem.sortText = `000${attr.name}`
     completionItem.insertText = attr.name
@@ -231,12 +228,12 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
   // 获取标签包含的属性
   getTagAttrs(tag: string) {
     let attrs: any = []
-    if (this.TAGS[tag]) {
-      for (const key in this.TAGS[tag]) {
+    if (this.attribute[tag]) {
+      for (const key in this.attribute[tag]) {
         if (key !== '_self') {
           attrs.push({
             name: key,
-            ...this.TAGS[tag][key]
+            ...this.attribute[tag][key]
           })
         }
       }
@@ -389,12 +386,14 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
   }
 
    // 编译建议标签
-   buildTagSuggestion(tag: string, tagVal: any, id: number) {
+   buildTagSuggestion(tag: string, tagVal: any, id: number): CompletionItem {
     return {
       label: tag,
       sortText: `00${id}${tag}`,
       insertText: new SnippetString(tagVal),
       kind: CompletionItemKind.Snippet,
+      detail: '',
+      documentation: ''
     };
   }
 
@@ -403,8 +402,16 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     let suggestions: any[] = [];
     let id = 1;
     try {
-      for (let tag in this.TAGSJs) {
-        suggestions.push(this.buildTagSuggestion(tag, this.TAGSJs[tag], id));
+      for (let tag in this.jsTag) {
+        const tagItem = this.jsTag[tag]
+        suggestions.push({
+          label: tag,
+          sortText: `00${id}${tag}`,
+          insertText: new SnippetString(tagItem),
+          kind: CompletionItemKind.Snippet,
+          detail: 'vue-helper',
+          documentation: tagItem
+        })
         id++;
       }
     } catch (error) {
@@ -438,8 +445,8 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     let id = 1;
 
     try {
-      for (let tag in this.SNIPPETS) {
-        suggestions.push(this.buildTagSuggestion(tag, this.SNIPPETS[tag], id));
+      for (let tag in this.tag) {
+        suggestions.push(this.buildTagSuggestion(tag, this.tag[tag], id));
         id++;
       }
     } catch (error) {
@@ -467,7 +474,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
 
     try {
       let labels: string[] = []
-      for (let tag in this.TAGS) {
+      for (let tag in this.attribute) {
         let label = tag.replace(/:.*/gi, '')
         if (!labels.includes(label)) {
           labels.push(label)
@@ -477,7 +484,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
             insertText: new SnippetString(`${label}$0></${label}>`),
             kind: CompletionItemKind.Snippet,
             detail: `vue-helper`,
-            documentation: this.TAGS[tag]._self.description
+            documentation: this.attribute[tag]._self.description
           });
           id++;
         }
@@ -508,7 +515,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     } else if (tag) {
       console.log(2)
       // 属性开始
-      if (this.TAGS[tag.text]) {
+      if (this.attribute[tag.text]) {
         // 框架属性
         return this.getAttrSuggestion(tag.text, document, position);
       } else {

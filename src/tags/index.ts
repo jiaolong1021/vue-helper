@@ -1,46 +1,34 @@
-import element from './element';
-import elementJs from './element-js';
-import elementPlus from './element-plus-tag';
-import elementPlusJs from './element-plus-js';
-import ant from "./ant-desigin-vue-tag";
-import vant from './vant';
-// import vue from './vue';
-// import vant from './vant';
+import ant from './ant-desigin-vue-text';
+import elementPlus from './element-plus-text';
+import element from './element-text';
 
-export function getTags(version: string[]) {
+export function getTags(frameworks: string[], tabSize: string) {
   let ret = {}
-  if (version.includes('element-ui')) {
+  if (frameworks.includes('element-ui')) {
     ret = Object.assign(ret, element)
   }
-  if (version.includes('element-plus')) {
-    ret = Object.assign(ret, elementPlus)
+  if (frameworks.includes('element-plus')) {
+    ret = Object.assign(ret, elementPlus(tabSize))
   }
-  if (version.includes('ant-design-vue')) {
+  if (frameworks.includes('ant-design-vue')) {
     ret = Object.assign(ret, ant)
   }
-  if (version.includes('vant')) {
-    ret = Object.assign(ret, vant)
-  }
-  return ret
-}
-
-export function getVantTags() {
-  return vant
-}
-
-export function getJsTags(version: string[]) {
-  let ret = {}
-  if (version.includes('element-ui')) {
-    ret = Object.assign(ret, elementJs)
-  }
-  if (version.includes('element-plus')) {
-    ret = Object.assign(ret, elementPlusJs)
-  }
-  // if (version.includes('ant-design-vue')) {
-  //   ret = Object.assign(ret, ant)
-  // }
-  // if (version.includes('vant')) {
+  // if (frameworks.includes('vant')) {
   //   ret = Object.assign(ret, vant)
   // }
   return ret
+}
+
+export function getJsTag(frameworks: string[], tabSize: string) {
+  let ret = {}
+  // if (frameworks.includes('element-ui')) {
+  //   ret = Object.assign(ret, element)
+  // }
+  if (frameworks.includes('element-plus')) {
+    ret = Object.assign(ret, elementPlus(tabSize))
+  }
+  // if (frameworks.includes('ant-design-vue')) {
+  //   ret = Object.assign(ret, ant)
+  // }
+  return
 }

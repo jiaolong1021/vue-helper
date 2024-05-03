@@ -1311,5 +1311,6 @@
   "tags.el-watermark.content.description": "水印文本内容",
   "tags.el-watermark.font.description": "文字样式",
   "tags.el-watermark.gap.description": "水印之间的间距",
-  "tags.el-watermark.offset.description": "水印从容器左上角的偏移 默认值为 gap/2"
+  "tags.el-watermark.offset.description": "水印从容器左上角的偏移 默认值为 gap/2",
+  "el-loading": "加载"
 }
