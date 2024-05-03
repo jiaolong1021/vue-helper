@@ -48,12 +48,12 @@ export function getGlobalAttribute(frameworks: string[], tabSize: string) {
   return ret
 }
 
-// export function getDocument(frameworks: string[], tabSize: string) {
-//   let ret = {}
-//   frameworks.forEach((frameworkName) => {
-//     if (framework[frameworkName]) {
-//       ret = Object.assign(ret, framework[frameworkName].document(tabSize))
-//     }
-//   })
-//   return ret
-// }
+export function getDocument(frameworks: string[], tabSize: string) {
+  let ret = {}
+  frameworks.forEach((frameworkName) => {
+    if (framework[frameworkName]) {
+      ret = Object.assign(ret, framework[frameworkName].document(tabSize))
+    }
+  })
+  return ret
+}

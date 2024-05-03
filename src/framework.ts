@@ -1,11 +1,11 @@
 import { CancellationToken, CompletionContext, CompletionItem, CompletionItemProvider, CompletionList, Position, ProviderResult, TextDocument, 
   languages, workspace, Range, window, Selection, CompletionItemKind, SnippetString, 
-  l10n} from "vscode";
+  l10n, HoverProvider, Hover, TextLine } from "vscode";
 import ExplorerProvider from './explorer'
 import * as fs from 'fs'
 import * as path from 'path'
 import { winRootPathHandle, getRelativePath, getCurrentWord } from './util/util'
-import { getJsTag, getTag, getAttribute, getGlobalAttribute } from "./frameworks";
+import { getJsTag, getTag, getAttribute, getGlobalAttribute, getDocument } from "./frameworks";
 
 export interface TagObject {
   text: string,
@@ -33,6 +33,7 @@ export default class FrameworkProvider {
 
   register() {
     this.explorer.context.subscriptions.push(languages.registerCompletionItemProvider(['vue', 'javascript', 'typescript', 'html', 'wxml'], new FrameworkCompletionItemProvider(this), '', ':', '<', '"', "'", '/', '@', '(', '>', '{'))
+    this.explorer.context.subscriptions.push(languages.registerHoverProvider(['vue', 'wxml'], new FrameworkHoverProvider(this)))
   }
 
 }
@@ -181,8 +182,6 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
         sortText: `000${value}`,
         label: value,
         kind: CompletionItemKind.Value,
-        detail: 'vue-helper detail',
-        documentation: 'vue-helper document'
       });
     });
     return suggestions;
@@ -543,4 +542,77 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
   //   throw new Error("Method not implemented.");
   // }
 
+}
+
+// 文档通过 hover 形式查看
+class FrameworkHoverProvider implements HoverProvider {
+  public frameworkProvider: FrameworkProvider
+  public document: any
+
+  constructor(frameworkProvider: FrameworkProvider) {
+    this.frameworkProvider = frameworkProvider
+    this.document = getDocument(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
+  }
+
+  // 获取属性所属标签
+  public getTag(document: any, position: any): String {
+    let line = position.line;
+    let tagName = '';
+
+    while(line > 0 && !tagName) {
+      let lineInfo: TextLine = document.lineAt(line);
+      let text = lineInfo.text.trim();
+      // 本行则获取光标位置前文本
+      if(line === position.line) {
+        text = text.substring(0, position.character);
+      }
+      let txtArr = text.match(/<[^(>/)]+/gim);
+      if(txtArr) {
+        for (let i = (txtArr.length - 1); i >= 0; i--) {
+          if(txtArr[i][0] === '<' && txtArr[i][1] !== '/') {
+            if(txtArr[i].indexOf(' ') !== -1) {
+              tagName = txtArr[i].replace(/^<(\S*)(\s.*|\s*)/gi, '$1');
+            } else {
+              tagName = txtArr[i].replace(/^<(.*)/gi, '$1');
+            }
+            break;
+          }
+        }
+      }
+      --line;
+    }
+    return tagName;
+  }
+  provideHover(document: TextDocument, position: Position): ProviderResult<import("vscode").Hover> {
+    const line = document.lineAt(position.line);
+    const textSplite = [' ', '<', '>', '"', '\'', '.', '\\', "=", ":"];
+    // 通过前后字符串拼接成选择文本
+    let posIndex = position.character;
+    let textMeta = line.text.substring(posIndex, posIndex + 1);
+    let selectText = '';
+    // 前向获取符合要求的字符串
+    while(textSplite.indexOf(textMeta) === -1 && posIndex <= line.text.length) {
+      selectText += textMeta;
+      ++posIndex
+      textMeta = line.text.substring(posIndex, posIndex + 1)
+    }
+    // 往后获取符合要求的字符串
+    posIndex = position.character - 1;
+    textMeta = line.text.substring(posIndex, posIndex + 1);
+    while(textSplite.indexOf(textMeta) === -1 && posIndex > 0) {
+      selectText = textMeta + selectText;
+      --posIndex
+      textMeta = line.text.substring(posIndex, posIndex + 1);
+    }
+    textMeta = line.text.substring(posIndex, posIndex + 1);
+
+    console.log(selectText)
+
+    // tag标签便利
+    if(this.document[selectText]) {
+      return new Hover(this.document[selectText]);
+    }
+
+    return null
+  }
 }

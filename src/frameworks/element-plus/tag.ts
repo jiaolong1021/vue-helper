@@ -307,10 +307,10 @@ ${tabSize}$1
 "el-table-v2:overlay[slot]": `<template #overlay>
 ${tabSize}$1
 </template>`,
-"el-tag": ` <el-tag type="\${1:primary}">$2</el-tag>`,
-"el-tag:effect": ` <el-tag type="\${1:primary}" effect="\${2:dark}">$3</el-tag>`,
-"el-tag:closable": ` <el-tag type="\${1:primary}" closable>$2</el-tag>`,
-"el-tag:round": ` <el-tag type="\${1:primary}" round>$2</el-tag>`,
+"el-tag": ` <el-tag type="\${1:success}">$2</el-tag>`,
+"el-tag:effect": ` <el-tag type="\${1:success}" effect="\${2:dark}">$3</el-tag>`,
+"el-tag:closable": ` <el-tag type="\${1:success}" closable>$2</el-tag>`,
+"el-tag:round": ` <el-tag type="\${1:success}" round>$2</el-tag>`,
 "el-check-tag":  `<el-check-tag :checked="\${1:checked}" @change="\${2:onChange}">$3</el-check-tag>`,
 "el-timeline": `<el-timeline>
 ${tabSize}$1
