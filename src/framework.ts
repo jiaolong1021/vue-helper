@@ -418,8 +418,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
         })
         id++;
       }
-    } catch (error) {
-      console.log(error)
+    } catch (_error) {
     }
     return suggestions
   }
@@ -453,8 +452,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
         suggestions.push(this.buildTagSuggestion(tag, this.tag[tag], id));
         id++;
       }
-    } catch (error) {
-      console.log(error)
+    } catch (_error) {
     }
     return suggestions;
   }
@@ -492,8 +490,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
           id++;
         }
       }
-    } catch (error) {
-      console.log(error)
+    } catch (_error) {
     }
     return suggestions;
   }
@@ -512,11 +509,9 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     let hasSquareQuote = document.lineAt(position.line).text.includes('<')
 
     if (tag && attr && this.isAttrValueStart(tag, attr)) {
-      console.log(1)
       // 属性值开始
       return this.getAttrValueSuggestion(tag.text, attr);
     } else if (tag) {
-      console.log(2, tag.text)
       // 属性开始
       if (this.attribute[tag.text]) {
         // 框架属性
@@ -525,26 +520,18 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
         return this.getPropAttr(document, tag.text);
       }
     } else if (this.isImport(document, position)) {
-      console.log(3)
       return this.importSuggestion(document, position);
     } else if (word[0] === 'e' || word[0] === 'a') {
       // 标签
-      console.log(4)
       return this.notInTemplate(document, position) ? this.getTagJsSuggestion() : this.getTagSuggestion()
     } else if (word.includes('v')) {
-      console.log(5)
       return this.getTagSuggestion()
     } else if (!tag && hasSquareQuote) {
-      console.log(6)
       return this.notInTemplate(document, position) ? [] : this.getElementTagLabelSuggestion()
     }
 
     return []
   }
-  // resolveCompletionItem?(_item: CompletionItem, _token: CancellationToken): ProviderResult<CompletionItem> {
-  //   console.log('resolveCompletionItem')
-  //   throw new Error("Method not implemented.");
-  // }
 
 }
 
@@ -664,8 +651,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
         let p: any = {}
         try {
           p = JSON.parse(data)
-        } catch(e) {
-          console.log('e:', e)
+        } catch(_e) {
         }
         if (Array.isArray(plugin)) {
           let framework = plugin
@@ -758,8 +744,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
         let p: any = {}
         try {
           p = JSON.parse(data)
-        } catch(e) {
-          console.log('e:', e)
+        } catch(_e) {
         }
         if (p.main) {
           resolve(p.main)
