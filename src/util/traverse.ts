@@ -1,10 +1,13 @@
 import * as fs from 'fs'
 import * as path from 'path'
+import { Prefix } from '../explorer'
 
 export default class Traverse {
   public rootPath?: string
-  public constructor(rootPath: string) {
+  public prefix: Prefix
+  public constructor(rootPath: string, prefix: Prefix) {
     this.rootPath = rootPath
+    this.prefix = prefix
   }
 
   // 遍历组件
@@ -12,10 +15,7 @@ export default class Traverse {
     let files: any[] = [];
     let cond: Function;
     let componentPath = ''
-    let prefix: any = {
-      alias: '@',
-      path: 'src'
-    }
+    let prefix = this.prefix
     // if (this.explorer.config.rootPath) {
     //   componentPath = this.explorer.config.rootPath.component
     //   let pathAlias = this.explorer.config.rootPath.root.split('=')

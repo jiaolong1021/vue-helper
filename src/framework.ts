@@ -1,11 +1,13 @@
 import { CancellationToken, CompletionContext, CompletionItem, CompletionItemProvider, CompletionList, Position, ProviderResult, TextDocument, 
   languages, workspace, Range, window, Selection, CompletionItemKind, SnippetString, 
-  l10n, HoverProvider, Hover, TextLine } from "vscode";
+  l10n, HoverProvider, Hover, TextLine, DefinitionProvider, Definition, Uri, Location } from "vscode";
 import ExplorerProvider from './explorer'
 import * as fs from 'fs'
 import * as path from 'path'
-import { winRootPathHandle, getRelativePath, getCurrentWord } from './util/util'
+import { winRootPathHandle, getRelativePath, getCurrentWord, getWord } from './util/util'
 import { getJsTag, getTag, getAttribute, getGlobalAttribute, getDocument } from "./frameworks";
+const paramCamse = require('param-case')
+const glob = require('glob')
 
 export interface TagObject {
   text: string,
@@ -34,6 +36,7 @@ export default class FrameworkProvider {
   register() {
     this.explorer.context.subscriptions.push(languages.registerCompletionItemProvider(['vue', 'javascript', 'typescript', 'html', 'wxml'], new FrameworkCompletionItemProvider(this), '', ':', '<', '"', "'", '/', '@', '(', '>', '{'))
     this.explorer.context.subscriptions.push(languages.registerHoverProvider(['vue', 'wxml'], new FrameworkHoverProvider(this)))
+    this.explorer.context.subscriptions.push(languages.registerDefinitionProvider(['vue', 'javascript', 'html', 'wxml'], new vueHelperDefinitionProvider(this)))
   }
 
 }
@@ -181,6 +184,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
       suggestions.push({
         sortText: `000${value}`,
         label: value,
+        detail: 'vue-helper',
         kind: CompletionItemKind.Value,
       });
     });
@@ -220,6 +224,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     completionItem.sortText = `000${attr.name}`
     completionItem.insertText = attr.name
     completionItem.kind = attr.type === 'method' ? CompletionItemKind.Method : CompletionItemKind.Property
+    completionItem.detail = 'vue-helper'
     completionItem.documentation = l10n.t(attr.description)
     return completionItem
   }
@@ -391,7 +396,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
       sortText: `00${id}${tag}`,
       insertText: new SnippetString(tagVal),
       kind: CompletionItemKind.Snippet,
-      detail: '',
+      detail: 'vue-helper',
       documentation: ''
     };
   }
@@ -482,8 +487,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
             sortText: `00${id}${label}`,
             insertText: new SnippetString(`${label}$0></${label}>`),
             kind: CompletionItemKind.Snippet,
-            detail: `vue-helper`,
-            documentation: this.attribute[tag]._self.description
+            detail: `vue-helper`
           });
           id++;
         }
@@ -512,7 +516,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
       // 属性值开始
       return this.getAttrValueSuggestion(tag.text, attr);
     } else if (tag) {
-      console.log(2)
+      console.log(2, tag.text)
       // 属性开始
       if (this.attribute[tag.text]) {
         // 框架属性
@@ -584,35 +588,378 @@ class FrameworkHoverProvider implements HoverProvider {
     return tagName;
   }
   provideHover(document: TextDocument, position: Position): ProviderResult<import("vscode").Hover> {
-    const line = document.lineAt(position.line);
-    const textSplite = [' ', '<', '>', '"', '\'', '.', '\\', "=", ":"];
-    // 通过前后字符串拼接成选择文本
-    let posIndex = position.character;
-    let textMeta = line.text.substring(posIndex, posIndex + 1);
-    let selectText = '';
-    // 前向获取符合要求的字符串
-    while(textSplite.indexOf(textMeta) === -1 && posIndex <= line.text.length) {
-      selectText += textMeta;
-      ++posIndex
-      textMeta = line.text.substring(posIndex, posIndex + 1)
-    }
-    // 往后获取符合要求的字符串
-    posIndex = position.character - 1;
-    textMeta = line.text.substring(posIndex, posIndex + 1);
-    while(textSplite.indexOf(textMeta) === -1 && posIndex > 0) {
-      selectText = textMeta + selectText;
-      --posIndex
-      textMeta = line.text.substring(posIndex, posIndex + 1);
-    }
-    textMeta = line.text.substring(posIndex, posIndex + 1);
+    let word = getWord(document, position, [' ', '<', '>', '"', '\'', '.', '\\', "=", ":"])
 
-    console.log(selectText)
-
-    // tag标签便利
-    if(this.document[selectText]) {
-      return new Hover(this.document[selectText]);
+    // tag标签遍历
+    if(this.document[word.selectText]) {
+      return new Hover(this.document[word.selectText]);
     }
 
     return null
+  }
+}
+
+// 跳转到定义位置
+export class vueHelperDefinitionProvider implements DefinitionProvider {
+  public frameworkProvider: FrameworkProvider
+
+  constructor(frameworkProvider: FrameworkProvider) {
+    this.frameworkProvider = frameworkProvider
+  }
+
+  public VUE_ATTR: any = {
+    props: 1,
+    computed: 2,
+    methods: 3,
+    watch: 4,
+    beforeCreate: 5,
+    created: 6,
+    beforeMount: 7,
+    mounted: 8,
+    beforeUpdate: 9,
+    updated: 10,
+    activated: 11,
+    deactivated: 12,
+    beforeDestroy: 13,
+    destroyed: 14,
+    directives: 15,
+    filters: 16,
+    components: 17,
+    data: 18
+  }
+
+  /**
+   * 判断是文件内跳转还是文件外跳转
+   */
+  getDefinitionPosition(lineText: string) {
+    const pathRegs = [
+      /import\s+.*\s+from\s+['"](.*)['"]/,
+      /import\s*[^'"]*\(['"](.*)['"]\)[^'"]*/,
+      /.*require\s*\([^'"]*['"](.*)['"][^'"]*\)/,
+      /import\s+['"](.*)['"]/,
+      /import\s*\([^'"]*(?:\/\*.*\*\/)\s*['"](.*)['"][^'"]\)*/
+    ];
+    let execResult: RegExpMatchArray | null;
+    for (const pathReg of pathRegs) {
+      execResult = pathReg.exec(lineText);
+      if (execResult && execResult[1]) {
+        const filePath = execResult[1];
+        return {
+          path: filePath
+        }
+      }
+    }
+  }
+
+  /**
+   * 获取框架
+   * @param plugin 数组则是获取框架，字符串则为获取插件
+   */
+  async getPlugin(plugin: any) {
+    return await new Promise((resolve, reject) => {
+      fs.readFile(workspace.rootPath + path.sep + 'package.json', 'utf8', (err, data) => {
+        if (err) reject(err)
+        // 数组则是获取框架
+        let ret = ''
+        let p: any = {}
+        try {
+          p = JSON.parse(data)
+        } catch(e) {
+          console.log('e:', e)
+        }
+        if (Array.isArray(plugin)) {
+          let framework = plugin
+          for (let i = 0; i < framework.length; i++) {
+            const frame = framework[i]
+            if ((p.dependencies && p.dependencies[frame]) || (p.devDependencies && p.devDependencies[frame])) {
+              ret = frame
+            }
+          }
+        } else {
+          let pluginArr = plugin.split('/')
+          if (pluginArr.length === 1 && (p.dependencies && p.dependencies[plugin]) || (p.devDependencies && p.devDependencies[plugin])) {
+            ret = plugin
+          } else if (pluginArr.length > 1 &&  (p.dependencies && p.dependencies[pluginArr[0]]) || (p.devDependencies && p.devDependencies[pluginArr[0]])) {
+            ret = plugin
+          }
+        }
+        
+        if (ret) {
+          resolve(ret)
+        } else {
+          resolve('')
+        }
+      })
+    })
+  }
+
+  async readDir(dir:string, selectText: string, frame: string) {
+    return await new Promise((resolve, reject) => {
+      fs.readdir(dir, 'utf8', (err, files) => {
+        if (err) reject(err)
+        if (files.indexOf(selectText.toLowerCase()) !== -1) {
+          if (frame === 'iview') {
+            let prePath = dir + path.sep + selectText.toLowerCase() + path.sep
+            let vuePath = prePath + selectText.toLowerCase() + '.vue'
+            let indexPath = prePath + 'index.js'
+            if (fs.existsSync(vuePath)) {
+              resolve(vuePath)
+            } else if (fs.existsSync(indexPath)) {
+              resolve(indexPath)
+            } else {
+              resolve('')
+            }
+          } else if (frame === 'element-ui') {
+            let prePath = dir + path.sep + selectText.replace(/^el-/gi, '') + path.sep
+            let mainPath = prePath + 'src' + path.sep + 'main.vue'
+            let vuePath = prePath + 'src' + path.sep + selectText + '.vue'
+            let indexPath = prePath + 'index.js'
+            if (fs.existsSync(mainPath)) {
+              resolve(mainPath)
+            } else if (fs.existsSync(vuePath)) {
+              resolve(vuePath)
+            } else if (fs.existsSync(indexPath)) {
+              resolve(indexPath)
+            } else {
+              resolve('')
+            }
+          }
+        } else {
+          resolve('')
+        }
+      })
+    })
+  }
+
+  /**
+  * 在node_modules目录下去查找
+  * @param selectText 
+  */
+  async definitionPlugin(selectText: string) {
+    // 获取框架
+    let frame: any = await this.getPlugin(['iview', 'element-ui'])
+    if (frame === 'iview') {
+      return await this.readDir(workspace.rootPath + path.sep + 'node_modules' + path.sep + 'iview' + path.sep + 'src' + path.sep + 'components', paramCamse(selectText), frame)
+    } else if (frame === 'element-ui') {
+      return await this.readDir(workspace.rootPath + path.sep + 'node_modules' + path.sep + 'element-ui' + path.sep + 'packages', paramCamse(selectText).replace(/^el-/gi, ''), frame)
+    } else {
+      return ''
+    }
+  }
+
+  /**
+   * 获取node_modules下package.json文件中的main字段
+   * @param path 
+   */
+  async getMain(rootPath:string) {
+    return await new Promise((resolve, reject) => {
+      fs.readFile(rootPath + 'package.json', 'utf8', (err, data) => {
+        if (err) reject(err)
+        let p: any = {}
+        try {
+          p = JSON.parse(data)
+        } catch(e) {
+          console.log('e:', e)
+        }
+        if (p.main) {
+          resolve(p.main)
+        } else {
+          resolve('')
+        }
+      })
+    })
+  }
+
+  /**
+   * 文件外跳转
+   * 处理方式
+   * 1. 根据文件目录查询是否存在相应文件
+   * 2. 通过package.json判断是否存在安装插件
+   * @param document 
+   * @param position 
+   * @param line 
+   */
+  async definitionOutFile(document: TextDocument, file: any) {
+    let filePath = file.path
+    let isRelative = false
+    if (filePath.indexOf('./') === 0) {
+      isRelative = true
+    }
+
+    // 1. 根据文件目录查询是否存在相应文件
+    filePath = filePath.replace(this.frameworkProvider.explorer.prefix.alias, this.frameworkProvider.explorer.prefix.path)
+    
+    // 文件存在后缀，则直接查找
+    if (/(.*\/.*|[^.]+)\..*$/gi.test(filePath)) {
+      let tempFile = path.resolve(workspace.rootPath || '', filePath)
+      // 相对路径处理
+      if (isRelative) {
+        tempFile = document.fileName.replace(/(.*)\/[^\/]*$/i, '$1') + path.sep + filePath.replace(/.\//i, '')
+      }
+      if (fs.existsSync(tempFile)) {
+        return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
+      }
+    } else {
+      // 添加后缀，判断文件是否存在
+      const postfix = ['vue', 'js', 'css', 'scss', 'less']
+      for (let i = 0; i < postfix.length; i++) {
+        const post = postfix[i]
+        // 相对路径处理
+        let tempFile = path.resolve(workspace.rootPath || '', filePath)
+        if (isRelative) {
+          tempFile = document.fileName.replace(/(.*)\/[^\/]*$/i, '$1') + path.sep + filePath.replace(/.\//i, '')
+        }
+        if (tempFile.endsWith('/')) {
+          tempFile = tempFile + 'index.' + post
+          if (fs.existsSync(tempFile)) {
+            return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
+          }
+        } else {
+          let indexFile = tempFile + path.sep + 'index.' + post
+          tempFile += '.' + post
+          if (fs.existsSync(tempFile)) {
+            return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
+          }
+          // index文件判断
+          if(fs.existsSync(indexFile)) {
+            return Promise.resolve(new Location(Uri.file(indexFile), new Position(0, 0)))
+          }
+        }
+      }
+    }
+
+    // 2. 通过package.json判断是否存在安装插件, 插件可能有目录，获取最前一节作为插件进行判断
+    let plugin = await this.getPlugin(filePath)
+    let pluginRootPath = workspace.rootPath + path.sep + 'node_modules' + path.sep + plugin + path.sep
+    let pluginOwn = workspace.rootPath + path.sep + 'node_modules' + path.sep + plugin + '.js'
+    let pluginPath = pluginRootPath + 'index.js'
+    if (fs.existsSync(pluginOwn)) {
+      return Promise.resolve(new Location(Uri.file(pluginOwn), new Position(0, 0)))
+    } else if (fs.existsSync(pluginPath)) {
+      return Promise.resolve(new Location(Uri.file(pluginPath), new Position(0, 0)))
+    }
+    let main = await this.getMain(pluginRootPath)
+    if (main) {
+      return Promise.resolve(new Location(Uri.file(pluginRootPath + main), new Position(0, 0)))
+    }
+
+    return Promise.resolve(null)
+  }
+
+  /**
+   * 文件内跳转
+   */
+  async definitionInFile(document: TextDocument, position: Position) {
+    const word = getWord(document, position, [' ', '<', '>', '"', '\'', '.', '\\', "=", ":", "@", "(", ")", "[", "]", "{", "}", ",", "!"])
+    console.log('word', word)
+
+    // 查找字符串位置
+    let pos = 0
+    let begin = false
+    let lineText = ''
+    let braceLeftCount = 0
+    let attr = ''
+    // 搜索类型，主要用于判断在哪个属性中去搜索内容，目前主要用于区分是否是组件
+    let searchType = ''
+    // 判断选择文件搜索类型，是否是标签
+    if (word.startText === '<') {
+      searchType = 'components'
+    }
+    while(pos < document.lineCount && !/^\s*<\/script>\s*$/g.test(lineText)) {
+      lineText = document.lineAt(++pos).text
+      // 从script标签开始查找
+      if(!begin) {
+        if(/^\s*<script.*>\s*$/g.test(lineText)) {
+          begin = true
+        }
+        continue;
+      }
+      // 判断现在正在对哪个属性进行遍历
+      let keyWord = lineText.replace(/\s*(\w*)\s*(\(\s*\)|:|(:\s*function\s*\(\s*\)))\s*{\s*/gi, '$1')
+      // braceLeftCount <= 3 用于去除data属性中包含vue其他属性从而不能定义问题
+      if(this.VUE_ATTR[keyWord] !== undefined && braceLeftCount === 0) {
+        attr = keyWord
+        braceLeftCount = 0
+      }
+
+      if (searchType === 'components') {
+        /**
+         * component组件跳转处理方式
+         * 1. 文件内import，require引入判断
+         * 2. iview, element组件判断
+         */
+        // attr存在，说明已遍历过import内容
+        if (attr) {
+          let retPath: any = await this.definitionPlugin(word.selectText)
+          if (retPath) {
+            return Promise.resolve(new Location(Uri.file(retPath), new Position(0, 0)))
+          }
+          break;
+        } else {
+          let tag = word.selectText.toLowerCase().replace(/-/gi, '')
+          if (lineText.toLowerCase().includes(tag) && (lineText.trim().indexOf('import') === 0 || lineText.trim().indexOf('require') === 0)) {
+            return this.definitionOutFile(document, this.getDefinitionPosition(lineText))
+          }
+        }
+      } else {
+        // data属性匹配, data具有return，单独处理
+        let braceLeftList = lineText.match(/{/gi)
+        let braceRightList = lineText.match(/}/gi)
+        if(attr === 'data' && braceLeftCount >= 2) {
+          let matchName = lineText.replace(/\s*(\w+):.+/gi, '$1')
+          if(word.selectText === matchName && braceLeftCount === 2) {
+            return Promise.resolve(new Location(document.uri, new Position(pos, lineText.indexOf(matchName) + matchName.length)))
+          }
+          let braceLeft = braceLeftList ? braceLeftList.length : 0
+          let braceRight = braceRightList ? braceRightList.length : 0
+          braceLeftCount += braceLeft - braceRight
+        } else if(attr) {
+          let matchName = lineText.replace(/\s*(async\s*)?(\w*)\s*(:|\().*/gi, '$2')
+          if(word.selectText === matchName && braceLeftCount === 1) {
+            return Promise.resolve(new Location(document.uri, new Position(pos, lineText.indexOf(matchName) + matchName.length)))
+          }
+          let braceLeft = braceLeftList ? braceLeftList.length : 0
+          let braceRight = braceRightList ? braceRightList.length : 0
+          braceLeftCount += braceLeft - braceRight
+        }
+
+        // data取return的属性值
+        if(attr === 'data') {
+          if(/\s*return\s*{\s*/gi.test(lineText)) {
+            braceLeftCount = 2
+          }
+        }
+      }
+    }
+
+    // 全目录搜索看是否存在改文件
+    let files = glob.sync(workspace.rootPath + '/!(node_modules)/**/*.vue')
+    for (let i = 0; i < files.length; i++) {
+      const vueFile = files[i];
+      let vueChangeFile = vueFile.replace(/-/gi, '').toLowerCase().replace(/\.vue$/, '')
+      if (vueChangeFile.endsWith('/' + word.selectText.toLowerCase().replace(/-/gi, ''))) {
+        return Promise.resolve(new Location(Uri.file(vueFile), new Position(0, 0)))
+      }
+    }
+   
+    return Promise.resolve(null);
+  }
+
+  provideDefinition(document: TextDocument, position: Position, _token: CancellationToken): ProviderResult<Definition> {
+    let docText = document.getText()
+    // vue2跳转
+    // 获取定义word
+    const line = document.lineAt(position.line)
+    // // 判断是文件内跳转还是文件外跳转
+    let file = this.getDefinitionPosition(line.text)
+    console.log('file', file)
+    if (file) {
+      return this.definitionOutFile(document, file)
+    } else {
+      if (!(docText.includes('lang="ts"') || this.frameworkProvider.explorer.isTs)) {
+        return this.definitionInFile(document, position)
+      }
+    }
+    return []
   }
 }
