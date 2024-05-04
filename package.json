@@ -91,6 +91,7 @@
     "jsonc-parser": "^3.2.0",
     "mitt": "^3.0.0",
     "opn": "^6.0.0",
+    "param-case": "^4.0.0",
     "pretty": "^2.0.0",
     "puppeteer-core": "^19.7.0",
     "uuid": "^9.0.0",

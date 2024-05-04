@@ -1,6 +1,7 @@
 import { ExtensionContext, workspace } from 'vscode';
 import ExplorerProvider from './explorer';
 import FrameworkProvider from './framework';
+import Assist from './assist';
 
 export function activate(context: ExtensionContext) {
   if (workspace.workspaceFolders) {
@@ -14,4 +15,6 @@ function init(context: ExtensionContext) {
   const framework = new FrameworkProvider(explorer)
   framework.register()
 
+  const assist = new Assist(explorer)
+  assist.register()
 }

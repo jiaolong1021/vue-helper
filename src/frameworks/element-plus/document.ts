@@ -1,5 +1,10 @@
-export default {
-  "el-button": `#### [访问](https://element-plus.gitee.io/zh-CN/component/button)
+import { l10n } from "vscode"
+
+const docUrl = 'https://element-plus.org'
+
+export default () => {
+return {
+"el-button": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/button.html)
 
 #### 属性
 
@@ -40,7 +45,7 @@ export default {
 | disabled| 按钮已禁用| object |
 | shouldAddSpace| 是否在两个字符之间插入空格| object |
 `,
-  "el-button-group": `#### [访问](https://element-plus.gitee.io/zh-CN/component/button)
+  "el-button-group": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/button.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -58,7 +63,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-container": `#### [访问](https://element-plus.gitee.io/zh-CN/component/container)
+  "el-container": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/container.html)
 
 #### 属性
 
@@ -72,7 +77,7 @@ export default {
 | :--- | :--- | :--- |
 | default| 自定义默认内容| Container / Header / Aside / Main / Footer |
 `,
-  "el-header": `#### [访问](https://element-plus.gitee.io/zh-CN/component/container)
+  "el-header": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/container.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -85,7 +90,7 @@ export default {
 | :--- | :--- |
 | default| 自定义默认内容 |
 `,
-  "el-aside": `#### [访问](https://element-plus.gitee.io/zh-CN/component/container)
+  "el-aside": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/container.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -98,7 +103,7 @@ export default {
 | :--- | :--- |
 | default| 自定义默认内容 |
 `,
-  "el-main": `#### [访问](https://element-plus.gitee.io/zh-CN/component/container)
+  "el-main": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/container.html)
 
 #### Main Slots
 
@@ -106,7 +111,7 @@ export default {
 | :--- | :--- |
 | default| 自定义默认内容 |
 `,
-  "el-footer": `#### [访问](https://element-plus.gitee.io/zh-CN/component/container)
+  "el-footer": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/container.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -123,7 +128,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-icon": `#### [访问](https://element-plus.gitee.io/zh-CN/component/icon)
+  "el-icon": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/icon.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -141,9 +146,9 @@ export default {
 
 #### 贡献者
 `,
-  "el-layout": `#### [访问](https://element-plus.gitee.io/zh-CN/component/layout)
+  "el-layout": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/layout.html)
 `,
-  "el-row": `#### [访问](https://element-plus.gitee.io/zh-CN/component/layout)
+  "el-row": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/layout.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -159,7 +164,7 @@ export default {
 | :--- | :--- | :--- |
 | default| 自定义默认内容| Col |
 `,
-  "el-col": `#### [访问](https://element-plus.gitee.io/zh-CN/component/layout)
+  "el-col": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/layout.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -183,7 +188,7 @@ export default {
 
 #### 源代码
 `,
-  "el-link": `#### [访问](https://element-plus.gitee.io/zh-CN/component/link)
+  "el-link": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/link.html)
 
 #### 属性
 
@@ -207,7 +212,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-text": `#### [访问](https://element-plus.gitee.io/zh-CN/component/text)
+  "el-text": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/text.html)
 #### 属性
 
 | 属性名| 描述| 类型| 默认值 |
@@ -228,7 +233,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-scrollbar": `#### [访问](https://element-plus.gitee.io/zh-CN/component/scrollbar)
+  "el-scrollbar": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/scrollbar.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -275,7 +280,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-space": `#### [访问](https://element-plus.gitee.io/zh-CN/component/space)
+  "el-space": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/space.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -301,7 +306,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-config-provider": `#### [访问](https://element-plus.gitee.io/zh-CN/component/config-provider)
+  "el-config-provider": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/config-provider.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -336,7 +341,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-autocomplete": `#### [访问](https://element-plus.gitee.io/zh-CN/component/autocomplete)
+  "el-autocomplete": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/autocomplete.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -398,7 +403,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-cascader": `#### [访问](https://element-plus.gitee.io/zh-CN/component/cascader)
+  "el-cascader": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/cascader.html)
 
 #### 属性
 
@@ -452,7 +457,7 @@ export default {
 | togglePopperVisible 2.2.31| 切换 popper 可见状态| Function |
 | contentRef| cascader 内容的 ref| object |
 `,
-  "el-cascader-panel": `#### [访问](https://element-plus.gitee.io/zh-CN/component/cascader)
+  "el-cascader-panel": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/cascader.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -504,7 +509,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-checkbox": `#### [访问](https://element-plus.gitee.io/zh-CN/component/checkbox)
+  "el-checkbox": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/checkbox.html)
 
 #### 属性
 
@@ -539,7 +544,7 @@ export default {
 | :--- | :--- |
 | default| 自定义默认内容 |
 `,
-  "el-checkbox-group": `#### [访问](https://element-plus.gitee.io/zh-CN/component/checkbox)
+  "el-checkbox-group": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/checkbox.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -566,7 +571,7 @@ export default {
 | :--- | :--- | :--- |
 | default| 自定义默认内容| Checkbox / Checkbox-button |
 `,
-  "el-checkbox-button": `#### [访问](https://element-plus.gitee.io/zh-CN/component/checkbox)
+  "el-checkbox-button": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/checkbox.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -591,7 +596,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-color-picker": `#### [访问](https://element-plus.gitee.io/zh-CN/component/color-picker)
+  "el-color-picker": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/color-picker.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -630,7 +635,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-date-picker": `#### [访问](https://element-plus.gitee.io/zh-CN/component/date-picker)
+  "el-date-picker": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/date-picker.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认 |
@@ -694,7 +699,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-datetime-picker": `#### [访问](https://element-plus.gitee.io/zh-CN/component/datetime-picker)
+  "el-datetime-picker": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/datetime-picker.html)
 #### 属性
 
 | 属性名| 说明| 类型| 可选值| 默认值 |
@@ -750,7 +755,7 @@ export default {
 
 #### 源代码
 `,
-  "el-form": `#### [访问](https://element-plus.gitee.io/zh-CN/component/form)
+  "el-form": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/form.html)
 
 #### 属性
 
@@ -794,7 +799,7 @@ export default {
 | scrollToField| 滚动到指定的字段| Function |
 | clearValidate| 清理某个字段的表单验证信息。| Function |
 `,
-  "el-form-item": `#### [访问](https://element-plus.gitee.io/zh-CN/component/form)
+  "el-form-item": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/form.html)
 #### 属性
 
 | 属性名| 说明| 类型| Default |
@@ -840,7 +845,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-input": `#### [访问](https://element-plus.gitee.io/zh-CN/component/input)
+  "el-input": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/input.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -913,7 +918,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-input-number": `#### [访问](https://element-plus.gitee.io/zh-CN/component/input-number)
+  "el-input-number": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/input-number.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -954,7 +959,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-radio": `#### [访问](https://element-plus.gitee.io/zh-CN/component/radio)
+  "el-radio": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/radio.html)
 
 #### 属性
 
@@ -979,7 +984,7 @@ export default {
 | :--- | :--- |
 | default| 自定义默认内容 |
 `,
-  "el-radio-group": `#### [访问](https://element-plus.gitee.io/zh-CN/component/radio)
+  "el-radio-group": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/radio.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -1005,7 +1010,7 @@ export default {
 | :--- | :--- | :--- |
 | default| 自定义默认内容| Radio / RadioButton |
 `,
-  "el-radio-button": `#### [访问](https://element-plus.gitee.io/zh-CN/component/radio)
+  "el-radio-button": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/radio.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认 |
@@ -1025,7 +1030,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-rate": `#### [访问](https://element-plus.gitee.io/zh-CN/component/rate)
+  "el-rate": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/rate.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -1068,7 +1073,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-select": `#### [访问](https://element-plus.gitee.io/zh-CN/component/select)
+  "el-select": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/select.html)
 
 #### 属性
 
@@ -1144,7 +1149,7 @@ export default {
 | focus| 使选择器的输入框获取焦点| Function |
 | blur| 使选择器的输入框失去焦点，并隐藏下拉框| Function |
 `,
-  "el-option": `#### [访问](https://element-plus.gitee.io/zh-CN/component/select)
+  "el-option": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/select.html)
 #### 属性
 
 | 插槽名| 说明| Type| Default |
@@ -1176,7 +1181,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-select-v2": `#### [访问](https://element-plus.gitee.io/zh-CN/component/select-v2)
+  "el-select-v2": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/select-v2.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -1265,7 +1270,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-slider": `#### [访问](https://element-plus.gitee.io/zh-CN/component/slider)
+  "el-slider": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/slider.html)
 #### 属性
 
 | 属性名| 描述| 类型| 默认 |
@@ -1307,7 +1312,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-switch": `#### [访问](https://element-plus.gitee.io/zh-CN/component/switch)
+  "el-switch": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/switch.html)
 #### 属性
 
 | 属性名| 说明| 类型| Default |
@@ -1358,7 +1363,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-time-picker": `#### [访问](https://element-plus.gitee.io/zh-CN/component/time-picker)
+  "el-time-picker": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/time-picker.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认 |
@@ -1411,7 +1416,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-time-select": `#### [访问](https://element-plus.gitee.io/zh-CN/component/time-select)
+  "el-time-select": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/time-select.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -1451,7 +1456,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-transfer": `#### [访问](https://element-plus.gitee.io/zh-CN/component/transfer)
+  "el-transfer": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/transfer.html)
 #### 属性
 
 | 属性名| 说明| 类型| Default |
@@ -1498,7 +1503,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-upload": `#### [访问](https://element-plus.gitee.io/zh-CN/component/upload)
+  "el-upload": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/upload.html)
 #### 属性
 
 | 名称| 描述| 类型| 默认值 |
@@ -1553,7 +1558,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-avatar": `#### [访问](https://element-plus.gitee.io/zh-CN/component/avatar)
+  "el-avatar": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/avatar.html)
 #### 属性
 
 | 名称| 说明| 类型| 默认值 |
@@ -1581,7 +1586,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-badge": `#### [访问](https://element-plus.gitee.io/zh-CN/component/badge)
+  "el-badge": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/badge.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -1603,7 +1608,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-calendar": `#### [访问](https://element-plus.gitee.io/zh-CN/component/calendar)
+  "el-calendar": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/calendar.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -1622,7 +1627,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-card": `#### [访问](https://element-plus.gitee.io/zh-CN/component/card)
+  "el-card": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/card.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -1645,7 +1650,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-carousel": `#### [访问](https://element-plus.gitee.io/zh-CN/component/carousel)
+  "el-carousel": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/carousel.html)
 #### 属性
 
 | 属性名| 说明| 类型| 可选值| 默认值 |
@@ -1696,7 +1701,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-collapse": `#### [访问](https://element-plus.gitee.io/zh-CN/component/collapse)
+  "el-collapse": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/collapse.html)
 
 #### 属性
 
@@ -1735,7 +1740,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-descriptions": `#### [访问](https://element-plus.gitee.io/zh-CN/component/descriptions)
+  "el-descriptions": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/descriptions.html)
 
 #### 属性
 
@@ -1756,7 +1761,7 @@ export default {
 | title| 自定义标题，显示在左上方| — |
 | extra| 自定义操作区，显示在右上方| — |
 `,
-  "el-descriptions-item": `#### [访问](https://element-plus.gitee.io/zh-CN/component/descriptions)
+  "el-descriptions-item": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/descriptions.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认 |
@@ -1781,7 +1786,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-empty": `#### [访问](https://element-plus.gitee.io/zh-CN/component/empty)
+  "el-empty": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/empty.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -1802,7 +1807,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-image": `#### [访问](https://element-plus.gitee.io/zh-CN/component/image)
+  "el-image": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/image.html)
 
 #### 属性
 
@@ -1876,7 +1881,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-pagination": `#### [访问](https://element-plus.gitee.io/zh-CN/component/pagination)
+  "el-pagination": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/pagination.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -1920,7 +1925,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-progress": `#### [访问](https://element-plus.gitee.io/zh-CN/component/progress)
+  "el-progress": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/progress.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -1950,7 +1955,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-result": `#### [访问](https://element-plus.gitee.io/zh-CN/component/result)
+  "el-result": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/result.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -1972,7 +1977,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-skeleton": `#### [访问](https://element-plus.gitee.io/zh-CN/component/skeleton)
+  "el-skeleton": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/skeleton.html)
 
 #### 属性
 
@@ -1991,7 +1996,7 @@ export default {
 | default| 真正渲染的DOM| object |
 | template| 渲染 skeleton 模板的内容| object |
 `,
-  "el-skeleton-item": `#### [访问](https://element-plus.gitee.io/zh-CN/component/skeleton)
+  "el-skeleton-item": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/skeleton.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -2002,7 +2007,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-table": `#### [访问](https://element-plus.gitee.io/zh-CN/component/table)
+  "el-table": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/table.html)
 
 #### 属性
 
@@ -2095,7 +2100,7 @@ export default {
 | setScrollTop| 设置垂直滚动位置| Function |
 | setScrollLeft| 设置水平滚动位置| Function |
 `,
-  "el-table-column": `#### [访问](https://element-plus.gitee.io/zh-CN/component/table)
+  "el-table-column": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/table.html)
 #### 属性
 
 | 属性名| 说明| Type| 默认值 |
@@ -2144,7 +2149,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-tag": `#### [访问](https://element-plus.gitee.io/zh-CN/component/tag)
+  "el-tag": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/tag.html)
 
 #### 属性
 
@@ -2171,7 +2176,7 @@ export default {
 | :--- | :--- |
 | default| 自定义默认内容 |
 `,
-  "el-check-tag": `#### [访问](https://element-plus.gitee.io/zh-CN/component/tag)
+  "el-check-tag": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/tag.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认 |
@@ -2194,7 +2199,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-timeline": `#### [访问](https://element-plus.gitee.io/zh-CN/component/timeline)
+  "el-timeline": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/timeline.html)
 
 
 #### Timeline Slots
@@ -2203,7 +2208,7 @@ export default {
 | :--- | :--- | :--- |
 | default| timeline 组件的自定义默认内容| Timeline-Item |
 `,
-  "el-timeline--item": `#### [访问](https://element-plus.gitee.io/zh-CN/component/timeline)
+  "el-timeline--item": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/timeline.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -2229,7 +2234,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-tour": `#### [访问](https://element-plus.gitee.io/zh-CN/component/tour)
+  "el-tour": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/tour.html)
 
 #### 属性
 
@@ -2296,7 +2301,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-tree-select": `#### [访问](https://element-plus.gitee.io/zh-CN/component/tree-select)
+  "el-tree-select": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/tree-select.html)
 #### 属性
 
 | 属性| 方法| 事件| 插槽 |
@@ -2315,7 +2320,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-statistic": `#### [访问](https://element-plus.gitee.io/zh-CN/component/statistic)
+  "el-statistic": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/statistic.html)
 
 #### 属性
 
@@ -2345,7 +2350,7 @@ export default {
 | :--- | :--- | :--- |
 | displayValue| 当前显示值| object |
 `,
-  "el-countdown": `#### [访问](https://element-plus.gitee.io/zh-CN/component/statistic)
+  "el-countdown": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/statistic.html)
 #### 属性
 
 | 属性| 详情| 类型| 默认值 |
@@ -2381,7 +2386,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-affix": `#### [访问](https://element-plus.gitee.io/zh-CN/component/affix)
+  "el-affix": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/affix.html)
 #### 属性
 
 | 名称| 说明| 类型| 默认值 |
@@ -2414,7 +2419,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-anchor": `#### [访问](https://element-plus.gitee.io/zh-CN/component/anchor)
+  "el-anchor": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/anchor.html)
 
 #### 属性
 
@@ -2461,7 +2466,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-backtop": `#### [访问](https://element-plus.gitee.io/zh-CN/component/backtop)
+  "el-backtop": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/backtop.html)
 #### 属性
 
 | 名称| 说明| 类型| 默认值 |
@@ -2486,7 +2491,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-breadcrumb": `#### [访问](https://element-plus.gitee.io/zh-CN/component/breadcrumb)
+  "el-breadcrumb": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/breadcrumb.html)
 
 #### 属性
 
@@ -2501,7 +2506,7 @@ export default {
 | :--- | :--- | :--- |
 | default| 自定义默认内容| Breadcrumb Item |
 `,
-  "el-breadcrumb-item": `#### [访问](https://element-plus.gitee.io/zh-CN/component/breadcrumb)
+  "el-breadcrumb-item": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/breadcrumb.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -2519,7 +2524,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-dropdown": `#### [访问](https://element-plus.gitee.io/zh-CN/component/dropdown)
+  "el-dropdown": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/dropdown.html)
 #### 属性
 
 | 属性名| 说明| 类型| 可选值| 默认值 |
@@ -2583,7 +2588,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-menu": `#### [访问](https://element-plus.gitee.io/zh-CN/component/menu)
+  "el-menu": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/menu.html)
 #### 属性
 
 | 属性名| 说明| 类型| 可选值| 默认值 |
@@ -2684,7 +2689,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-page-header": `#### [访问](https://element-plus.gitee.io/zh-CN/component/page-header)
+  "el-page-header": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/page-header.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认 |
@@ -2713,7 +2718,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-steps": `#### [访问](https://element-plus.gitee.io/zh-CN/component/steps)
+  "el-steps": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/steps.html)
 
 #### 属性
 
@@ -2733,7 +2738,7 @@ export default {
 | :--- | :--- | :--- |
 | default| 默认插槽| Step |
 `,
-  "el-step": `#### [访问](https://element-plus.gitee.io/zh-CN/component/steps)
+  "el-step": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/steps.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认 |
@@ -2755,7 +2760,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-alert": `#### [访问](https://element-plus.gitee.io/zh-CN/component/alert)
+  "el-alert": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/alert.html)
 
 #### 属性
 
@@ -2786,7 +2791,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-dialog": `#### [访问](https://element-plus.gitee.io/zh-CN/component/dialog)
+  "el-dialog": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/dialog.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认 |
@@ -2842,7 +2847,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-drawer": `#### [访问](https://element-plus.gitee.io/zh-CN/component/drawer)
+  "el-drawer": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/drawer.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认值 |
@@ -2896,7 +2901,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-loading": `#### [访问](https://element-plus.gitee.io/zh-CN/component/loading)
+  "el-loading": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/loading.html)
 #### 属性
 
 #### 配置项
@@ -2926,7 +2931,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-message": `#### [访问](https://element-plus.gitee.io/zh-CN/component/message)
+  "el-message": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/message.html)
 #### 属性
 
 #### Message 配置项
@@ -2955,7 +2960,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-message-box": `#### [访问](https://element-plus.gitee.io/zh-CN/component/message-box)
+  "el-message-box": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/message-box.html)
 #### 属性
 
 #### 配置项
@@ -3002,7 +3007,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-notification": `#### [访问](https://element-plus.gitee.io/zh-CN/component/notification)
+  "el-notification": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/notification.html)
 #### 属性
 
 #### 配置项
@@ -3032,7 +3037,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-popconfirm": `#### [访问](https://element-plus.gitee.io/zh-CN/component/popconfirm)
+  "el-popconfirm": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/popconfirm.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认 |
@@ -3066,7 +3071,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-popover": `#### [访问](https://element-plus.gitee.io/zh-CN/component/popover)
+  "el-popover": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/popover.html)
 #### 属性
 
 | 属性名| 说明| 类型| 可选值| 默认值 |
@@ -3113,7 +3118,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-tooltip": `#### [访问](https://element-plus.gitee.io/zh-CN/component/tooltip)
+  "el-tooltip": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/tooltip.html)
 #### 属性
 
 | 名称| 说明| 类型| 默认值 |
@@ -3166,7 +3171,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-divider": `#### [访问](https://element-plus.gitee.io/zh-CN/component/divider)
+  "el-divider": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/divider.html)
 #### 属性
 
 | 属性名| 说明| 类型| 默认 |
@@ -3185,7 +3190,7 @@ export default {
 
 #### 贡献者
 `,
-  "el-watermark": `#### [访问](https://element-plus.gitee.io/zh-CN/component/watermark)
+  "el-watermark": `#### [访问](${docUrl}/${l10n.t('el-locale')}/component/watermark.html)
 #### 属性
 
 | 属性名| 描述| 类型| 默认值 |
@@ -3222,4 +3227,5 @@ export default {
 
 #### 贡献者
 `,
+}
 }

@@ -1,5 +1,6 @@
 import { workspace, TextDocument, Position } from 'vscode'
 import * as os from 'os'
+import * as path from 'path'
 
 // windows根路径处理
 export function winRootPathHandle(pagePath: string) {
@@ -42,4 +43,40 @@ export function getCurrentWord(document: TextDocument, position: Position) {
     i--;
   }
   return text.substring(i + 1, position.character);
+}
+
+export function getRelativePath(src: string, dist: string) {
+  let vfPath = path.relative(winRootPathHandle(src), dist)
+  vfPath = vfPath.replace(/\\/gi, '/')
+  if (vfPath.startsWith('../')) {
+    vfPath = vfPath.substr(1, vfPath.length)
+  }
+  return vfPath
+}
+
+export function getWord(document: TextDocument, position: Position, textSplite: string[]) {
+  const line = document.lineAt(position.line);
+    // 通过前后字符串拼接成选择文本
+    let posIndex = position.character;
+    let textSingle = line.text.substring(posIndex, posIndex + 1);
+    let selectText = '';
+    // 前向获取符合要求的字符串
+    while(textSplite.indexOf(textSingle) === -1 && posIndex <= line.text.length) {
+      selectText += textSingle;
+      ++posIndex
+      textSingle = line.text.substring(posIndex, posIndex + 1)
+    }
+    // 往后获取符合要求的字符串
+    posIndex = position.character - 1;
+    textSingle = line.text.substring(posIndex, posIndex + 1);
+    while(textSplite.indexOf(textSingle) === -1 && posIndex > 0) {
+      selectText = textSingle + selectText;
+      --posIndex
+      textSingle = line.text.substring(posIndex, posIndex + 1);
+    }
+    textSingle = line.text.substring(posIndex, posIndex + 1);
+    return {
+      selectText,
+      startText: textSingle
+    }
 }
