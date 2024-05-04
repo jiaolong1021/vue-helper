@@ -21,6 +21,7 @@ export default class FrameworkProvider {
     alias: '',
     path: ''
   }
+  public vueFiles: any = []
 
   constructor(explorer: ExplorerProvider) {
     this.explorer = explorer
@@ -29,6 +30,12 @@ export default class FrameworkProvider {
       pkg.includes('element-plus') && this.frameworks.push('element-plus')
       pkg.includes('element-ui') && this.frameworks.push('element-ui')
       pkg.includes('ant-design-vue') && this.frameworks.push('ant-design-vue')
+      this.vueFiles = this.explorer.traverse.search('.vue', '')
+      if (workspace.workspaceFolders) {
+        const watcher = workspace.createFileSystemWatcher('**/*.vue')
+        watcher.onDidCreate(() => { this.vueFiles = this.explorer.traverse.search('.vue', '') })
+        watcher.onDidDelete(() => { this.vueFiles = this.explorer.traverse.search('.vue', '') })
+      }
     } catch (error) {
     }
   }
@@ -43,7 +50,6 @@ export default class FrameworkProvider {
 
 class FrameworkCompletionItemProvider implements CompletionItemProvider {
   public frameworkProvider: FrameworkProvider
-  public vueFiles: any = []
   public attribute: any = {}
   public jsTag: any = {}
   public tag: any = {}
@@ -53,16 +59,10 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
 
   constructor(frameworkProvider: FrameworkProvider) {
     this.frameworkProvider = frameworkProvider
-    this.vueFiles = this.frameworkProvider.explorer.traverse.search('.vue', '')
     this.attribute = getAttribute(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
     this.tag = getTag(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
     this.jsTag = getJsTag(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
     this.globalAttribute = getGlobalAttribute(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
-    if (workspace.workspaceFolders) {
-      const watcher = workspace.createFileSystemWatcher('**/*.vue')
-      watcher.onDidCreate(() => { this.vueFiles = this.frameworkProvider.explorer.traverse.search('.vue', '') })
-      watcher.onDidDelete(() => { this.vueFiles = this.frameworkProvider.explorer.traverse.search('.vue', '') })
-    }
   }
 
   isCloseTag(document: TextDocument, position: Position) {
@@ -427,8 +427,8 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
   // 添加工程内vue组件提示
   addLocalComponentSuggestions() {
     let suggestions: CompletionItem[] = [];
-    for (let i = 0; i < this.vueFiles.length; i++) {
-      const vf = this.vueFiles[i];
+    for (let i = 0; i < this.frameworkProvider.vueFiles.length; i++) {
+      const vf = this.frameworkProvider.vueFiles[i];
       suggestions.push({
         label: vf.name,
         sortText: `0${i}${vf.name}`,
@@ -463,8 +463,8 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     let suggestions: CompletionItem[] = [];
     let id = 1;
     // 添加vue组件提示
-    for (let i = 0; i < this.vueFiles.length; i++) {
-      const vf = this.vueFiles[i];
+    for (let i = 0; i < this.frameworkProvider.vueFiles.length; i++) {
+      const vf = this.frameworkProvider.vueFiles[i];
       suggestions.push({
         label: vf.name,
         sortText: `0${i}${vf.name}`,
@@ -781,21 +781,13 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
    */
   async definitionOutFile(document: TextDocument, file: any) {
     let filePath = file.path
-    let isRelative = false
-    if (filePath.indexOf('./') === 0) {
-      isRelative = true
-    }
 
     // 1. 根据文件目录查询是否存在相应文件
     filePath = filePath.replace(this.frameworkProvider.explorer.prefix.alias, this.frameworkProvider.explorer.prefix.path)
     
     // 文件存在后缀，则直接查找
     if (/(.*\/.*|[^.]+)\..*$/gi.test(filePath)) {
-      let tempFile = path.resolve(workspace.rootPath || '', filePath)
-      // 相对路径处理
-      if (isRelative) {
-        tempFile = document.fileName.replace(/(.*)\/[^\/]*$/i, '$1') + path.sep + filePath.replace(/.\//i, '')
-      }
+      let tempFile = path.resolve(document.uri.fsPath || '', '../', filePath)
       if (fs.existsSync(tempFile)) {
         return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
       }
@@ -805,10 +797,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
       for (let i = 0; i < postfix.length; i++) {
         const post = postfix[i]
         // 相对路径处理
-        let tempFile = path.resolve(workspace.rootPath || '', filePath)
-        if (isRelative) {
-          tempFile = document.fileName.replace(/(.*)\/[^\/]*$/i, '$1') + path.sep + filePath.replace(/.\//i, '')
-        }
+        let tempFile = path.resolve(document.uri.fsPath || '', '../', filePath)
         if (tempFile.endsWith('/')) {
           tempFile = tempFile + 'index.' + post
           if (fs.existsSync(tempFile)) {
@@ -851,7 +840,6 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
    */
   async definitionInFile(document: TextDocument, position: Position) {
     const word = getWord(document, position, [' ', '<', '>', '"', '\'', '.', '\\', "=", ":", "@", "(", ")", "[", "]", "{", "}", ",", "!"])
-    console.log('word', word)
 
     // 查找字符串位置
     let pos = 0
@@ -889,14 +877,23 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
          * 2. iview, element组件判断
          */
         // attr存在，说明已遍历过import内容
+        let tag = word.selectText.toLowerCase().replace(/-/gi, '')
         if (attr) {
+          // 全局组件
+          for (let i = 0; i < this.frameworkProvider.vueFiles.length; i++) {
+            const vueFile = this.frameworkProvider.vueFiles[i];
+            const vueFileName = vueFile.name.toLowerCase().replace(/-/gi, '')
+            if (vueFileName === tag) {
+              return Promise.resolve(new Location(Uri.file(path.join(this.frameworkProvider.explorer.projectRootPath, vueFile.path.replace(this.frameworkProvider.explorer.prefix.alias, this.frameworkProvider.explorer.prefix.path))), new Position(0, 0)))
+            }
+          }
+
           let retPath: any = await this.definitionPlugin(word.selectText)
           if (retPath) {
             return Promise.resolve(new Location(Uri.file(retPath), new Position(0, 0)))
           }
           break;
         } else {
-          let tag = word.selectText.toLowerCase().replace(/-/gi, '')
           if (lineText.toLowerCase().includes(tag) && (lineText.trim().indexOf('import') === 0 || lineText.trim().indexOf('require') === 0)) {
             return this.definitionOutFile(document, this.getDefinitionPosition(lineText))
           }
@@ -952,7 +949,6 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
     const line = document.lineAt(position.line)
     // // 判断是文件内跳转还是文件外跳转
     let file = this.getDefinitionPosition(line.text)
-    console.log('file', file)
     if (file) {
       return this.definitionOutFile(document, file)
     } else {

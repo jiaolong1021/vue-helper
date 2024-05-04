@@ -64,7 +64,7 @@ export default class Traverse {
           path: dir.replace(new RegExp(`^${prefix.path}`, 'gi'), prefix.alias).replace(/\\/gi, '/')
         });
         if (name === 'index') {
-          name = dir.replace(/.*\/(\w*)\/\w*.\w*/gi, '$1')
+          name = dir.replace(/\\/gi, '/').replace(/.*\/(\w*)\/\w*.\w*/gi, '$1')
           files.push({
             name: name,
             path: dir.replace(new RegExp(`^${prefix.path}`, 'gi'), prefix.alias).replace(/\\/gi, '/')

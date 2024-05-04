@@ -190,7 +190,7 @@ var require_traverse = __commonJS({
               path: dir.replace(new RegExp(`^${prefix.path}`, "gi"), prefix.alias).replace(/\\/gi, "/")
             });
             if (name === "index") {
-              name = dir.replace(/.*\/(\w*)\/\w*.\w*/gi, "$1");
+              name = dir.replace(/\\/gi, "/").replace(/.*\/(\w*)\/\w*.\w*/gi, "$1");
               files.push({
                 name,
                 path: dir.replace(new RegExp(`^${prefix.path}`, "gi"), prefix.alias).replace(/\\/gi, "/")
@@ -16666,12 +16666,23 @@ var require_framework = __commonJS({
           alias: "",
           path: ""
         };
+        this.vueFiles = [];
         this.explorer = explorer;
         try {
           const pkg = fs.readFileSync((0, util_1.winRootPathHandle)(path.join(this.explorer.projectRootPath, "package.json")), "utf-8");
           pkg.includes("element-plus") && this.frameworks.push("element-plus");
           pkg.includes("element-ui") && this.frameworks.push("element-ui");
           pkg.includes("ant-design-vue") && this.frameworks.push("ant-design-vue");
+          this.vueFiles = this.explorer.traverse.search(".vue", "");
+          if (vscode_12.workspace.workspaceFolders) {
+            const watcher = vscode_12.workspace.createFileSystemWatcher("**/*.vue");
+            watcher.onDidCreate(() => {
+              this.vueFiles = this.explorer.traverse.search(".vue", "");
+            });
+            watcher.onDidDelete(() => {
+              this.vueFiles = this.explorer.traverse.search(".vue", "");
+            });
+          }
         } catch (error) {
         }
       }
@@ -16684,7 +16695,6 @@ var require_framework = __commonJS({
     exports2.default = FrameworkProvider;
     var FrameworkCompletionItemProvider = class {
       constructor(frameworkProvider) {
-        this.vueFiles = [];
         this.attribute = {};
         this.jsTag = {};
         this.tag = {};
@@ -16692,20 +16702,10 @@ var require_framework = __commonJS({
         this.tagReg = /<([\w-]+)\s+/g;
         this.attrReg = /(?:\(|\s*)((\w(-)?)*)=['"][^'"]*/;
         this.frameworkProvider = frameworkProvider;
-        this.vueFiles = this.frameworkProvider.explorer.traverse.search(".vue", "");
         this.attribute = (0, frameworks_1.getAttribute)(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize);
         this.tag = (0, frameworks_1.getTag)(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize);
         this.jsTag = (0, frameworks_1.getJsTag)(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize);
         this.globalAttribute = (0, frameworks_1.getGlobalAttribute)(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize);
-        if (vscode_12.workspace.workspaceFolders) {
-          const watcher = vscode_12.workspace.createFileSystemWatcher("**/*.vue");
-          watcher.onDidCreate(() => {
-            this.vueFiles = this.frameworkProvider.explorer.traverse.search(".vue", "");
-          });
-          watcher.onDidDelete(() => {
-            this.vueFiles = this.frameworkProvider.explorer.traverse.search(".vue", "");
-          });
-        }
       }
       isCloseTag(document, position) {
         let txt = document.getText(new vscode_12.Range(new vscode_12.Position(position.line, 0), position)).trim();
@@ -17018,8 +17018,8 @@ var require_framework = __commonJS({
       }
       addLocalComponentSuggestions() {
         let suggestions = [];
-        for (let i = 0; i < this.vueFiles.length; i++) {
-          const vf = this.vueFiles[i];
+        for (let i = 0; i < this.frameworkProvider.vueFiles.length; i++) {
+          const vf = this.frameworkProvider.vueFiles[i];
           suggestions.push({
             label: vf.name,
             sortText: `0${i}${vf.name}`,
@@ -17048,8 +17048,8 @@ var require_framework = __commonJS({
       getElementTagLabelSuggestion() {
         let suggestions = [];
         let id = 1;
-        for (let i = 0; i < this.vueFiles.length; i++) {
-          const vf = this.vueFiles[i];
+        for (let i = 0; i < this.frameworkProvider.vueFiles.length; i++) {
+          const vf = this.frameworkProvider.vueFiles[i];
           suggestions.push({
             label: vf.name,
             sortText: `0${i}${vf.name}`,
@@ -17312,16 +17312,9 @@ var require_framework = __commonJS({
       definitionOutFile(document, file) {
         return __awaiter(this, void 0, void 0, function* () {
           let filePath = file.path;
-          let isRelative = false;
-          if (filePath.indexOf("./") === 0) {
-            isRelative = true;
-          }
           filePath = filePath.replace(this.frameworkProvider.explorer.prefix.alias, this.frameworkProvider.explorer.prefix.path);
           if (/(.*\/.*|[^.]+)\..*$/gi.test(filePath)) {
-            let tempFile = path.resolve(vscode_12.workspace.rootPath || "", filePath);
-            if (isRelative) {
-              tempFile = document.fileName.replace(/(.*)\/[^\/]*$/i, "$1") + path.sep + filePath.replace(/.\//i, "");
-            }
+            let tempFile = path.resolve(document.uri.fsPath || "", "../", filePath);
             if (fs.existsSync(tempFile)) {
               return Promise.resolve(new vscode_12.Location(vscode_12.Uri.file(tempFile), new vscode_12.Position(0, 0)));
             }
@@ -17329,10 +17322,7 @@ var require_framework = __commonJS({
             const postfix = ["vue", "js", "css", "scss", "less"];
             for (let i = 0; i < postfix.length; i++) {
               const post = postfix[i];
-              let tempFile = path.resolve(vscode_12.workspace.rootPath || "", filePath);
-              if (isRelative) {
-                tempFile = document.fileName.replace(/(.*)\/[^\/]*$/i, "$1") + path.sep + filePath.replace(/.\//i, "");
-              }
+              let tempFile = path.resolve(document.uri.fsPath || "", "../", filePath);
               if (tempFile.endsWith("/")) {
                 tempFile = tempFile + "index." + post;
                 if (fs.existsSync(tempFile)) {
@@ -17369,7 +17359,6 @@ var require_framework = __commonJS({
       definitionInFile(document, position) {
         return __awaiter(this, void 0, void 0, function* () {
           const word = (0, util_1.getWord)(document, position, [" ", "<", ">", '"', "'", ".", "\\", "=", ":", "@", "(", ")", "[", "]", "{", "}", ",", "!"]);
-          console.log("word", word);
           let pos = 0;
           let begin = false;
           let lineText = "";
@@ -17393,14 +17382,21 @@ var require_framework = __commonJS({
               braceLeftCount = 0;
             }
             if (searchType === "components") {
+              let tag = word.selectText.toLowerCase().replace(/-/gi, "");
               if (attr) {
+                for (let i = 0; i < this.frameworkProvider.vueFiles.length; i++) {
+                  const vueFile = this.frameworkProvider.vueFiles[i];
+                  const vueFileName = vueFile.name.toLowerCase().replace(/-/gi, "");
+                  if (vueFileName === tag) {
+                    return Promise.resolve(new vscode_12.Location(vscode_12.Uri.file(path.join(this.frameworkProvider.explorer.projectRootPath, vueFile.path.replace(this.frameworkProvider.explorer.prefix.alias, this.frameworkProvider.explorer.prefix.path))), new vscode_12.Position(0, 0)));
+                  }
+                }
                 let retPath = yield this.definitionPlugin(word.selectText);
                 if (retPath) {
                   return Promise.resolve(new vscode_12.Location(vscode_12.Uri.file(retPath), new vscode_12.Position(0, 0)));
                 }
                 break;
               } else {
-                let tag = word.selectText.toLowerCase().replace(/-/gi, "");
                 if (lineText.toLowerCase().includes(tag) && (lineText.trim().indexOf("import") === 0 || lineText.trim().indexOf("require") === 0)) {
                   return this.definitionOutFile(document, this.getDefinitionPosition(lineText));
                 }
@@ -17447,7 +17443,6 @@ var require_framework = __commonJS({
         let docText = document.getText();
         const line = document.lineAt(position.line);
         let file = this.getDefinitionPosition(line.text);
-        console.log("file", file);
         if (file) {
           return this.definitionOutFile(document, file);
         } else {
