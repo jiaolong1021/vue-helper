@@ -4290,7 +4290,7 @@ var require_document = __commonJS({
   "out/frameworks/element-ui/document.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var docUrl = "http://element-cn.eleme.io";
+    var docUrl = "http://element.eleme.io";
     exports2.default = () => {
       return {
         "el-row": `[element\uFF1A${docUrl}/#/zh-CN/component/layout](${docUrl}/#/zh-CN/component/layout) 
@@ -22719,9 +22719,18 @@ var require_framework = __commonJS({
       definitionOutFile(document, file) {
         return __awaiter(this, void 0, void 0, function* () {
           let filePath = file.path;
+          let isAbsolute = false;
+          if (filePath.includes(this.frameworkProvider.explorer.prefix.alias)) {
+            isAbsolute = true;
+          }
           filePath = filePath.replace(this.frameworkProvider.explorer.prefix.alias, this.frameworkProvider.explorer.prefix.path);
           if (/(.*\/.*|[^.]+)\..*$/gi.test(filePath)) {
-            let tempFile = path.resolve(document.uri.fsPath || "", "../", filePath);
+            let tempFile = "";
+            if (isAbsolute) {
+              tempFile = path.join(this.frameworkProvider.explorer.projectRootPath, filePath);
+            } else {
+              tempFile = path.join(document.uri.path || "", "../", filePath);
+            }
             if (fs.existsSync(tempFile)) {
               return Promise.resolve(new vscode_12.Location(vscode_12.Uri.file(tempFile), new vscode_12.Position(0, 0)));
             }
@@ -22729,8 +22738,13 @@ var require_framework = __commonJS({
             const postfix = ["vue", "js", "css", "scss", "less"];
             for (let i = 0; i < postfix.length; i++) {
               const post = postfix[i];
-              let tempFile = path.resolve(document.uri.fsPath || "", "../", filePath);
-              if (tempFile.endsWith("/")) {
+              let tempFile = "";
+              if (isAbsolute) {
+                tempFile = path.join(this.frameworkProvider.explorer.projectRootPath, filePath);
+              } else {
+                tempFile = path.join(document.uri.path || "", "../", filePath);
+              }
+              if (tempFile.endsWith(path.sep)) {
                 tempFile = tempFile + "index." + post;
                 if (fs.existsSync(tempFile)) {
                   return Promise.resolve(new vscode_12.Location(vscode_12.Uri.file(tempFile), new vscode_12.Position(0, 0)));
@@ -22738,6 +22752,7 @@ var require_framework = __commonJS({
               } else {
                 let indexFile = tempFile + path.sep + "index." + post;
                 tempFile += "." + post;
+                tempFile = (0, util_1.winRootPathHandle)(tempFile);
                 if (fs.existsSync(tempFile)) {
                   return Promise.resolve(new vscode_12.Location(vscode_12.Uri.file(tempFile), new vscode_12.Position(0, 0)));
                 }

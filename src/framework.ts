@@ -787,11 +787,20 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
     let filePath = file.path
 
     // 1. 根据文件目录查询是否存在相应文件
+    let isAbsolute = false
+    if (filePath.includes(this.frameworkProvider.explorer.prefix.alias)) {
+      isAbsolute = true
+    }
     filePath = filePath.replace(this.frameworkProvider.explorer.prefix.alias, this.frameworkProvider.explorer.prefix.path)
     
     // 文件存在后缀，则直接查找
     if (/(.*\/.*|[^.]+)\..*$/gi.test(filePath)) {
-      let tempFile = path.resolve(document.uri.fsPath || '', '../', filePath)
+      let tempFile = ''
+      if (isAbsolute) {
+        tempFile = path.join(this.frameworkProvider.explorer.projectRootPath, filePath)
+      } else {
+        tempFile = path.join(document.uri.path || '', '../', filePath)
+      }
       if (fs.existsSync(tempFile)) {
         return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
       }
@@ -801,8 +810,13 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
       for (let i = 0; i < postfix.length; i++) {
         const post = postfix[i]
         // 相对路径处理
-        let tempFile = path.resolve(document.uri.fsPath || '', '../', filePath)
-        if (tempFile.endsWith('/')) {
+        let tempFile = ''
+        if (isAbsolute) {
+          tempFile = path.join(this.frameworkProvider.explorer.projectRootPath, filePath) 
+        } else {
+          tempFile = path.join(document.uri.path || '', '../', filePath)
+        }
+        if (tempFile.endsWith(path.sep)) {
           tempFile = tempFile + 'index.' + post
           if (fs.existsSync(tempFile)) {
             return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
@@ -810,6 +824,7 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
         } else {
           let indexFile = tempFile + path.sep + 'index.' + post
           tempFile += '.' + post
+          tempFile = winRootPathHandle(tempFile)
           if (fs.existsSync(tempFile)) {
             return Promise.resolve(new Location(Uri.file(tempFile), new Position(0, 0)))
           }

@@ -1,4 +1,4 @@
-const docUrl = 'http://element-cn.eleme.io'
+const docUrl = 'http://element.eleme.io'
 
 export default () => {
   return {
