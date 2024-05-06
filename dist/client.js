@@ -242,6 +242,7 @@ var require_explorer = __commonJS({
         return vfPath.replace(/\\/gi, "/");
       }
       constructor(context) {
+        this.name = "vue-helper";
         this.projectRootPath = "";
         this.tabSize = "";
         this.isTs = false;
@@ -250,6 +251,14 @@ var require_explorer = __commonJS({
           path: "src"
         };
         this.vueFiles = [];
+        this.store = {
+          set: (key, value) => {
+            vscode_12.workspace.getConfiguration(this.name).update(key, value, vscode_12.ConfigurationTarget.Global);
+          },
+          get: (key) => {
+            return vscode_12.workspace.getConfiguration(this.name).get(key);
+          }
+        };
         this.context = context;
         this.projectRootPath = (0, util_1.getWorkspaceRoot)("");
         this.projectRootPathReg = new RegExp(`.*${this.projectRootPath}/`, "gi");
@@ -280,8 +289,93 @@ var require_jsTag = __commonJS({
   "out/frameworks/element-ui/jsTag.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.default = () => {
-      return {};
+    exports2.default = (tabSize) => {
+      return {
+        "el-alert": `this.$alert('\u8FD9\u662F\u4E00\u6BB5\u5185\u5BB9', '\u6807\u9898\u540D\u79F0', {
+${tabSize}confirmButtonText: '\u786E\u5B9A',
+${tabSize}callback: action => {
+${tabSize}${tabSize}
+${tabSize}}
+})`,
+        "el-conform": `this.$confirm('\u6B64\u64CD\u4F5C\u5C06\u6C38\u4E45\u5220\u9664\u8BE5\u6587\u4EF6, \u662F\u5426\u7EE7\u7EED?', '\u63D0\u793A', {
+${tabSize}confirmButtonText: '\u786E\u5B9A',
+${tabSize}cancelButtonText: '\u53D6\u6D88',
+${tabSize}type: 'warning'
+}).then(() => {
+${tabSize}this.$message({
+${tabSize}${tabSize}type: 'success',
+${tabSize}${tabSize}message: '\u5220\u9664\u6210\u529F!'
+${tabSize}})
+}).catch(() => {
+${tabSize}this.$message({
+${tabSize}${tabSize}type: 'info',
+${tabSize}${tabSize}message: '\u5DF2\u53D6\u6D88\u5220\u9664'
+${tabSize}})
+})`,
+        "el-form:clear": `this.$refs['\${1:form}'].clearValidate()`,
+        "el-form:valid": `this.$refs['\${1:formName}'].validate((valid) => {
+${tabSize}if (valid) {
+${tabSize}${tabSize}$2
+${tabSize}} else {
+${tabSize}${tabSize}return false
+${tabSize}}
+})`,
+        "el-message": `this.$message({
+${tabSize}message: '\u606D\u559C\u4F60\uFF0C\u8FD9\u662F\u4E00\u6761\u6210\u529F\u6D88\u606F',
+${tabSize}type: 'success'
+})`,
+        "el-message:close": `this.$message({
+${tabSize}message: '\u606D\u559C\u4F60\uFF0C\u8FD9\u662F\u4E00\u6761\u6210\u529F\u6D88\u606F',
+${tabSize}showClose: true,
+${tabSize}type: 'success'
+})`,
+        "el-notify": `this.$notify({
+${tabSize}title: '\u6807\u9898\u540D\u79F0',
+${tabSize}message: h('i', {style: 'color: teal'}, 'notify')
+})`,
+        "el-notify:noclose": `this.$notify({
+${tabSize}title: '\u63D0\u793A',
+${tabSize}message: '\u4E0D\u4F1A\u81EA\u52A8\u5173\u95ED\u7684\u6D88\u606F',
+${tabSize}duration: 0
+})`,
+        "el-notify:success": `this.$notify({
+${tabSize}title: '\u6210\u529F',
+${tabSize}message: '\u8FD9\u662F\u4E00\u6761\u6210\u529F\u7684\u63D0\u793A\u6D88\u606F',
+${tabSize}type: 'success'
+})`,
+        "el-prompt": `this.$prompt('\u8BF7\u8F93\u5165\u90AE\u7BB1', '\u63D0\u793A', {
+${tabSize}confirmButtonText: '\u786E\u5B9A',
+${tabSize}cancelButtonText: '\u53D6\u6D88',
+${tabSize}inputPattern: '',
+${tabSize}inputErrorMessage: ''
+}).then(({ value }) => {
+${tabSize}
+}).catch(() => {
+${tabSize}
+});`,
+        "el-rules:array": `{ type: 'array', required: true, message: '\u8BF7\u81F3\u5C11\u9009\u62E9\u4E00\u4E2A', trigger: 'change' }`,
+        "el-rules:date": `{ type: 'date', required: true, message: '\u8BF7\u9009\u62E9\u65E5\u671F', trigger: 'change' }`,
+        "el-rules:minMax": `{require: true, min: 3, max: 5, message: '\u957F\u5EA6\u5728 3 \u5230 5 \u4E2A\u5B57\u7B26', trigger: 'blur' }`,
+        "el-rules:required": `{required: true, message:'\u8BF7\u8F93\u5165', trigger: 'blur'}`,
+        "el-rules:self": `{ validator: validatePass, trigger: 'blur' }`,
+        "el-rules:selfmethod": `var validatePass = (rule, value, callback) => {
+${tabSize}if (value === '') {
+${tabSize}${tabSize}callback(new Error(''));
+${tabSize}} else {
+${tabSize}${tabSize}callback();
+${tabSize}}
+}`,
+        "el-pagination": `handleCurrentChange (pageNum) {
+${tabSize}this.pageNum = pageNum
+${tabSize}this.fetchList()
+},
+handleSizeChange(pageSize) {
+${tabSize}this.pageSize = pageSize
+${tabSize}this.fetchList()
+}`,
+        "reg-phone": `/^[1][3,4,5,7,8][0-9]{9}$/`,
+        "reg-email": `/^[A-Za-zd]+([-_.][A-Za-zd]+)*@([A-Za-zd]+[-.])+[A-Za-zd]{2,4}$/`
+      };
     };
   }
 });
@@ -293,63 +387,21 @@ var require_tag = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.default = (tabSize) => {
       return {
-        "el-row": `<el-row>
-${tabSize}<el-col :span="$1">$2</el-col>
-</el-row>`,
         "el-col": `<el-col :span="$1">$2</el-col>`,
-        "el-button": `<el-button type="$1">$2</el-button>`,
-        "el-radio": `<el-radio label="$1">$2</el-radio>`,
-        "el-radio-group": `<el-radio-group v-model="$1">
-${tabSize}<el-radio label="$2">$3</el-radio>$4
-</el-radio-group>`,
-        "el-radio-button": `<el-radio-button label="$1">$2</el-radio-button>`,
         "el-checkbox": `<el-checkbox label="$1">$2</el-checkbox>`,
         "el-checkbox-group": `<el-checkbox-group v-model="$1">
 ${tabSize}<el-checkbox label="$2">$3</el-checkbox>
 </el-checkbox-group>`,
         "el-checkbox-button": `<el-checkbox-button label="$1">$2</el-checkbox-button>`,
         "el-input": `<el-input v-model="$1" placeholder="$2">$3</el-input>`,
-        "el-autocomplete": `<el-autocomplete v-model="$1" placeholder="$2">$3</el-autocomplete>`,
-        "el-input-number": `<el-input-number v-model="$1" placeholder="$2">$3</el-input-number>`,
-        "el-select": `<el-select v-model="$1" placeholder="$2">
-${tabSize}<el-option :label="$3" :value="$4"></el-option>$5
-</el-select>`,
         "el-option": `<el-option :label="$1" :value="$2">$3</el-option>`,
         "el-option-group": `<el-option-group v-for="$1" :key="$2">
 <el-option :label="$3" :value="$4"></el-option>$5
 </el-option-group>`,
         "el-cascader": `<el-cascader :options="$1" v-model="$2">$3</el-cascader>`,
-        "el-switch": `<el-switch v-model="$1">$2</el-switch>`,
-        "el-slider": `<el-slider v-model="$1">$2</el-slider>`,
-        "el-time-select": `<el-time-select v-model="$1" placeholder="$2">$3</el-time-select>`,
-        "el-time-picker": `<el-time-picker v-model="$1" placeholder="$2">$3</el-time-picker>`,
-        "el-date-picker": `<el-date-picker v-model="$1" placeholder="$2">$3</el-date-picker>`,
-        "el-upload": `<el-upload action="$1">
-${tabSize}<el-button type="$2">$3</el-button>
-</el-upload>`,
-        "el-rate": `<el-rate v-model="$1">$2</el-rate>`,
         "el-color-picker": `<el-color-picker v-model="$1">$2</el-color-picker>`,
-        "el-transfer": `<el-transfer v-model="$1" :data="$2">$3</el-transfer>`,
-        "el-form": `<el-form :model="$1">
-${tabSize}<el-form-item label="$2">$3</el-form-item>$4
-</el-form>`,
         "el-form-item": `<el-form-item label="$1">$2</el-form-item>`,
-        "el-table": `<el-table :data="$1">
-${tabSize}<el-table-column label="$2">$3</el-table-column>$4
-</el-table>`,
-        "el-table-column": `<el-table-column label="$1">$2</el-table-column>`,
-        "el-tag": `<el-tag type="$1">$2</el-tag>`,
-        "el-progress": `<el-progress percentage="$1">$2</el-progress>`,
-        "el-tree": `<el-tree :data="$1">$2</el-tree>`,
-        "el-pagination": `<el-pagination :total="$1" :current-page="$2" :page-size="$3" @current-change="$4" layout="$5">$6</el-pagination>`,
-        "el-badge": `<el-badge value="$1">$2</el-badge>`,
         "el-alert": `<el-alert type="$1" title="$2">$3</el-alert>`,
-        "el-menu": `<el-menu default-active="$1">
-${tabSize}<el-submenu index="$2">
-${tabSize}${tabSize}<el-menu-item index="$3">$4</el-menu-item>
-${tabSize}</el-submenu>
-${tabSize}<el-menu-item index="$5">$6</el-menu-item>$7
-</el-menu>`,
         "el-submenu": `<el-submenu index="$1">
 ${tabSize}<el-menu-item index="$2">$3</el-menu-item>$4
 </el-submenu>`,
@@ -357,41 +409,320 @@ ${tabSize}<el-menu-item index="$2">$3</el-menu-item>$4
 ${tabSize}<el-menu-item index="$1">$2</el-menu-item>$3
 </el-menu-item-group>`,
         "el-menu-item": `<el-menu-item index=""></el-menu-item>`,
-        "el-tabs": `<el-tabs>
-${tabSize}<el-tab-pane>$1</el-tab-pane>$2
-</el-tabs>`,
         "el-tab-pane": `<el-tab-pane>$1</el-tab-pane>`,
-        "el-breadcrumb": `<el-breadcrumb separator="$1">
-${tabSize}<el-breadcrumb-item>$2</el-breadcrumb-item>$3
-</el-breadcrumb>`,
         "el-breadcrumb-item": `<el-breadcrumb-item></el-breadcrumb-item>`,
-        "el-dropdown": `<el-dropdown>
-${tabSize}<el-dropdown-menu>$1</el-dropdown-menu>$2
-</el-dropdown>`,
         "el-dropdown-menu": `<el-dropdown-menu></el-dropdown-menu>`,
-        "el-steps": `<el-steps :space="$1" :active="$2">
-${tabSize}<el-step title="$3">$4</el-step>$5
-</el-steps>`,
         "el-step": `<el-step title="$1">$2</el-step>`,
-        "el-dialog": `<el-dialog title="$1">$2</el-dialog>`,
-        "el-tooltip": `<el-tooltip content="$1" placement="$2">$3</el-tooltip>`,
-        "el-popover": `<el-popover placement="$1">$2</el-popover>`,
-        "el-card": `<el-card>$1</el-card>`,
         "el-carousel": `<el-carousel>
 ${tabSize}<el-carousel-item>$1</el-carousel-item>
 </el-carousel>`,
         "el-carousel-item": `<el-carousel-item>$1</el-carousel-item>`,
-        "el-collapse": `<el-collapse>
-${tabSize}<el-collapse-item name="$1" title="$2">$3</el-collapse-item>$4
-</el-collapse>`,
         "el-collapse-item": `<el-collapse-item name="$1" title="$2">$3</el-collapse-item>`,
-        "el-timeline": `<el-timeline>$1</el-timeline>`,
         "el-timeline-item": `<el-timeline-item>$1</el-timeline-item>`,
         "el-divider": `<el-divider>$1</el-divider>`,
-        "el-calendar": `<el-calendar>$1</el-calendar>`,
-        "el-image": `<el-image>$1</el-image>`,
-        "el-backtop": `<el-backtop>$1</el-backtop>`,
-        "el-drawer": `<el-drawer>$1</el-drawer>`
+        "el-alert:icon": `<el-alert
+${tabSize}title="success"
+${tabSize}type="success"
+${tabSize}show-icon>
+</el-alert>`,
+        "el-autocomplete": `<el-autocomplete v-model="$1" placeholder="" :fetch-suggestions="fetchSuggestions" @select="handleSelect">
+</el-autocomplete>`,
+        "el-badge": `<el-badge :value="$1"/>`,
+        "el-badge:button": `<el-badge :value="$1">
+${tabSize}<el-button size="small">$2</el-button>
+</el-badge>`,
+        "el-badge:dot": `<el-badge is-dot>$1</el-badge>`,
+        "el-breadcrumb": `<el-breadcrumb separator="/">
+${tabSize}<el-breadcrumb-item :to="{ path: '/' }"></el-breadcrumb-item>
+${tabSize}<el-breadcrumb-item></el-breadcrumb-item>
+</el-breadcrumb>`,
+        "el-button": `<el-button type="primary">$1</el-button>`,
+        "el-button-group": `<el-button-group>
+${tabSize}<el-button type="primary">$1</el-button>
+${tabSize}<el-button type="primary">$2</el-button>
+</el-button-group>`,
+        "el-card": `<el-card>
+${tabSize}<div slot="header">$1</div>
+${tabSize}<div></div>
+</el-card>`,
+        "el-carousel:card": `<el-carousel type="card" height="150px">
+${tabSize}<el-carousel-item>
+${tabSize}${tabSize}$1
+${tabSize}</el-carousel-item>
+</el-carousel>`,
+        "el-cascadar": `<el-cascader
+${tabSize}:options="$1"
+${tabSize}v-model="$2"
+${tabSize}@change="$3">
+</el-cascader>`,
+        "el-collapse": `<el-collapse v-model="\${1:activeName}" @change="\${2:collapseChange}">
+${tabSize}<el-collapse-item title="\${3:title}" name="\${4:name}">
+${tabSize}${tabSize}<div>$5</div>
+${tabSize}</el-collapse-item>
+</el-collapse>`,
+        "el-date-picker": `<el-date-picker v-model="$1" type="date" placeholder="\${2:date}"></el-date-picker>`,
+        "el-date-picker:datetime": `<el-date-picker v-model="$1" type="datetime" placeholder="\${2:datetime}"></el-date-picker>`,
+        "el-dialog": `<el-dialog
+${tabSize}title=""
+${tabSize}:visible.sync="\${1:dialogVisible}"
+${tabSize}width="\${2:width}"
+${tabSize}:before-close="\${3:dialogBeforeClose}">
+${tabSize}<div>$4</div>
+${tabSize}<div slot="footer">
+${tabSize}${tabSize}<el-button @click="dialogVisible = false">\u53D6 \u6D88</el-button>
+${tabSize}${tabSize}<el-button type="primary" @click="dialogVisible = false">\u786E \u5B9A</el-button>
+${tabSize}</div>
+</el-dialog>`,
+        "el-dialog:form": `<el-dialog
+${tabSize}title=""
+${tabSize}:visible.sync="\${1:dialogVisible}"
+${tabSize}width="\${2:width}"
+${tabSize}:before-close="\${3:dialogBeforeClose}">
+${tabSize}<el-form :model="form">
+${tabSize}${tabSize}<el-form-item label="" :label-width="">
+${tabSize}${tabSize}${tabSize}<el-input v-model=""></el-input>
+${tabSize}${tabSize}</el-form-item>
+${tabSize}</el-form>
+${tabSize}<div slot="footer">
+${tabSize}${tabSize}<el-button @click="dialogVisible = false">\u53D6 \u6D88</el-button>
+${tabSize}${tabSize}<el-button type="primary" @click="dialogVisible = false">\u786E \u5B9A</el-button>
+${tabSize}</div>
+</el-dialog>`,
+        "el-dropdown": `<el-dropdown>
+${tabSize}<el-button type="primary">
+${tabSize}${tabSize}\u4E0B\u62C9\u83DC\u5355<i class="el-icon-arrow-down el-icon--right"></i>
+${tabSize}</el-button>
+${tabSize}<el-dropdown-menu slot="dropdown">
+${tabSize}${tabSize}<el-dropdown-item>\u9EC4\u91D1\u7CD5</el-dropdown-item>
+${tabSize}</el-dropdown-menu>
+</el-dropdown>`,
+        "el-form": `<el-form ref="\${1:form}" :model="\${2:form}" label-width="\${3:80px}">
+${tabSize}$4
+</el-form>`,
+        "el-form:inline": `<el-form :inline="true" ref="\${1:form}" :model="\${2:form}" label-width="\${3:80px}">
+${tabSize}$4
+</el-form>`,
+        "el-form-item:input": `<el-form-item label="\${1:label}">
+${tabSize}<el-input v-model="\${2:model}"></el-input>
+</el-form-item>`,
+        "el-form-item:checkbox": `<el-form-item label="\${1:label}">
+${tabSize}<el-checkbox-group v-model="\${2:model}">
+${tabSize}${tabSize}<el-checkbox label="\${3:label}" name="\${4:name}"></el-checkbox>
+${tabSize}</el-checkbox-group>
+</el-form-item>`,
+        "el-form-item:radio": `<el-form-item label="\${1:label}">
+${tabSize}<el-radio-group v-model="\${2:model}">
+${tabSize}${tabSize}<el-radio label="\${3:label}"></el-radio>
+${tabSize}</el-radio-group>
+</el-form-item>`,
+        "el-form-item:select": `<el-form-item label="\${1:label}">
+${tabSize}<el-select v-model="\${2:model}" placeholder="\${3:placeholder}">
+${tabSize}${tabSize}<el-option label="\${4:label}" value="\${5:value}"></el-option>
+${tabSize}</el-select>
+</el-form-item>`,
+        "el-form-item:switch": `<el-form-item label="\${1:label}">
+<el-switch v-model="\${2:model}"></el-switch>
+</el-form-item>`,
+        "el-form-item:textarea": `<el-form-item label="\${1:label}">
+<el-input type="textarea" v-model="\${2:model}"></el-input>
+</el-form-item>`,
+        "el-input-number": `<el-input-number v-model="$1" @change="\${2:inputChange}" :min="\${3:1}" :max="\${4:10}" label="\${5:label}"></el-input-number>`,
+        "el-input:textarea": `<el-input type="textarea" v-model="$1" placeholder="$2"></el-input>`,
+        "el-menu": `<el-menu :default-active="\${1:activeIndex}" mode="horizontal" @select="\${2:menuSelect}">
+${tabSize}<el-menu-item index="\${3:index}">$4</el-menu-item>
+</el-menu>`,
+        "el-menu:submenu": `<el-menu :default-active="\${1:activeIndex}" mode="horizontal" @select="handleSelect">
+${tabSize}<el-menu-item index="1"></el-menu-item>
+${tabSize}<el-submenu index="2">
+${tabSize}${tabSize}<template slot="title"></template>
+${tabSize}${tabSize}<el-menu-item index="2-1"></el-menu-item>
+${tabSize}</el-submenu>
+</el-menu>`,
+        "el-pagination": `<el-pagination
+${tabSize}layout="prev, pager, next"
+${tabSize}:total="50">
+</el-pagination>`,
+        "el-pagination:full": `<el-pagination
+${tabSize}@size-change="handleSizeChange"
+${tabSize}@current-change="handleCurrentChange"
+${tabSize}:current-page="pageNum"
+${tabSize}:page-sizes="[10, 20, 50]"
+${tabSize}:page-size="pageSize"
+${tabSize}layout="total, sizes, prev, pager, next, jumper"
+${tabSize}:total="totalCount">
+</el-pagination>`,
+        "el-popover": `<el-popover
+${tabSize}ref="popover1"
+${tabSize}placement="top-start"
+${tabSize}title="\u6807\u9898"
+${tabSize}width="200"
+${tabSize}trigger="hover"
+${tabSize}content="\u8FD9\u662F\u4E00\u6BB5\u5185\u5BB9">
+</el-popover>`,
+        "el-popover:insert": `<el-popover
+${tabSize}ref="popover4"
+${tabSize}placement="right"
+${tabSize}width="400"
+${tabSize}trigger="click">
+${tabSize}<div></div>
+</el-popover>`,
+        "el-progress": `<el-progress :percentage="\${1:30}"></el-progress>`,
+        "el-progress:circle": `<el-progress type="circle" :percentage="\${1:30}"></el-progress>`,
+        "el-progress:inside": `<el-progress :text-inside="true" :stroke-width="18" :percentage="70"></el-progress>`,
+        "el-radio": `<el-radio v-model="radio" label="\${1:label}">$2</el-radio>`,
+        "el-radio-button": `<el-radio-button label="\${1:label}"></el-radio-button>`,
+        "el-radio-group": `<el-radio-group v-model="\${1:model}">
+${tabSize}<el-radio :label="\${2:label}">$3</el-radio>
+</el-radio-group>`,
+        "el-rate": `<el-rate v-model="$1"></el-rate>`,
+        "el-rate:color": `<el-rate
+${tabSize}v-model="\${1:model}"
+${tabSize}:colors="['#99A9BF', '#F7BA2A', '#FF9900']">
+</el-rate>`,
+        "el-rate:half": `<el-rate
+${tabSize}v-model="3.7"
+${tabSize}disabled
+${tabSize}show-score
+${tabSize}text-color="#ff9900"
+${tabSize}score-template="{value}">
+</el-rate>`,
+        "el-row": `<el-row :gutter="\${1:10}">
+${tabSize}<el-col :span="\${2:6}">$3</el-col>
+</el-row>`,
+        "el-select": `<el-select v-model="model" placeholder="">
+${tabSize}<el-option
+${tabSize}${tabSize}v-for="item in options"
+${tabSize}${tabSize}:key="item.value"
+${tabSize}${tabSize}:label="item.label"
+${tabSize}${tabSize}:value="item.value">
+${tabSize}</el-option>
+</el-select>`,
+        "el-slider": `<el-slider v-model="\${1:30}"></el-slider>`,
+        "el-steps": `<el-steps :active="active" finish-status="success">
+${tabSize}<el-step title="step1"></el-step>
+</el-steps>`,
+        "el-steps:simple": `<el-steps simple>
+${tabSize}<el-step title="step1"></el-step>
+</el-steps>`,
+        "el-steps:icon": `<el-steps :active="active" finish-status="success">
+${tabSize}<el-step title="step1" icon="el-icon-edit"></el-step>
+</el-steps>`,
+        "el-switch": `<el-switch v-model="\${1:model}" active-color="\${2:#13ce66}" inactive-color="\${3:#ff4949}"></el-switch>`,
+        "el-tabs": `<el-tabs v-model="\${1:activeName}" @tab-click="\${2:handleClick}">
+${tabSize}<el-tab-pane label="\${3:label}" name="\${4:name}">$5</el-tab-pane>
+</el-tabs>`,
+        "el-tabs:card": `<el-tabs type="card" v-model="\${1:activeName}" @tab-click="\${2:handleClick}">
+${tabSize}<el-tab-pane label="\${3:label}" name="\${4:name}">$5</el-tab-pane>
+</el-tabs>`,
+        "el-table": `<el-table
+${tabSize}:data="\${1:data}"
+${tabSize}style="width: 100%">
+${tabSize}<el-table-column
+${tabSize}${tabSize}prop="\${2:prop}"
+${tabSize}${tabSize}label="\${3:label}"
+${tabSize}${tabSize}width="\${4:width}">
+${tabSize}</el-table-column>
+</el-table>`,
+        "el-table-column": `<el-table-column
+${tabSize}header-align="center"
+${tabSize}align="center"
+${tabSize}prop="\${1:prop}"
+${tabSize}label="\${2:label}" >
+</el-table-column>`,
+        "el-table-column:left": `<el-table-column
+${tabSize}header-align="left"
+${tabSize}align="left"
+${tabSize}prop="\${1:prop}"
+${tabSize}label="\${2:label}" >
+</el-table-column>`,
+        "el-table-column:slot": `<template slot-scope="scope">
+${tabSize}{{scope.row.status}}
+</template>`,
+        "el-tag": `<el-tag type="\${1:success}">$2</el-tag>`,
+        "el-tag:close": `<el-tag closable type="\${1:success}">$2</el-tag>`,
+        "el-time-picker": `<el-time-picker
+${tabSize}v-model="$1"
+${tabSize}:picker-options="\${2:{ selectableRange: '18:30:00 - 20:30:00' }}"
+${tabSize}placeholder="$3">
+</el-time-picker>`,
+        "el-time-select": `<el-time-select
+${tabSize}v-model="$1"
+${tabSize}:picker-options="\${2:{start: '08:30',step: '00:15',end: '18:30'}}"
+${tabSize}placeholder="$3">
+</el-time-select>`,
+        "el-tooltip": `<el-tooltip effect="dark" content="$1" placement="\${2:top}">
+${tabSize}<el-button>$3</el-button>
+</el-tooltip>`,
+        "el-tooltip:content": `<el-tooltip effect="dark" content="$1" placement="\${2:top}">
+<div slot="content">$3</div>
+${tabSize}<el-button>$4</el-button>
+</el-tooltip>`,
+        "el-transfer": `<el-transfer
+${tabSize}v-model="$1"
+${tabSize}:data="$2">
+</el-transfer>`,
+        "el-transfer:search": `<el-transfer
+${tabSize}v-model="$1"
+${tabSize}:data="$2">
+${tabSize}filterable
+${tabSize}:filter-method=""
+${tabSize}filter-placeholder="">
+</el-transfer>`,
+        "el-tree": `<el-tree
+${tabSize}:data="$1"
+${tabSize}:props="$2"
+${tabSize}@node-click="$3">
+</el-tree>`,
+        "el-tree:select": `<el-tree
+${tabSize}show-checkbox
+${tabSize}:data="$1"
+${tabSize}:props="$2"
+${tabSize}@node-click="$3">
+</el-tree>`,
+        "el-upload": `<el-upload
+${tabSize}action=""
+${tabSize}:on-preview=""
+${tabSize}:on-remove=""
+${tabSize}:before-remove=""
+${tabSize}multiple
+${tabSize}:limit="3"
+${tabSize}:on-exceed=""
+${tabSize}:file-list="[{name: 'name', url: 'url'}]">
+${tabSize}<el-button size="small" type="primary">\u70B9\u51FB\u4E0A\u4F20</el-button>
+${tabSize}<div slot="tip" class="el-upload__tip">\u53EA\u80FD\u4E0A\u4F20jpg/png\u6587\u4EF6\uFF0C\u4E14\u4E0D\u8D85\u8FC7500kb</div>
+</el-upload>`,
+        "el-upload:avatar": `<el-upload
+${tabSize}action=""
+${tabSize}:show-file-list="false"
+${tabSize}:on-success=""
+${tabSize}:before-upload="">
+${tabSize}<img v-if="imageUrl" :src="imageUrl">
+${tabSize}<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+</el-upload>`,
+        "el-timeline": `<el-timeline :reverse="reverse">
+${tabSize}<el-timeline-item
+${tabSize}${tabSize}v-for="(activity, index) in activities"
+${tabSize}${tabSize}:key="index"
+${tabSize}${tabSize}:timestamp="activity.timestamp">
+${tabSize}${tabSize}{{activity.content}}
+${tabSize}</el-timeline-item>
+</el-timeline>`,
+        "el-calendar": `<el-calendar v-model="\${1:value}"></el-calendar>`,
+        "el-image": `<el-image
+${tabSize}style="\${1:width: 100px; height: 100px}"
+${tabSize}:src="\${2:url}"
+${tabSize}:fit="\${3:fit}">$4</el-image>`,
+        "el-backtop": `<el-backtop target="\${1:.page-component__scroll .el-scrollbar__wrap}">$2</el-backtop>`,
+        "el-infinite-scroll": `<ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
+${tabSize}<li v-for="i in count" class="infinite-list-item">{{ i }}</li>
+</ul>`,
+        "el-drawer": `<el-drawer
+${tabSize}title="\${1:\u6211\u662F\u6807\u9898}"
+${tabSize}:visible.sync="\${2:drawer}"
+${tabSize}:direction="\${3:direction}"
+${tabSize}:before-close="\${4:handleClose}">
+${tabSize}\${5:<span>\u6211\u6765\u5566!</span>}
+</el-drawer>`
       };
     };
   }
@@ -15817,6 +16148,170 @@ var require_frameworks = __commonJS({
   }
 });
 
+// out/vue/snippets-html.js
+var require_snippets_html = __commonJS({
+  "out/vue/snippets-html.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.default = (tabSize) => {
+      return {
+        "vcomponent": `<component :is="\${1:componentId}"></component>$0`,
+        "vka": `<keep-alive$1>
+${tabSize}$2
+</keep-alive>$0`,
+        "vtransition": `<transition$1>
+${tabSize}$2
+</transition>$0`,
+        "vtg": `<transition-group$1>
+${tabSize}$2
+</transition-group>`,
+        "vrl": `<router-link $1>$2</router-link>$0`,
+        "vrlt": `<router-link to="$1">$2</router-link>$0`,
+        "vrv": `<router-view>$1</router-view>$0`
+      };
+    };
+  }
+});
+
+// out/vue/snippets-js.js
+var require_snippets_js = __commonJS({
+  "out/vue/snippets-js.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.default = (tabSize) => {
+      return {
+        "vnew": `new Vue({
+${tabSize}$1
+})`,
+        "vgsilent": `Vue.config.silent = \${1:true}`,
+        "vgeh": `Vue.config.errorHandler = function (err, vm, info) {
+${tabSize}\${1:// handle error}
+}`,
+        "vgwh": `Vue.config.warnHandler = function (msg, vm, trace) {
+${tabSize}\${1:// handle warn}
+}`,
+        "vgextend": `Vue.extend({
+${tabSize}template:\${1:template}
+})`,
+        "vgnt": `Vue.nextTick({
+${tabSize}$1
+})`,
+        "vgset": `Vue.set(\${2:target}, \${3:key}, \${4:value})`,
+        "vgdelete": `Vue.delete(\${2:target}, \${3:key})`,
+        "vgdirective": `Vue.directive(\${2:id}\${3:, [definition]})`,
+        "vgfilter": `Vue.filter(\${1:id}\${2:, [definition]})`,
+        "vgcomponent": `Vue.component(\${1:id}\${2:, [definition]})$0`,
+        "vguse": `Vue.use(\${1:plugin})$0`,
+        "vgmixin": `Vue.mixin({\${1:mixin}})`,
+        "vgcompile": `Vue.compile(\${1:template})`,
+        "vdata": `data() {
+${tabSize}return {
+${tabSize}${tabSize}$1
+${tabSize}}
+},$0`,
+        "vmounted": `mounted () {
+${tabSize}$1
+}`,
+        "vbm": `beforeMount () {
+${tabSize}$1
+}`,
+        "vcreated": `created () {
+${tabSize}$1
+}`,
+        "vbc": `beforeCreate () {
+${tabSize}$1
+}`,
+        "vupdated": `updated () {
+${tabSize}$1
+}`,
+        "vbu": `beforeUpdate () {
+${tabSize}$1
+}`,
+        "vactivated": `activated () {
+${tabSize}$1
+}`,
+        "vdeactivated": `deactivated () {
+${tabSize}$1
+}`,
+        "vbd": `beforeDestroy () {
+${tabSize}$1
+}`,
+        "vdestroyed": `destroyed () {
+${tabSize}$1
+}`,
+        "vprops": `props: {
+${tabSize}$1
+}`,
+        "vpd": `propsData: {
+${tabSize}$1
+}`,
+        "vcomputed": `computed: {
+${tabSize}$1
+}`,
+        "vmethods": `methods: {
+${tabSize}$1
+}`,
+        "vwatch": `watch: {
+${tabSize}$1
+}`,
+        "vwo": `\${1:key}: {
+${tabSize}deep: \${2:true},
+${tabSize}immediate: \${3:true},
+${tabSize}handler: function (\${4:val}, \${5:oldVal}) {
+${tabSize}${tabSize}$6
+${tabSize}}
+},$0`,
+        "vdirectives": `directives: {
+${tabSize}$1
+}`,
+        "vfilters": `filters: {
+${tabSize}$1
+}`,
+        "vcomponents": `components: {
+${tabSize}$1
+}`,
+        "vmixins": `mixins:[$1],`,
+        "vprovide": `provide: {
+${tabSize}$1
+}`,
+        "vinject": `inject: [$1],`,
+        "vmodel": `model: {
+${tabSize}prop: $1,
+${tabSize}event: $2
+}`,
+        "vrender": `render(h) {
+${tabSize}$1
+},`,
+        "vel": `\${1|this,vm|}.$el$2`,
+        "voptions": `\${1|this,vm|}.$options$2`,
+        "vparent": `\${1|this,vm|}.$parent$2`,
+        "vroot": `\${1|this,vm|}.$root$2`,
+        "vchildren": `\${1|this,vm|}.$children$2`,
+        "vslots": `\${1|this,vm|}.$slots$2`,
+        "vss": `\${1|this,vm|}.$scopedSlots.default({
+${tabSize}$2
+})`,
+        "vrefs": `\${1|this,vm|}.$refs$2`,
+        "vis": `\${1|this,vm|}.$isServer$2`,
+        "vattrs": `\${1|this,vm|}.$attrs$2`,
+        "vlisteners": `\${1|this,vm|}.$listeners$2`,
+        "vset": `\${1|this,vm|}.$set(\${2:target}, \${3:key}, \${4:value})`,
+        "vdelete": `\${1|this,vm|}.$delete(\${2:target}, \${3:key})`,
+        "von": `\${1|this,vm|}.$on('\${2:event}', \${3:callback})$4`,
+        "vonce": `\${1|this,vm|}.$once('\${2:event}', \${3:callback})$4`,
+        "voff": `\${1|this,vm|}.$off('\${2:event}', \${3:callback})$4`,
+        "vemit": `\${1|this,vm|}.$emit('\${2:event}'\${3:, args})$4`,
+        "vmount": `\${1|this,vm|}.$mount('$2')`,
+        "vfu": `\${1|this,vm|}.$forceUpdate()`,
+        "vdestroy": `\${1|this,vm|}.$destroy()$2`,
+        "vnt": `\${1|this,vm|}.$nextTick(() => {
+${tabSize}$2
+})`
+      };
+    };
+  }
+});
+
 // node_modules/no-case/dist/index.js
 function split(input, options = {}) {
   let result = input.replace(SPLIT_LOWER_UPPER_RE, SPLIT_REPLACE_VALUE).replace(SPLIT_UPPER_UPPER_RE, SPLIT_REPLACE_VALUE);
@@ -21568,6 +22063,8 @@ var require_framework = __commonJS({
     var path = require("path");
     var util_1 = require_util();
     var frameworks_1 = require_frameworks();
+    var snippets_html_1 = require_snippets_html();
+    var snippets_js_1 = require_snippets_js();
     var paramCamse = (init_dist2(), __toCommonJS(dist_exports));
     var glob = require_commonjs5();
     var FrameworkProvider = class {
@@ -21707,7 +22204,7 @@ var require_framework = __commonJS({
           suggestions.push({
             sortText: `000${value}`,
             label: value,
-            detail: "vue-helper",
+            detail: this.frameworkProvider.explorer.name,
             kind: vscode_12.CompletionItemKind.Value
           });
         });
@@ -21737,7 +22234,7 @@ var require_framework = __commonJS({
         completionItem.sortText = `000${attr.name}`;
         completionItem.insertText = attr.name;
         completionItem.kind = attr.type === "method" ? vscode_12.CompletionItemKind.Method : vscode_12.CompletionItemKind.Property;
-        completionItem.detail = "vue-helper";
+        completionItem.detail = this.frameworkProvider.explorer.name;
         completionItem.documentation = vscode_12.l10n.t(attr.description);
         return completionItem;
       }
@@ -21891,13 +22388,28 @@ var require_framework = __commonJS({
           sortText: `00${id}${tag}`,
           insertText: new vscode_12.SnippetString(tagVal),
           kind: vscode_12.CompletionItemKind.Snippet,
-          detail: "vue-helper",
+          detail: this.frameworkProvider.explorer.name,
           documentation: ""
         };
       }
       getTagJsSuggestion() {
         let suggestions = [];
         let id = 1;
+        const useVueSnippets = this.frameworkProvider.explorer.store.get("use-vue-snippets");
+        if (useVueSnippets) {
+          const snippetsJs = (0, snippets_js_1.default)(this.frameworkProvider.explorer.tabSize);
+          for (const key in snippetsJs) {
+            const snippet = snippetsJs[key];
+            suggestions.push({
+              label: key,
+              sortText: `0${id}${key}`,
+              insertText: new vscode_12.SnippetString(snippet),
+              kind: vscode_12.CompletionItemKind.Snippet,
+              detail: this.frameworkProvider.explorer.name
+            });
+            id++;
+          }
+        }
         try {
           for (let tag in this.jsTag) {
             const tagItem = this.jsTag[tag];
@@ -21906,7 +22418,7 @@ var require_framework = __commonJS({
               sortText: `00${id}${tag}`,
               insertText: new vscode_12.SnippetString(tagItem),
               kind: vscode_12.CompletionItemKind.Snippet,
-              detail: "vue-helper",
+              detail: this.frameworkProvider.explorer.name,
               documentation: tagItem
             });
             id++;
@@ -21926,9 +22438,9 @@ var require_framework = __commonJS({
               sortText: `0${i}${vf.name}`,
               insertText: new vscode_12.SnippetString(`${vf.name}$0></${vf.name}>`),
               kind: vscode_12.CompletionItemKind.Folder,
-              detail: "vue-helper",
+              detail: this.frameworkProvider.explorer.name,
               documentation: `import ${vf.name} from '${this.frameworkProvider.explorer.getVueRelativePath(activeEditorPath, vf.path)}'`,
-              command: { command: "vue-helper.funcEnhance", title: "vue-helper: funcEnhance" }
+              command: { command: `${this.frameworkProvider.explorer.name}.funcEnhance`, title: `${this.frameworkProvider.explorer.name}.funcEnhance` }
             });
           }
         }
@@ -21937,6 +22449,21 @@ var require_framework = __commonJS({
       getTagSuggestion() {
         let suggestions = this.addLocalComponentSuggestions();
         let id = 1;
+        const useVueSnippets = this.frameworkProvider.explorer.store.get("use-vue-snippets");
+        if (useVueSnippets) {
+          const snippetsHtml = (0, snippets_html_1.default)(this.frameworkProvider.explorer.tabSize);
+          for (const key in snippetsHtml) {
+            const snippet = snippetsHtml[key];
+            suggestions.push({
+              label: key,
+              sortText: `0${id}${key}`,
+              insertText: new vscode_12.SnippetString(snippet),
+              kind: vscode_12.CompletionItemKind.Snippet,
+              detail: this.frameworkProvider.explorer.name
+            });
+            id++;
+          }
+        }
         try {
           for (let tag in this.tag) {
             suggestions.push(this.buildTagSuggestion(tag, this.tag[tag], id));
@@ -21960,7 +22487,7 @@ var require_framework = __commonJS({
                 sortText: `00${id}${label}`,
                 insertText: new vscode_12.SnippetString(`${label}$0></${label}>`),
                 kind: vscode_12.CompletionItemKind.Snippet,
-                detail: `vue-helper`
+                detail: this.frameworkProvider.explorer.name
               });
               id++;
             }
@@ -21991,7 +22518,7 @@ var require_framework = __commonJS({
         } else if (word[0] === "e" || word[0] === "a") {
           return this.notInTemplate(document, position) ? this.getTagJsSuggestion() : this.getTagSuggestion();
         } else if (word.includes("v")) {
-          return this.getTagSuggestion();
+          return this.notInTemplate(document, position) ? this.getTagJsSuggestion() : this.getTagSuggestion();
         } else if (!tag && hasSquareQuote) {
           return this.notInTemplate(document, position) ? [] : this.getElementTagLabelSuggestion();
         }

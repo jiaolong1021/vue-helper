@@ -1,4 +1,4 @@
-import { ExtensionContext, workspace } from 'vscode'
+import { ExtensionContext, workspace, ConfigurationTarget } from 'vscode'
 import { getTabSize, getWorkspaceRoot, winRootPathHandle } from './util/util'
 import Traverse from './util/traverse'
 import * as path from 'path'
@@ -11,6 +11,7 @@ export interface Prefix {
 
 export default class ExplorerProvider {
   // 全局变量
+  public name: string = 'vue-helper'
   public context: ExtensionContext
   // 工程根目录
   public projectRootPath: string = ''
@@ -23,6 +24,14 @@ export default class ExplorerProvider {
     path: 'src'
   }
   public vueFiles: any = []
+  public store = {
+    set: (key: string, value: any) => {
+      workspace.getConfiguration(this.name).update(key, value, ConfigurationTarget.Global);
+    },
+    get: (key: string) => {
+      return workspace.getConfiguration(this.name).get(key);
+    }
+  }
 
   public getActiveEditorDir(activePath: string, ) {
     return activePath.replace(this.projectRootPathReg, '').replace(/[\/|\\]\w*\.\w*$/gi, '')

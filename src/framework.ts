@@ -6,6 +6,8 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { winRootPathHandle, getRelativePath, getCurrentWord, getWord } from './util/util'
 import { getJsTag, getTag, getAttribute, getGlobalAttribute, getDocument } from "./frameworks";
+import vueSnippetsHtml from './vue/snippets-html'
+import vueSnippetsJs from './vue/snippets-js'
 const paramCamse = require('param-case')
 const glob = require('glob')
 
@@ -177,7 +179,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
       suggestions.push({
         sortText: `000${value}`,
         label: value,
-        detail: 'vue-helper',
+        detail: this.frameworkProvider.explorer.name,
         kind: CompletionItemKind.Value,
       });
     });
@@ -217,7 +219,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     completionItem.sortText = `000${attr.name}`
     completionItem.insertText = attr.name
     completionItem.kind = attr.type === 'method' ? CompletionItemKind.Method : CompletionItemKind.Property
-    completionItem.detail = 'vue-helper'
+    completionItem.detail = this.frameworkProvider.explorer.name
     completionItem.documentation = l10n.t(attr.description)
     return completionItem
   }
@@ -389,7 +391,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
       sortText: `00${id}${tag}`,
       insertText: new SnippetString(tagVal),
       kind: CompletionItemKind.Snippet,
-      detail: 'vue-helper',
+      detail: this.frameworkProvider.explorer.name,
       documentation: ''
     };
   }
@@ -398,6 +400,23 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
   getTagJsSuggestion() {
     let suggestions: any[] = [];
     let id = 1;
+
+    const useVueSnippets = this.frameworkProvider.explorer.store.get('use-vue-snippets')
+    if (useVueSnippets) {
+      const snippetsJs: any = vueSnippetsJs(this.frameworkProvider.explorer.tabSize)
+      for (const key in snippetsJs) {
+        const snippet = snippetsJs[key]
+        suggestions.push({
+          label: key,
+          sortText: `0${id}${key}`,
+          insertText: new SnippetString(snippet),
+          kind: CompletionItemKind.Snippet,
+          detail: this.frameworkProvider.explorer.name,
+        })
+        id++
+      }
+    }
+
     try {
       for (let tag in this.jsTag) {
         const tagItem = this.jsTag[tag]
@@ -406,7 +425,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
           sortText: `00${id}${tag}`,
           insertText: new SnippetString(tagItem),
           kind: CompletionItemKind.Snippet,
-          detail: 'vue-helper',
+          detail: this.frameworkProvider.explorer.name,
           documentation: tagItem
         })
         id++;
@@ -428,9 +447,9 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
           sortText: `0${i}${vf.name}`,
           insertText: new SnippetString(`${vf.name}$0></${vf.name}>`),
           kind: CompletionItemKind.Folder,
-          detail: 'vue-helper',
+          detail: this.frameworkProvider.explorer.name,
           documentation: `import ${vf.name} from '${this.frameworkProvider.explorer.getVueRelativePath(activeEditorPath, vf.path)}'`,
-          command: { command: 'vue-helper.funcEnhance', title: 'vue-helper: funcEnhance' }
+          command: { command: `${this.frameworkProvider.explorer.name}.funcEnhance`, title: `${this.frameworkProvider.explorer.name}.funcEnhance` }
         });
       }
     }
@@ -442,6 +461,22 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
   getTagSuggestion() {
     let suggestions: CompletionItem[] = this.addLocalComponentSuggestions();
     let id = 1;
+
+    const useVueSnippets = this.frameworkProvider.explorer.store.get('use-vue-snippets')
+    if (useVueSnippets) {
+      const snippetsHtml: any = vueSnippetsHtml(this.frameworkProvider.explorer.tabSize)
+      for (const key in snippetsHtml) {
+        const snippet = snippetsHtml[key]
+        suggestions.push({
+          label: key,
+          sortText: `0${id}${key}`,
+          insertText: new SnippetString(snippet),
+          kind: CompletionItemKind.Snippet,
+          detail: this.frameworkProvider.explorer.name,
+        })
+        id++
+      }
+    }
 
     try {
       for (let tag in this.tag) {
@@ -468,7 +503,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
             sortText: `00${id}${label}`,
             insertText: new SnippetString(`${label}$0></${label}>`),
             kind: CompletionItemKind.Snippet,
-            detail: `vue-helper`
+            detail: this.frameworkProvider.explorer.name
           });
           id++;
         }
@@ -508,11 +543,12 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
       // 标签
       return this.notInTemplate(document, position) ? this.getTagJsSuggestion() : this.getTagSuggestion()
     } else if (word.includes('v')) {
-      return this.getTagSuggestion()
+      // vue相关
+      return this.notInTemplate(document, position) ? this.getTagJsSuggestion() : this.getTagSuggestion()
     } else if (!tag && hasSquareQuote) {
       return this.notInTemplate(document, position) ? [] : this.getElementTagLabelSuggestion()
     }
-
+    
     return []
   }
 
