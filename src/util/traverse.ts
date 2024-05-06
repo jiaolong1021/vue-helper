@@ -11,11 +11,11 @@ export default class Traverse {
   }
 
   // 遍历组件
-  search(poster: any, searchName: any) {
+  search(poster: any, searchName: any, usePrefix: boolean) {
     let files: any[] = [];
     let cond: Function;
     let componentPath = ''
-    let prefix = this.prefix
+    let prefix = usePrefix ? this.prefix : {}
     // if (this.explorer.config.rootPath) {
     //   componentPath = this.explorer.config.rootPath.component
     //   let pathAlias = this.explorer.config.rootPath.root.split('=')

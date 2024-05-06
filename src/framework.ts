@@ -21,7 +21,6 @@ export default class FrameworkProvider {
     alias: '',
     path: ''
   }
-  public vueFiles: any = []
 
   constructor(explorer: ExplorerProvider) {
     this.explorer = explorer
@@ -30,12 +29,6 @@ export default class FrameworkProvider {
       pkg.includes('element-plus') && this.frameworks.push('element-plus')
       pkg.includes('element-ui') && this.frameworks.push('element-ui')
       pkg.includes('ant-design-vue') && this.frameworks.push('ant-design-vue')
-      this.vueFiles = this.explorer.traverse.search('.vue', '')
-      if (workspace.workspaceFolders) {
-        const watcher = workspace.createFileSystemWatcher('**/*.vue')
-        watcher.onDidCreate(() => { this.vueFiles = this.explorer.traverse.search('.vue', '') })
-        watcher.onDidDelete(() => { this.vueFiles = this.explorer.traverse.search('.vue', '') })
-      }
     } catch (error) {
     }
   }
@@ -350,7 +343,7 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
     search = search.replace(/^import/, '').trim();
     let suggestions: CompletionItem[] = [];
     if (search) {
-      let files = this.frameworkProvider.explorer.traverse.search('', search);
+      let files = this.frameworkProvider.explorer.traverse.search('', search, false);
       let pathAlias = this.frameworkProvider.pathAlias
       files.forEach(vf => {
         let filePath = '';
@@ -426,17 +419,20 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
   // 添加工程内vue组件提示
   addLocalComponentSuggestions() {
     let suggestions: CompletionItem[] = [];
-    for (let i = 0; i < this.frameworkProvider.vueFiles.length; i++) {
-      const vf = this.frameworkProvider.vueFiles[i];
-      suggestions.push({
-        label: vf.name,
-        sortText: `0${i}${vf.name}`,
-        insertText: new SnippetString(`${vf.name}$0></${vf.name}>`),
-        kind: CompletionItemKind.Folder,
-        detail: 'vue-helper',
-        documentation: `import ${vf.name} from '${vf.path}'`,
-        command: { command: 'vue-helper.funcEnhance', title: 'vue-helper: funcEnhance' }
-      });
+    if (window.activeTextEditor) {
+      let activeEditorPath = this.frameworkProvider.explorer.getActiveEditorDir(window.activeTextEditor.document.uri.path)
+      for (let i = 0; i < this.frameworkProvider.explorer.vueFiles.length; i++) {
+        const vf = this.frameworkProvider.explorer.vueFiles[i];
+        suggestions.push({
+          label: vf.name,
+          sortText: `0${i}${vf.name}`,
+          insertText: new SnippetString(`${vf.name}$0></${vf.name}>`),
+          kind: CompletionItemKind.Folder,
+          detail: 'vue-helper',
+          documentation: `import ${vf.name} from '${this.frameworkProvider.explorer.getVueRelativePath(activeEditorPath, vf.path)}'`,
+          command: { command: 'vue-helper.funcEnhance', title: 'vue-helper: funcEnhance' }
+        });
+      }
     }
     return suggestions
   }
@@ -458,21 +454,8 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
   }
 
   getElementTagLabelSuggestion() {
-    let suggestions: CompletionItem[] = [];
+    let suggestions: CompletionItem[] = this.addLocalComponentSuggestions();
     let id = 1;
-    // 添加vue组件提示
-    for (let i = 0; i < this.frameworkProvider.vueFiles.length; i++) {
-      const vf = this.frameworkProvider.vueFiles[i];
-      suggestions.push({
-        label: vf.name,
-        sortText: `0${i}${vf.name}`,
-        insertText: new SnippetString(`${vf.name}$0></${vf.name}>`),
-        kind: CompletionItemKind.Folder,
-        detail: 'vue-helper',
-        documentation: `import ${vf.name} from '${vf.path}'`,
-        command: { command: 'vue-helper.funcEnhance', title: 'vue-helper: funcEnhance' }
-      });
-    }
 
     try {
       let labels: string[] = []
@@ -865,8 +848,8 @@ export class vueHelperDefinitionProvider implements DefinitionProvider {
         let tag = word.selectText.toLowerCase().replace(/-/gi, '')
         if (attr) {
           // 全局组件
-          for (let i = 0; i < this.frameworkProvider.vueFiles.length; i++) {
-            const vueFile = this.frameworkProvider.vueFiles[i];
+          for (let i = 0; i < this.frameworkProvider.explorer.vueFiles.length; i++) {
+            const vueFile = this.frameworkProvider.explorer.vueFiles[i];
             const vueFileName = vueFile.name.toLowerCase().replace(/-/gi, '')
             if (vueFileName === tag) {
               return Promise.resolve(new Location(Uri.file(path.join(this.frameworkProvider.explorer.projectRootPath, vueFile.path.replace(this.frameworkProvider.explorer.prefix.alias, this.frameworkProvider.explorer.prefix.path))), new Position(0, 0)))

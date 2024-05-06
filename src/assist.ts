@@ -12,6 +12,229 @@ export default class Assist {
     this.explorer.context.subscriptions.push(commands.registerCommand('vue-helper.blockSelect', () => {
       this.blockSelect()
     }))
+    this.explorer.context.subscriptions.push(commands.registerCommand('vue-helper.funcEnhance', () => {
+      this.funcEnhance()
+    }))
+  }
+
+  // 函数增强
+  public funcEnhance() {
+    let editor = window.activeTextEditor;
+    if (!editor) { return; }
+    let character = (window.activeTextEditor?.selection.anchor.character || 0) - 1;
+    let txt = window.activeTextEditor?.document.lineAt(window.activeTextEditor?.selection.anchor.line).text;
+    let word: string = '';
+    let isWordEnd = false
+    let type = '' // '0': 变量 '1': 函数
+    if (txt && txt.includes('"')) {
+      type = '0'
+    }
+    while(txt && character && character > 0) {
+      let wordSingle = txt[character]
+      if (wordSingle === '"') {
+        type = '0'
+        isWordEnd = true
+      }
+      if (wordSingle === ' ') {
+        break
+      }
+      if (!isWordEnd) {
+        word = wordSingle + word;
+      }
+      if (wordSingle === '@') {
+        type = '1'
+      }
+      --character;
+    }
+    // 没有参数往后找
+    character = (window.activeTextEditor?.selection.anchor.character || 0);
+    while(txt && character && txt.length > character) {
+      if (txt[character] === '"') {
+        break;
+      }
+      word = word + txt[character];
+      ++character;
+    }
+    // 如果是函数引用方式，则认为是生成函数
+    if (word.includes(')')) {
+      type = '1'
+    }
+
+    switch (type) {
+      default:
+        this.autoEnhance()
+        break;
+    }
+  }
+
+  public autoEnhance() {
+    let editor: any = window.activeTextEditor;
+    if (!editor) { return; }
+    let txt = editor.document.lineAt(editor.selection.anchor.line).text;
+    if(editor.document.lineCount <= editor.selection.anchor.line + 1) { return; }
+    // 组件自动导入
+    if (/<.*>\s?<\/.*>/gi.test(txt.trim()) || /<.*\/>/gi.test(txt.trim())) {
+      this.autoImportComponent(txt, editor, editor.selection.anchor.line);
+      return;
+    }
+    // 本地文件自动导入
+    let nextLineTxt = editor.document.lineAt(editor.selection.anchor.line + 1).text;
+    
+    let baseEmpty = txt.replace(/(\s)\S.*/gi, '$1');
+    let replaceTxt = ` {\n${baseEmpty}${this.explorer.tabSize}\n${baseEmpty}}`;
+    // 本行全是空
+    if(/^\s*$/gi.test(txt) || txt === '') {
+      replaceTxt = 'name (params)' + replaceTxt;
+    } else if (/[0-9a-zA-Z]\s{0,1}:\s{0,1}[\w\"\']/gi.test(txt)) {
+      // key: value
+      replaceTxt = ',\n' + baseEmpty;
+    } else if(txt.indexOf(')') === -1) {
+      replaceTxt = ' (params)' + replaceTxt;
+    }
+    // 判断下一行是否是单行注释
+    if(/\s*\/\/\s+.*/gi.test(nextLineTxt)) {
+      if(editor.document.lineCount <= editor.selection.anchor.line + 2) { return; }
+      nextLineTxt = editor.document.lineAt(editor.selection.anchor.line + 2).text;
+    }
+    // 下一行是一个函数
+    if (/.*(.*).*{.*/gi.test(nextLineTxt)) {
+      let isCond = false;
+      let txtTrim = txt.trim();
+      const condList = ['if', 'for', 'while', 'switch'];
+      condList.forEach(cond => {
+        if (txtTrim.indexOf(cond) === 0) {
+          isCond = true;
+        }
+      });
+      if (!isCond) {
+        replaceTxt += ',';
+      }
+    }
+    editor.edit((editBuilder: any) => {
+      editBuilder.insert(new Position(editor.selection.anchor.line, txt.length + 1), replaceTxt);
+    });
+    let newPosition = editor.selection.active.translate(1, (baseEmpty + this.explorer.tabSize).length);
+    editor.selection = new Selection(newPosition, newPosition);
+  }
+
+  // 组件自动导入
+  autoImportComponent(txt: string, editor: TextEditor, line: number) {
+    let tag = txt.trim().replace(/<([\w-]*)[\s>].*/gi, '$1');
+    for (let i = 0; i < this.explorer.vueFiles.length; i++) {
+      const vf : any = this.explorer.vueFiles[i];
+      if (tag === vf.name) {
+        let name = vf.name;
+        // 不重复插入引入
+        if (editor.document.getText().includes(`import ${name}`)) {
+          return
+        }
+        let countLine = editor.document.lineCount;
+        // 找script位置
+        while (!/^\s*<script.*>\s*$/.test(<string>editor.document.lineAt(line).text)) {
+          if (countLine > line) {
+            line++;
+          } else {
+            break;
+          }
+        }
+        let activeEditorPath = this.explorer.getActiveEditorDir(editor.document.uri.path)
+        let importString = `import ${name} from '${this.explorer.getVueRelativePath(activeEditorPath, vf.path)}'\n`;
+        if (editor.document.lineAt(line).text.includes('setup')) {
+          // 组合式
+          editor.edit((editBuilder) => {
+            importString = importString.replace(/\\/gi, '/');
+            editBuilder.insert(new Position(line + 1, 0), importString);
+          });
+          return
+        }
+        if (editor.document.lineAt(line + 1).text.includes('export default')) {
+          line += 1;
+        } else {
+          line += 1;
+          if (countLine < line) {
+            return;
+          }
+          // 找import位置
+          while (/import /gi.test(editor.document.lineAt(line).text.trim())) {
+            if (countLine > line) {
+              line++;
+            } else {
+              break;
+            }
+          }
+        }
+        let importLine = line;
+        if (line < countLine) {
+          let prorityInsertLine = 0;
+          let secondInsertLine = 0;
+          let hasComponents = false;
+          let baseEmpty = '';
+          while(!/\s*<\/script>\s*/gi.test(editor.document.lineAt(line).text.trim())) {
+            if (/\s*components\s*:\s*{.*}.*/gi.test(editor.document.lineAt(line).text.trim())) {
+              let text = editor.document.lineAt(line).text;
+              let preText = text.replace(/\s*}.*$/, '');
+              let insertPos = preText.length;
+              editor.edit((editBuilder) => {
+                importString = importString.replace(/\\/gi, '/');
+                editBuilder.insert(new Position(importLine, 0), importString);
+                editBuilder.insert(new Position(line, insertPos), ', ' + name);
+              });
+              break;
+            }
+            if (hasComponents && /\s*},?\s*$/gi.test(editor.document.lineAt(line).text.trim())) {
+              let text = editor.document.lineAt(line - 1).text;
+              let insertPos = text.indexOf(text.trim());
+              let empty = '';
+              for (let i = 0; i < insertPos; i++) {
+                empty += ' ';
+              }
+              editor.edit((editBuilder) => {
+                importString = importString.replace(/\\/gi, '/');
+                editBuilder.insert(new Position(importLine, 0), importString);
+                editBuilder.insert(new Position(line - 1, editor.document.lineAt(line - 1).text.length), ',\n' + empty + name);
+              });
+              break;
+            }
+            if (/\s*components\s*:\s*{\s*$/gi.test(editor.document.lineAt(line).text.trim())) {
+              hasComponents = true;
+            }
+            if (/\s*export\s*default\s*{\s*/gi.test(editor.document.lineAt(line).text.trim())) {
+              secondInsertLine = line;
+            }
+            if (/\s*data\s*\(\s*\)\s*{\s*/gi.test(editor.document.lineAt(line).text.trim())) {
+              let text = editor.document.lineAt(line).text;
+              let insertPos = text.indexOf(text.trim());
+              for (let i = 0; i < insertPos; i++) {
+                baseEmpty += '';
+              }
+              prorityInsertLine = line;
+            }
+            if (countLine > line) {
+              line++;
+            } else {
+              break;
+            }
+          }
+          if (prorityInsertLine > 0) {
+            editor.edit((editBuilder) => {
+              importString = importString.replace(/\\/gi, '/');
+              editBuilder.insert(new Position(importLine - 1, 0), importString);
+              editBuilder.insert(new Position(prorityInsertLine - 1, editor.document.lineAt(prorityInsertLine - 1).text.length), `\n\t${baseEmpty}components: { ${name} },`);
+            });
+            break;
+          }
+          if (secondInsertLine > 0) {
+            editor.edit((editBuilder) => {
+              importString = importString.replace(/\\/gi, '/');
+              editBuilder.insert(new Position(importLine, 0), importString);
+              editBuilder.insert(new Position(secondInsertLine, editor.document.lineAt(secondInsertLine).text.length),  `\n${this.explorer.tabSize}components: { ${name} },`);
+            });
+          }
+        }
+
+        break;
+      }
+    }
   }
 
   // 代码块选择

@@ -1,4 +1,4 @@
-import { ExtensionContext } from 'vscode'
+import { ExtensionContext, workspace } from 'vscode'
 import { getTabSize, getWorkspaceRoot, winRootPathHandle } from './util/util'
 import Traverse from './util/traverse'
 import * as path from 'path'
@@ -14,6 +14,7 @@ export default class ExplorerProvider {
   public context: ExtensionContext
   // 工程根目录
   public projectRootPath: string = ''
+  public projectRootPathReg: RegExp
   public tabSize = ''
   public traverse: Traverse
   public isTs = false
@@ -21,14 +22,36 @@ export default class ExplorerProvider {
     alias: '@',
     path: 'src'
   }
+  public vueFiles: any = []
+
+  public getActiveEditorDir(activePath: string, ) {
+    return activePath.replace(this.projectRootPathReg, '').replace(/[\/|\\]\w*\.\w*$/gi, '')
+  }
+
+  public getActiveEditorPath(activePath: string, ) {
+    return activePath.replace(this.projectRootPathReg, '')
+  }
+
+  public getVueRelativePath(activeEditorPath: string, vuePath: string) {
+    let vfPath = path.relative(activeEditorPath, vuePath)
+    vfPath = './' + vfPath
+    return vfPath.replace(/\\/gi, '/')
+  }
   
   constructor(context: ExtensionContext) {
     this.context = context
     this.projectRootPath = getWorkspaceRoot('')
+    this.projectRootPathReg = new RegExp(`.*${this.projectRootPath}/`, 'gi')
     this.traverse = new Traverse(this.projectRootPath, this.prefix)
     this.tabSize = getTabSize()
     const tsconfigPath = winRootPathHandle(path.join(this.projectRootPath, 'tsconfig.json'))
     this.isTs = fs.existsSync(tsconfigPath)
+    this.vueFiles = this.traverse.search('.vue', '', false)
+    if (workspace.workspaceFolders) {
+      const watcher = workspace.createFileSystemWatcher('**/*.vue')
+      watcher.onDidCreate(() => { this.vueFiles = this.traverse.search('.vue', '', false) })
+      watcher.onDidDelete(() => { this.vueFiles = this.traverse.search('.vue', '', false) })
+    }
   }
 
   register() {
