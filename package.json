@@ -46,10 +46,6 @@
   "contributes": {
     "commands": [
       {
-        "command": "vue-helper.searchFile",
-        "title": "%extentions.searchFile%"
-      },
-      {
         "command": "vue-helper.backspace",
         "title": "vue-helper: backspace"
       },
@@ -72,8 +68,23 @@
         "key": "shift+alt+enter",
         "command": "vue-helper.funcEnhance",
         "when": "editorTextFocus"
+      },
+      {
+        "key": "backspace",
+        "command": "vue-helper.backspace",
+        "when": "textInputFocus && editorLangId =~ /^vue$|^typescript$|^javascript$|^html$|^json$|^css$|^scss$/"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "vue-helper",
+      "type": "object",
+      "properties": {
+        "vue-helper.use-vue-snippets": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
   },
   "devDependencies": {
     "@types/node": "^20.12.2",

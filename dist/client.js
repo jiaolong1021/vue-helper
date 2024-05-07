@@ -22883,6 +22883,33 @@ var require_framework = __commonJS({
 var require_assist = __commonJS({
   "out/assist.js"(exports2) {
     "use strict";
+    var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
+      function adopt(value) {
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
+        });
+      }
+      return new (P || (P = Promise))(function(resolve, reject) {
+        function fulfilled(value) {
+          try {
+            step(generator.next(value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function rejected(value) {
+          try {
+            step(generator["throw"](value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function step(result) {
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
+    };
     Object.defineProperty(exports2, "__esModule", { value: true });
     var vscode_12 = require("vscode");
     var Assist = class {
@@ -22896,6 +22923,105 @@ var require_assist = __commonJS({
         this.explorer.context.subscriptions.push(vscode_12.commands.registerCommand("vue-helper.funcEnhance", () => {
           this.funcEnhance();
         }));
+        this.explorer.context.subscriptions.push(vscode_12.commands.registerCommand("vue-helper.backspace", () => {
+          this.backspce();
+        }));
+      }
+      asNormal(key, modifiers) {
+        switch (key) {
+          case "enter":
+            if (modifiers === "ctrl") {
+              return vscode_12.commands.executeCommand("editor.action.insertLineAfter");
+            } else {
+              return vscode_12.commands.executeCommand("type", { source: "keyboard", text: "\n" });
+            }
+          case "tab":
+            if (vscode_12.workspace.getConfiguration("emmet").get("triggerExpansionOnTab")) {
+              return vscode_12.commands.executeCommand("editor.emmet.action.expandAbbreviation");
+            } else if (modifiers === "shift") {
+              return vscode_12.commands.executeCommand("editor.action.outdentLines");
+            } else {
+              return vscode_12.commands.executeCommand("tab");
+            }
+          case "backspace":
+            return vscode_12.commands.executeCommand("deleteLeft");
+        }
+      }
+      backspce() {
+        var _a, _b, _c, _d, _e, _f, _g;
+        return __awaiter(this, void 0, void 0, function* () {
+          let editor = vscode_12.window.activeTextEditor;
+          if (!editor) {
+            this.asNormal("backspace");
+            return;
+          }
+          if (((_a = vscode_12.window.activeTextEditor) === null || _a === void 0 ? void 0 : _a.selections.length) && ((_b = vscode_12.window.activeTextEditor) === null || _b === void 0 ? void 0 : _b.selections.length) > 1) {
+            let selections = (_c = vscode_12.window.activeTextEditor) === null || _c === void 0 ? void 0 : _c.selections;
+            let selectionList = [];
+            for (let index = 0; index < selections.length; index++) {
+              const selection = selections[index];
+              if (selection.start.line === selection.end.line && selection.start.character === selection.end.character) {
+                if (selection.anchor.character > 0) {
+                  selectionList.push(new vscode_12.Selection(new vscode_12.Position(selection.anchor.line, selection.anchor.character - 1), selection.anchor));
+                } else if (selection.anchor.line > 0) {
+                  let len = editor.document.lineAt(selection.anchor.line - 1).text.length;
+                  selectionList.push(new vscode_12.Selection(new vscode_12.Position(selection.anchor.line - 1, len), selection.anchor));
+                }
+              } else {
+                selectionList.push(selection);
+              }
+            }
+            yield editor.edit((editBuilder) => {
+              for (let i = 0; i < selectionList.length; i++) {
+                editBuilder.delete(selectionList[i]);
+              }
+            });
+            return;
+          }
+          if (((_d = vscode_12.window.activeTextEditor) === null || _d === void 0 ? void 0 : _d.selection.start.line) === ((_e = vscode_12.window.activeTextEditor) === null || _e === void 0 ? void 0 : _e.selection.end.line) && ((_f = vscode_12.window.activeTextEditor) === null || _f === void 0 ? void 0 : _f.selection.start.character) === ((_g = vscode_12.window.activeTextEditor) === null || _g === void 0 ? void 0 : _g.selection.end.character)) {
+            if (editor.selection.anchor.line === 0) {
+              if (editor.selection.anchor.character > 0) {
+                yield editor.edit((editBuilder) => {
+                  editBuilder.delete(new vscode_12.Selection(new vscode_12.Position(editor.selection.anchor.line, editor.selection.anchor.character - 1), editor.selection.anchor));
+                });
+              }
+            } else {
+              let isLineEmpty = editor.document.lineAt(editor.selection.anchor.line).text.trim() === "";
+              if (isLineEmpty) {
+                let preText = "";
+                let line = editor.selection.anchor.line;
+                while (preText.trim() === "" && line >= 0) {
+                  line -= 1;
+                  preText = editor.document.lineAt(line).text;
+                }
+                yield editor.edit((editBuilder) => {
+                  editBuilder.delete(new vscode_12.Selection(new vscode_12.Position(line, preText.length), editor.selection.anchor));
+                });
+              } else {
+                let startPosition;
+                let endPosition = editor.selection.anchor;
+                let preLineText = editor.document.getText(new vscode_12.Range(new vscode_12.Position(endPosition.line, 0), endPosition));
+                if (endPosition.character === 0 || preLineText.trim() === "") {
+                  startPosition = new vscode_12.Position(endPosition.line - 1, editor.document.lineAt(endPosition.line - 1).text.length);
+                } else {
+                  startPosition = new vscode_12.Position(endPosition.line, endPosition.character - 1);
+                  let txt = editor.document.getText(new vscode_12.Range(new vscode_12.Position(endPosition.line, endPosition.character - 1), endPosition));
+                  if (editor.document.lineAt(endPosition.line).text.length > endPosition.character) {
+                    let nextTxt = editor.document.getText(new vscode_12.Range(endPosition, new vscode_12.Position(endPosition.line, endPosition.character + 1)));
+                    if (txt === "{" && nextTxt === "}" || txt === "(" && nextTxt === ")" || txt === "'" && nextTxt === "'" || txt === '"' && nextTxt === '"' || txt === "[" && nextTxt === "]" || txt === "<" && nextTxt === ">") {
+                      endPosition = new vscode_12.Position(endPosition.line, endPosition.character + 1);
+                    }
+                  }
+                }
+                yield editor.edit((editBuilder) => {
+                  editBuilder.delete(new vscode_12.Selection(startPosition, endPosition));
+                });
+              }
+            }
+          } else {
+            this.asNormal("backspace");
+          }
+        });
       }
       funcEnhance() {
         var _a, _b, _c, _d;
