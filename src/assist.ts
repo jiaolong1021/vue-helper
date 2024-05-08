@@ -81,6 +81,7 @@ export default class Assist {
             editBuilder.delete(new Selection(new Position(editor.selection.anchor.line, editor.selection.anchor.character - 1), editor.selection.anchor));
           });
         }
+      
       } else {
         let isLineEmpty = editor.document.lineAt(editor.selection.anchor.line).text.trim() === '';
         // 整行都是空格

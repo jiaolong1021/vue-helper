@@ -1,16 +1,19 @@
 {
-  "name": "vue-vue-helper",
+  "name": "vue-helper",
   "version": "2.5.0",
-  "description": "every thing for speed",
+  "description": "vue enhance, extension for Element-UI, Element Plus, Ant Desigin Vue",
   "keywords": [
-    "vue-vue-helper",
+    "vue-helper",
+    "element-ui",
+    "Element Plus",
+    "Ant Desigin Vue",
     "vue",
     "vscode"
   ],
   "icon": "asset/logo.png",
   "publisher": "shenjiaolong",
   "author": "shenjiaolong",
-  "homepage": "https://vue-vue-helper.80fight.cn/",
+  "homepage": "http://vue-helper.80fight.cn/",
   "license": "MIT",
   "main": "dist/client",
   "l10n": "./l10n",
@@ -23,16 +26,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jiaolong1021/vue-vue-helper.git"
+    "url": "https://github.com/jiaolong1021/vue-helper.git"
   },
   "gitHead": "b1cc40df44b9cd73ba96d8b7f0369cc3ce690c45",
   "scripts": {
     "dev": "concurrently \"npm:dev-tsc\" \"npm:dev-build\"",
     "dev-tsc": "tsc -b tsconfig.build.json -w",
     "dev-build": "node scripts/build -- --watch",
-    "build": "node scripts/build",
-    "prepack:node": "npm run prebuild && npm run build:node -- --minify",
-    "release": "npm run prepack:node && npm run publish",
+    "build": "node scripts/build -- --minify",
+    "release": "npm run build && npm run publish",
     "publish": "vsce package",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
@@ -40,7 +42,7 @@
     "vscode": "^1.74.0"
   },
   "activationEvents": [
-    "*",
+    "onStartupFinished",
     "onLanguage:vue"
   ],
   "contributes": {
@@ -94,9 +96,9 @@
     "@vscode/l10n-dev": "^0.0.35",
     "axios": "^0.21.1",
     "camelcase": "^7.0.1",
+    "concurrently": "^8.2.2",
     "crypto-js": "^4.1.1",
     "esbuild": "0.15.18",
-    "esbuild-plugin-copy": "^2.0.2",
     "execa": "^6.1.0",
     "find-chrome-bin": "^1.0.2",
     "jsonc-parser": "^3.2.0",
@@ -110,10 +112,7 @@
   },
   "dependencies": {
     "@vscode/l10n": "^0.0.18",
-    "concurrently": "^8.2.2",
     "glob": "^10.3.12",
-    "minio": "^7.1.3",
-    "mysql2": "^3.9.3",
-    "pg": "^8.11.3"
+    "minio": "^7.1.3"
   }
 }

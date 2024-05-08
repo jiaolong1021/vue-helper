@@ -1,3 +1,10 @@
+# version 2.5.0
+
+1. underlying refactoring to completely solve performance problems.
+2. support [Element Plus](/document/element-plus.md) framework，247 code blocks are supported。
+3. resolve issue [71](https://github.com/jiaolong1021/vue-helper/issues/71)、[64](https://github.com/jiaolong1021/vue-helper/issues/64)、
+   [57](https://github.com/jiaolong1021/vue-helper/issues/57)、[54](https://github.com/jiaolong1021/vue-helper/issues/54)、[40](https://github.com/jiaolong1021/vue-helper/issues/40)
+
 ## release 2.4.7 notes
 resolve issue [14](https://github.com/jiaolong1021/vue-helper/issues/14)
 resolve issue [15](https://github.com/jiaolong1021/vue-helper/issues/15)
