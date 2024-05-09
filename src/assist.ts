@@ -18,6 +18,7 @@ export default class Assist {
     this.explorer.context.subscriptions.push(commands.registerCommand('vue-helper.backspace', () => {
       this.backspce()
     }))
+    this.explorer.setContext('vue-helper.backspace', true)
   }
 
   asNormal(key: string, modifiers?: string) {

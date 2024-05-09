@@ -1,4 +1,4 @@
-import { ExtensionContext, workspace, ConfigurationTarget } from 'vscode'
+import { ExtensionContext, workspace, ConfigurationTarget, commands } from 'vscode'
 import { getTabSize, getWorkspaceRoot, winRootPathHandle } from './util/util'
 import Traverse from './util/traverse'
 import * as path from 'path'
@@ -31,6 +31,10 @@ export default class ExplorerProvider {
     get: (key: string) => {
       return workspace.getConfiguration(this.name).get(key);
     }
+  }
+
+  public setContext(name: string, value: boolean) {
+    commands.executeCommand('setContext', name, value);
   }
 
   public getActiveEditorDir(activePath: string, ) {
