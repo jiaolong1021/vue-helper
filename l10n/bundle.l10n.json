@@ -1312,5 +1312,10 @@
   "tags.el-watermark.font.description": "Text style",
   "tags.el-watermark.gap.description": "The spacing between watermarks",
   "tags.el-watermark.offset.description": "The offset of the watermark from the upper left corner of the container. The default is gap/2",
-  "el-loading": "loading"
+  "el-loading": "loading",
+  "el-locale": "en-US",
+  "ant-upload.drop": "Click or drag file to this area to upload",
+  "ant-upload.directory": "Upload Directory",
+  "ant-popconfirm:ok-text": "Yes",
+  "ant-popconfirm:cancel-text": "No"
 }

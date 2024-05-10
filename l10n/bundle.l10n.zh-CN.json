@@ -1312,5 +1312,10 @@
   "tags.el-watermark.font.description": "文字样式",
   "tags.el-watermark.gap.description": "水印之间的间距",
   "tags.el-watermark.offset.description": "水印从容器左上角的偏移 默认值为 gap/2",
-  "el-loading": "加载"
+  "el-loading": "加载",
+  "el-locale": "zh-CN",
+  "ant-upload.drop": "点击或拖拽文件至此上传",
+  "ant-upload.directory": "上传目录",
+  "ant-popconfirm:ok-text": "确定",
+  "ant-popconfirm:cancel-text": "取消"
 }
