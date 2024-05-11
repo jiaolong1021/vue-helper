@@ -1,12 +1,12 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import { Prefix } from '../explorer'
+import ExplorerProvider, { Prefix } from '../explorer'
 
 export default class Traverse {
-  public rootPath?: string
+  public explorer: ExplorerProvider
   public prefix: Prefix
-  public constructor(rootPath: string, prefix: Prefix) {
-    this.rootPath = rootPath
+  public constructor(explorer: ExplorerProvider, prefix: Prefix) {
+    this.explorer = explorer
     this.prefix = prefix
   }
 
@@ -26,7 +26,7 @@ export default class Traverse {
     //     }
     //   }
     // }
-    if (!this.rootPath) {
+    if (!this.explorer.projectRootPath) {
       // 未打开工程
       return []
     }
@@ -41,12 +41,12 @@ export default class Traverse {
         return !(rootPath.charAt(0) === '.' || ignore.indexOf(rootPath) !== -1);
       };
     }
-    let rootPathes = fs.readdirSync(this.rootPath || '');
+    let rootPathes = fs.readdirSync(this.explorer.projectRootPath || '');
     
     for (let i = 0; i < rootPathes.length; i++) {
       const rootPath = rootPathes[i];
       if (cond(rootPath)) {
-        let stat = fs.statSync(path.join(this.rootPath || '', rootPath));
+        let stat = fs.statSync(path.join(this.explorer.projectRootPath || '', rootPath));
         if (stat.isDirectory()) {
           this.traverseHandle(rootPath, files, prefix, poster, searchName);
         } else {
@@ -81,12 +81,12 @@ export default class Traverse {
 
   // 遍历处理
   traverseHandle(postPath: string, files: any [], prefix: any, poster: string, search: string) {
-    let fileDirs = fs.readdirSync(path.join(this.rootPath || '', postPath));
+    let fileDirs = fs.readdirSync(path.join(this.explorer.projectRootPath || '', postPath));
     for (let i = 0; i < fileDirs.length; i++) {
       const rootPath = fileDirs[i];
       if (!(rootPath.charAt(0) === '.')) {
         let dir = path.join(postPath, rootPath);
-        let stat = fs.statSync(path.join(this.rootPath || '', dir));
+        let stat = fs.statSync(path.join(this.explorer.projectRootPath || '', dir));
         if (stat.isDirectory()) {
           this.traverseHandle(dir, files, prefix, poster, search);
         } else {

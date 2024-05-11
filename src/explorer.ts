@@ -55,7 +55,7 @@ export default class ExplorerProvider {
     this.context = context
     this.projectRootPath = getWorkspaceRoot('')
     this.projectRootPathReg = new RegExp(`.*${this.projectRootPath}/`, 'gi')
-    this.traverse = new Traverse(this.projectRootPath, this.prefix)
+    this.traverse = new Traverse(this, this.prefix)
     this.tabSize = getTabSize()
     const tsconfigPath = winRootPathHandle(path.join(this.projectRootPath, 'tsconfig.json'))
     this.isTs = fs.existsSync(tsconfigPath)
@@ -66,13 +66,19 @@ export default class ExplorerProvider {
     this.context.subscriptions.push(vueHelperStatusBar)
 
     this.vueFiles = this.traverse.search('.vue', '', false)
-    if (workspace.workspaceFolders) {
-      const watcher = workspace.createFileSystemWatcher('**/*.vue')
-      watcher.onDidCreate(() => { this.vueFiles = this.traverse.search('.vue', '', false) })
-      watcher.onDidDelete(() => { this.vueFiles = this.traverse.search('.vue', '', false) })
-    }
+    const watcher = workspace.createFileSystemWatcher('**/*.vue')
+    watcher.onDidCreate(() => { this.vueFiles = this.traverse.search('.vue', '', false) })
+    watcher.onDidDelete(() => { this.vueFiles = this.traverse.search('.vue', '', false) })
+
+    workspace.onDidOpenTextDocument(this.openDocument)
   }
 
   register() {
+  }
+
+  openDocument(){
+    if (!this.projectRootPath) {
+      this.projectRootPath = getWorkspaceRoot('')
+    }
   }
 }

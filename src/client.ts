@@ -1,12 +1,10 @@
-import { ExtensionContext, workspace } from 'vscode';
+import { ExtensionContext } from 'vscode';
 import ExplorerProvider from './explorer';
 import FrameworkProvider from './framework';
 import Assist from './assist';
 
 export function activate(context: ExtensionContext) {
-  if (workspace.workspaceFolders) {
-    init(context)
-  }
+  init(context)
 }
 
 function init(context: ExtensionContext) {
