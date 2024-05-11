@@ -1,4 +1,4 @@
-import { ExtensionContext, workspace, ConfigurationTarget, commands } from 'vscode'
+import { ExtensionContext, workspace, ConfigurationTarget, commands, window, StatusBarAlignment } from 'vscode'
 import { getTabSize, getWorkspaceRoot, winRootPathHandle } from './util/util'
 import Traverse from './util/traverse'
 import * as path from 'path'
@@ -59,6 +59,12 @@ export default class ExplorerProvider {
     this.tabSize = getTabSize()
     const tsconfigPath = winRootPathHandle(path.join(this.projectRootPath, 'tsconfig.json'))
     this.isTs = fs.existsSync(tsconfigPath)
+    
+    const vueHelperStatusBar = window.createStatusBarItem(StatusBarAlignment.Right, -99999)
+    vueHelperStatusBar.text = '$(extensions-view-icon) helper'
+    vueHelperStatusBar.show()
+    this.context.subscriptions.push(vueHelperStatusBar)
+
     this.vueFiles = this.traverse.search('.vue', '', false)
     if (workspace.workspaceFolders) {
       const watcher = workspace.createFileSystemWatcher('**/*.vue')

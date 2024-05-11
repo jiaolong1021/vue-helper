@@ -507,7 +507,7 @@ ${tabSize}$3
 "a-table:headerCell": `<template #headerCell="{ column }">
 ${tabSize}$1
 </template>`,
-"a-table:bodyCell": `<template #bodyCell="{ column, text, record, }">
+"a-table:bodyCell": `<template #bodyCell="{ text, record, index, column }">
 ${tabSize}$1
 </template>`,
 "a-table:title": `<template #title>

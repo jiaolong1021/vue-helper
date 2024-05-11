@@ -1,4 +1,5 @@
-export default {
+export default () => {
+  return {
     "a-button": {
         "block": {
             "type": "attribute",
@@ -6350,4 +6351,5 @@ export default {
             "values": ["[number, number]"]
         }
     }
+}
 }

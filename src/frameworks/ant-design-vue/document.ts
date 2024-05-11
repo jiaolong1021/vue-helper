@@ -1,5 +1,5 @@
 import { l10n } from "vscode"
-const docUrl = '${docUrl}'
+const docUrl = 'https://www.antdv.com'
 
 export default () => {
   return {

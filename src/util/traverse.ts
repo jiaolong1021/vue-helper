@@ -26,6 +26,11 @@ export default class Traverse {
     //     }
     //   }
     // }
+    if (!this.rootPath) {
+      // 未打开工程
+      return []
+    }
+
     if (componentPath && Array.isArray(componentPath) && componentPath.length > 0) {
       cond = function (rootPath: any) {
         return componentPath.indexOf(rootPath) !== -1;
