@@ -2545,4 +2545,5 @@
   "tags.a-watermark.font.description": "文字样式",
   "tags.a-watermark.gap.description": "水印之间的间距",
   "tags.a-watermark.offset.description": "水印距离容器左上角的偏移量，默认为 gap/2",
+  "ant-locale": "-cn",
 }
