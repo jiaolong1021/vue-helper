@@ -1,4 +1,4 @@
-import { ExtensionContext, workspace, ConfigurationTarget, commands, window, StatusBarAlignment } from 'vscode'
+import { ExtensionContext, workspace, ConfigurationTarget, commands, window, StatusBarAlignment, MarkdownString, TextDocument } from 'vscode'
 import { getTabSize, getWorkspaceRoot, winRootPathHandle } from './util/util'
 import Traverse from './util/traverse'
 import * as path from 'path'
@@ -32,6 +32,7 @@ export default class ExplorerProvider {
       return workspace.getConfiguration(this.name).get(key);
     }
   }
+  public inits: any[] = []
 
   public setContext(name: string, value: boolean) {
     commands.executeCommand('setContext', name, value);
@@ -62,6 +63,9 @@ export default class ExplorerProvider {
     
     const vueHelperStatusBar = window.createStatusBarItem(StatusBarAlignment.Right, -99999)
     vueHelperStatusBar.text = '$(extensions-view-icon) helper'
+    const vueHelperStatusBarTooltip = new MarkdownString('<h2 style="color: #ff0000;">vue-helper2</h2>')
+    vueHelperStatusBarTooltip.supportHtml = true
+    vueHelperStatusBar.tooltip = vueHelperStatusBarTooltip
     vueHelperStatusBar.show()
     this.context.subscriptions.push(vueHelperStatusBar)
 
@@ -70,15 +74,31 @@ export default class ExplorerProvider {
     watcher.onDidCreate(() => { this.vueFiles = this.traverse.search('.vue', '', false) })
     watcher.onDidDelete(() => { this.vueFiles = this.traverse.search('.vue', '', false) })
 
-    workspace.onDidOpenTextDocument(this.openDocument)
+    workspace.onDidOpenTextDocument((e: TextDocument) => {
+      this.openDocument(e)
+    })
   }
 
   register() {
   }
 
-  openDocument(){
-    if (!this.projectRootPath) {
-      this.projectRootPath = getWorkspaceRoot('')
+  public resetInit() {
+    this.inits.forEach(initObj => {
+      initObj.init()
+    });
+  }
+
+  public addInit(obj: any) {
+    this.inits.push(obj)
+  }
+
+  public openDocument(e: TextDocument) {
+    // 当多工程打开时，进入文件重新获取工程路径
+    let docPath = e.uri.path.replace(/.*:\//gi, '\/')
+    if (!this.projectRootPath || !docPath.includes(this.projectRootPath.replace(/.*:\//gi, '\/'))) {
+      this.projectRootPath = getWorkspaceRoot(e.uri.path)
+      this.vueFiles = this.traverse.search('.vue', '', false)
+      this.resetInit()
     }
   }
 }

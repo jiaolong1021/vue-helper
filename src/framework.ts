@@ -26,11 +26,19 @@ export default class FrameworkProvider {
 
   constructor(explorer: ExplorerProvider) {
     this.explorer = explorer
+    this.init()
+    this.explorer.addInit(this)
+  }
+  
+  init() {
     try {
-      const pkg = fs.readFileSync(winRootPathHandle(path.join(this.explorer.projectRootPath, 'package.json')), 'utf-8')
-      pkg.includes('element-plus') && this.frameworks.push('element-plus')
-      pkg.includes('element-ui') && this.frameworks.push('element-ui')
-      pkg.includes('ant-design-vue') && this.frameworks.push('ant-design-vue')
+      if (this.explorer.projectRootPath) {
+        this.frameworks = []
+        const pkg = fs.readFileSync(winRootPathHandle(path.join(this.explorer.projectRootPath, 'package.json')), 'utf-8')
+        pkg.includes('element-plus') && this.frameworks.push('element-plus')
+        pkg.includes('element-ui') && this.frameworks.push('element-ui')
+        pkg.includes('ant-design-vue') && this.frameworks.push('ant-design-vue')
+      }
     } catch (error) {
     }
   }
@@ -54,6 +62,11 @@ class FrameworkCompletionItemProvider implements CompletionItemProvider {
 
   constructor(frameworkProvider: FrameworkProvider) {
     this.frameworkProvider = frameworkProvider
+    this.init()
+    this.frameworkProvider.explorer.addInit(this)
+  }
+
+  init() {
     this.attribute = getAttribute(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
     this.tag = getTag(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
     this.jsTag = getJsTag(this.frameworkProvider.frameworks, this.frameworkProvider.explorer.tabSize)
