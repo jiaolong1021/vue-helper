@@ -100,7 +100,7 @@
     "@types/uuid": "^9.0.0",
     "@types/vscode": "^1.74.0",
     "@vscode/l10n-dev": "^0.0.35",
-    "axios": "^0.21.1",
+    "axios": "^0.28.0",
     "camelcase": "^7.0.1",
     "concurrently": "^8.2.2",
     "crypto-js": "^4.1.1",
