@@ -2,6 +2,7 @@ import { ExtensionContext } from 'vscode';
 import ExplorerProvider from './explorer';
 import FrameworkProvider from './framework';
 import Assist from './assist';
+import MonitorProvider from './monitor'
 
 export function activate(context: ExtensionContext) {
   init(context)
@@ -15,4 +16,6 @@ function init(context: ExtensionContext) {
 
   const assist = new Assist(explorer)
   assist.register()
+
+  new MonitorProvider(explorer)
 }

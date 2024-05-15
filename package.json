@@ -1,11 +1,13 @@
 {
   "name": "vue-helper",
-  "version": "2.5.0",
+  "displayName": "vue-helper",
+  "version": "2.6.2",
   "description": "vue enhance, extension for Element-UI, Element Plus, Ant Desigin Vue",
   "keywords": [
     "vue-helper",
     "element-ui",
     "Element Plus",
+    "Ant",
     "Ant Desigin Vue",
     "vue",
     "vscode"
@@ -41,6 +43,10 @@
   "engines": {
     "vscode": "^1.74.0"
   },
+  "categories": [
+    "Snippets",
+    "Other"
+  ],
   "activationEvents": [
     "onStartupFinished",
     "onLanguage:vue"
@@ -74,7 +80,7 @@
       {
         "key": "backspace",
         "command": "vue-helper.backspace",
-        "when": "textInputFocus && editorLangId =~ /^vue$|^typescript$|^javascript$|^html$|^json$|^css$|^scss$/"
+        "when": "vue-helper.backspace && textInputFocus && editorLangId =~ /^vue$|^typescript$|^javascript$|^html$|^json$|^css$|^scss$/"
       }
     ],
     "configuration": {

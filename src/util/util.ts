@@ -4,6 +4,9 @@ import * as path from 'path'
 
 // windows根路径处理
 export function winRootPathHandle(pagePath: string) {
+  if (!pagePath) {
+    return ''
+  }
   if (os.platform().includes("win") && pagePath.length > 0 && (pagePath[0] === "\\" || pagePath[0] === "/")) {
     return pagePath.substr(1, pagePath.length);
   } else {
@@ -17,7 +20,8 @@ export function getWorkspaceRoot(documentUrl: string) {
     return winRootPathHandle(workspace.workspaceFolders[0].uri.path)
   }
   workspace.workspaceFolders?.forEach((workspaceFolder) => {
-    if(documentUrl.includes(workspaceFolder.uri.path)) {
+    // windows盘去除
+    if(documentUrl.includes(workspaceFolder.uri.path.replace(/.*:\//gi, '\/'))) {
       url = workspaceFolder.uri.path
     }
   })

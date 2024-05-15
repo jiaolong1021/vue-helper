@@ -1,4 +1,4 @@
-import { ExtensionContext, workspace, ConfigurationTarget, commands, window, StatusBarAlignment, MarkdownString, TextDocument } from 'vscode'
+import { ExtensionContext, workspace, ConfigurationTarget, commands, window, StatusBarAlignment, TextDocument } from 'vscode'
 import { getTabSize, getWorkspaceRoot, winRootPathHandle } from './util/util'
 import Traverse from './util/traverse'
 import * as path from 'path'
@@ -63,9 +63,9 @@ export default class ExplorerProvider {
     
     const vueHelperStatusBar = window.createStatusBarItem(StatusBarAlignment.Right, -99999)
     vueHelperStatusBar.text = '$(extensions-view-icon) helper'
-    const vueHelperStatusBarTooltip = new MarkdownString('<h2 style="color: #ff0000;">vue-helper2</h2>')
-    vueHelperStatusBarTooltip.supportHtml = true
-    vueHelperStatusBar.tooltip = vueHelperStatusBarTooltip
+    // const vueHelperStatusBarTooltip = new MarkdownString('<h2 style="color: #ff0000;">vue-helper2</h2>')
+    // vueHelperStatusBarTooltip.supportHtml = true
+    // vueHelperStatusBar.tooltip = vueHelperStatusBarTooltip
     vueHelperStatusBar.show()
     this.context.subscriptions.push(vueHelperStatusBar)
 

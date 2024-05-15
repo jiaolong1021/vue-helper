@@ -16,10 +16,9 @@
 ## 快速开始
 请查看文档 [vue-helper](http://vue-helper.80fight.cn/)!
 
-## version 2.6.0
+## version 2.6.2
 
-1、支持 [Ant Design Vue](http://vue-helper.80fight.cn/document/ant-design-vue.html) 组件标签的所有**68**个组件，总计**288**个代码块缩写  
-2、解决 issue [75](https://github.com/jiaolong1021/vue-helper/issues/75), [76](https://github.com/jiaolong1021/vue-helper/issues/76), [73](https://github.com/jiaolong1021/vue-helper/issues/73)  
+1、解决多文件插件提示不起作用问题
 
 
 ## 规划
@@ -30,7 +29,7 @@
 * 在github上提交[issue](https://github.com/jiaolong1021/vue-helper/issues)，如果该项目对你有所帮助，记得Star关注哦。🤪  
 * 加入我们的微信群，直接在群里反馈问题，即时解决，并获取更多权益。  
 
-![/imgs/creator.png](https://www.80fight.cn/helper/wxq.png)
+![/imgs/creator.png](https://www.80fight.cn/helper/wxq1.png)
 
 在这里我们提供 🎁    
 1、新功能抢先体验  

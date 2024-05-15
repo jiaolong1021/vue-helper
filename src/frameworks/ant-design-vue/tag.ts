@@ -378,7 +378,7 @@ ${tabSize}$1
 ${tabSize}$1
 </template>`,
 "a-card-meta": `<a-card-meta title="$1" description="$2">$3</a-card-meta>`,
-"a-card-meta:avatar": `<template #avatar>
+"a-card-meta:avatar[slot]": `<template #avatar>
 ${tabSize}$1
 </template>`,
 "a-carousel": `<a-carousel autoplay :after-change="onChange">$1</a-carousel>`,
@@ -486,7 +486,7 @@ ${tabSize}$1
 "a-qrcode:icon": `<a-qrcode :value="\${1:text}" icon="$2">$3</a-qrcode>`,
 "a-segmented": `<a-segmented v-model:value="\${1:value}" :options="\${2:data}">$3</a-segmented>`,
 "a-segmented:block": `<a-segmented v-model:value="\${1:value}" :options="\${2:data}" block>$3</a-segmented>`,
-"a-segmented:label": `<template #label="{ value: val, payload = {} }">
+"a-segmented:label[slot]": `<template #label="{ value: val, payload = {} }">
 ${tabSize}$1
 </template>`,
 "a-statistic": `<a-statistic title="$1" :value="$2">$3</a-statistic>`,
@@ -504,25 +504,25 @@ ${tabSize}$1
 "a-table": `<a-table :columns="\${1:columns}" :data-source="\${2:data}">
 ${tabSize}$3
 </a-table>`,
-"a-table:headerCell": `<template #headerCell="{ column }">
+"a-table:headerCell[slot]": `<template #headerCell="{ column }">
 ${tabSize}$1
 </template>`,
-"a-table:bodyCell": `<template #bodyCell="{ text, record, index, column }">
+"a-table:bodyCell[slot]": `<template #bodyCell="{ text, record, index, column }">
 ${tabSize}$1
 </template>`,
-"a-table:title": `<template #title>
+"a-table:title[slot]": `<template #title>
 ${tabSize}$1
 </template>`,
-"a-table:footer": `<template #footer>
+"a-table:footer[slot]": `<template #footer>
 ${tabSize}$1
 </template>`,
-"a-table:customFilterDropdown": `<template #customFilterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }">
+"a-table:customFilterDropdown[slot]": `<template #customFilterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }">
 ${tabSize}$1
 </template>`,
-"a-table:customFilterIcon": `<template #customFilterIcon>
+"a-table:customFilterIcon[slot]": `<template #customFilterIcon>
 ${tabSize}$1
 </template>`,
-"a-table:summary": `<template #summary>
+"a-table:summary[slot]": `<template #summary>
 ${tabSize}$1
 </template>`,
 "a-table-summary": `<a-table-summary>$1</a-table-summary>`,
@@ -650,10 +650,10 @@ ${tabSize}@cancel="\${3:cancel}"
 >
 ${tabSize}$4
 </a-popconfirm>`,
-"a-popconfirm:icon": `<template #icon>
+"a-popconfirm:icon[slot]": `<template #icon>
 ${tabSize}$1
 </template>`,
-"a-popconfirm:title": `<template #title>
+"a-popconfirm:title[slot]": `<template #title>
 ${tabSize}$1
 </template>`,
 "a-progress": `<a-progress :percent="30">$1</a-progress>`,
