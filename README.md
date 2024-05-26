@@ -25,23 +25,23 @@
 ## 功能特性
 ### 1、框架支持
 <h4>1.1、组件代码块生成</h4>
-<img src="https://www.miaixyt.com/helper/element-ui-tag.gif" />
+<img src="https://www.80fight.cn/helper/element-ui-tag.gif" />
 <h4>1.2、属性提示</h4>
-<img src="https://www.miaixyt.com/helper/element-ui-attr.gif" />
+<img src="https://www.80fight.cn/helper/element-ui-attr.gif" />
 <h4>1.3、属性值提示</h4>
-<img src="https://www.miaixyt.com/helper/element-plus-attribute-value.gif" />
+<img src="https://www.80fight.cn/helper/element-plus-attribute-value.gif" />
 <h4>1.4、文档查看，官网跳转</h4>
-<img src="https://www.miaixyt.com/helper/element-ui-document.gif" />
+<img src="https://www.80fight.cn/helper/element-ui-document.gif" />
  <h4>2、变量、方法快速定位</h4>
 <p>当你还在使用vue2的时候，这个功能绝对对你有用。<br>当你在变量或者方法上按住ctrl键时，能够自动定位到相应的定义变量/方法上。</p>
-<img src="https://www.miaixyt.com/helper/element-plus-go-definition.gif" />
+<img src="https://www.80fight.cn/helper/element-plus-go-definition.gif" />
 <h4>3、全局组件跳转</h4>
 <p>在工程项目中的vue文件、全局组件等外部组件都支持跳转。</p>
-<img src="https://www.miaixyt.com/helper/element-plus-go-definition-file.gif" />
+<img src="https://www.80fight.cn/helper/element-plus-go-definition-file.gif" />
 <h4>4、扩选 [alt + x]</h4>
 <p>通过快捷键 [**alt + x**] 扩选代码范围，支持属性、标签、对象、函数扩选</p>
-<img src="https://www.miaixyt.com/helper/element-plus-expand-select-tag.gif" />
+<img src="https://www.80fight.cn/helper/element-plus-expand-select-tag.gif" />
 <h4>5、增强 [alt + shift + enter]</h4>
-<img src="https://www.miaixyt.com/helper/element-plus-enhance-mtd.gif" />
+<img src="https://www.80fight.cn/helper/element-plus-enhance-mtd.gif" />
 **Enjoy it!**
  
