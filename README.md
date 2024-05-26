@@ -16,29 +16,32 @@
 ## 快速开始
 请查看文档 [vue-helper](http://vue-helper.80fight.cn/)!
 
-## version 2.6.2
+## version 3.0.0
 
-1、解决多文件插件提示不起作用问题
+* 增加Pro功能
+* 通过swagger一键生成后端对接接口
+![swagger](https://www.80fight.cn/helper/swagger.gif)
 
-
-## 规划
-基于swagger的接口一键生成
-
-## 问题反馈 🦁
-
-* 在github上提交[issue](https://github.com/jiaolong1021/vue-helper/issues)，如果该项目对你有所帮助，记得Star关注哦。🤪  
-* 加入我们的微信群，直接在群里反馈问题，即时解决，并获取更多权益。  
-
-![/imgs/creator.png](https://www.80fight.cn/helper/wxq1.png)
-
-在这里我们提供 🎁    
-1、新功能抢先体验  
-2、VIIP福利发放  
-3、官方功能信息发布  
-4、技术答疑  
-5、工作机会介绍  
-6、技术交流  
-7、需求、问题反馈
-
+## 功能特性
+### 1、框架支持
+<h4>1.1、组件代码块生成</h4>
+<img src="https://www.miaixyt.com/helper/element-ui-tag.gif" />
+<h4>1.2、属性提示</h4>
+<img src="https://www.miaixyt.com/helper/element-ui-attr.gif" />
+<h4>1.3、属性值提示</h4>
+<img src="https://www.miaixyt.com/helper/element-plus-attribute-value.gif" />
+<h4>1.4、文档查看，官网跳转</h4>
+<img src="https://www.miaixyt.com/helper/element-ui-document.gif" />
+ <h4>2、变量、方法快速定位</h4>
+<p>当你还在使用vue2的时候，这个功能绝对对你有用。<br>当你在变量或者方法上按住ctrl键时，能够自动定位到相应的定义变量/方法上。</p>
+<img src="https://www.miaixyt.com/helper/element-plus-go-definition.gif" />
+<h4>3、全局组件跳转</h4>
+<p>在工程项目中的vue文件、全局组件等外部组件都支持跳转。</p>
+<img src="https://www.miaixyt.com/helper/element-plus-go-definition-file.gif" />
+<h4>4、扩选 [alt + x]</h4>
+<p>通过快捷键 [**alt + x**] 扩选代码范围，支持属性、标签、对象、函数扩选</p>
+<img src="https://www.miaixyt.com/helper/element-plus-expand-select-tag.gif" />
+<h4>5、增强 [alt + shift + enter]</h4>
+<img src="https://www.miaixyt.com/helper/element-plus-enhance-mtd.gif" />
 **Enjoy it!**
  

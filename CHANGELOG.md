@@ -1,3 +1,8 @@
+# version 3.0.0
+* 增加Pro功能
+* 通过swagger一键生成后端对接接口
+![swagger](https://www.80fight.cn/helper/swagger.gif)
+
 # version 2.5.0
 
 1. underlying refactoring to completely solve performance problems.
