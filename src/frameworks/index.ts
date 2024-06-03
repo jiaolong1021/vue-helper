@@ -1,11 +1,7 @@
 import elementUI from './element-ui/index'
-import elementPlus from './element-plus/index'
-import antDesignVue from './ant-design-vue/index'
 
 const framework: any = {
-  'element-ui': elementUI,
-  'element-plus': elementPlus,
-  'ant-design-vue': antDesignVue
+  'element-ui': elementUI
 } 
 
 export function getTag(frameworks: string[], tabSize: string) {

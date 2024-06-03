@@ -1,39 +1,38 @@
 # vue-helper
 
 <div align="center">
-  <img src="https://www.80fight.cn/wp-content/uploads/2024/05/slogan.png" />
-  
-  **aim to create a full-link efficiency improvement development tool for VUE development**
+  aim to create a full-link efficiency improvement development tool for VUE development
 </div>
 
 Enhance the VUE development experience. support framework <a class="m-link" href="https://element.eleme.cn/" target="_blank">Element-UI</a>、<a class="m-link" href="https://element-plus.gitee.io/" target="_blank">Element-Plus</a>、<a class="m-link" href="https://www.antdv.com/" target="_blank">Ant Design Vue</a>. Enhance your Vue-development experience with visualizations, foundational templates, and rich materials.
 
-## Funtion Diagram
-![](https://www.80fight.cn/wp-content/uploads/2024/05/framework-en-1.png)
-
 ## Getting Started
 Please follow the documentation at [vue-helper](http://vue-helper.80fight.cn/)!
 
-## version 2.6.0
-1、All 68 components of the Ant Design Vue component tag are supported, for a total of 288 code block abbreviations 
-2、solve issue [75](https://github.com/jiaolong1021/vue-helper/issues/75), [76](https://github.com/jiaolong1021/vue-helper/issues/76), [73](https://github.com/jiaolong1021/vue-helper/issues/73)  
+## version 3.2.0
+1. jump compatible vetur, Vue-Official
+2. api generate support swagger admin
+3. Variable generation shortcut key is replaced with[alt + enter], you can change it by yourself. [detail](http://vue-helper.80fight.cn/en/document/pro/mv.html)
+4. to solve the problem generate variables with multiple touches
 
-## feature
-One-click generation of swagger-based APIs
+## Features
+### 1、framework support element-ui、element-plus、ant-design-vue
+<h4>1.1、code block generate</h4>
+<img src="https://common.xxpie.com/helper-element-tag.gif" />
+<h4>1.2、attribute tip</h4>
+<img src="https://common.xxpie.com/helper-attr.gif" />
+<h4>1.3、docuement see, or go official</h4>
+<img src="https://common.xxpie.com/helper-document.gif" />
+ <h4>2、go to definition of method、variable</h4>
+<img src="https://common.xxpie.com/helper-go-to-define.gif" />
+<h4>3、component jump</h4>
+<img src="https://common.xxpie.com/helper-definition-file-jump.gif" />
+<h4>4、expand select [alt + x]</h4>
+<img src="https://common.xxpie.com/helper-variable-block.gif" />
+<h4>5、enhance [alt + enter]</h4>
+<img src="https://common.xxpie.com/helper-key-value.gif" />
 
-## Feedback
-
-* submit [issue](https://github.com/jiaolong1021/vue-helper/issues) in github，ff the project is helpful to you，please Star it, thank you。🤪
-* Join our WeChat group to report problems directly in the group, solve them instantly, and get more benefits.  
-
-![/imgs/creator.png](https://www.80fight.cn/helper/wxq.png)
-
-here we offers 🎁：<br>
-1、official feature information released <br>
-2、feedback on needs and problems <br>
-3、Technical Q&A<br>
-4、presentation of job opportunities<br>
-5、technical communication
+more detail see document [vue-helper](http://vue-helper.80fight.cn/)!
 
 **Enjoy it!**
  
