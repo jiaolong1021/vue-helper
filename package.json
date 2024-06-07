@@ -1,7 +1,7 @@
 {
   "name": "vue-helper",
   "displayName": "vue-helper",
-  "version": "2.6.2",
+  "version": "3.4.0",
   "description": "vue enhance, extension for Element-UI, Element Plus, Ant Desigin Vue",
   "keywords": [
     "vue-helper",
@@ -64,8 +64,33 @@
       {
         "command": "vue-helper.funcEnhance",
         "title": "vue-helper: funcEnhance"
+      },
+      {
+        "command": "vue-helper.openPro",
+        "title": "vue-helper.openPro"
+      },
+      {
+        "command": "vue-helper.generateConfig",
+        "title": "vue-helper.generateConfig"
+      },
+      {
+        "command": "vue-helper.token.clear",
+        "title": "vue-helper.token.clear"
+      },
+      {
+        "command": "vue-helper.form",
+        "title": "%extension.form%"
       }
     ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "vue-helper.form",
+          "when": "!inOutput",
+          "group": "navigation"
+        }
+      ]
+    },
     "keybindings": [
       {
         "key": "alt+x",
@@ -73,7 +98,7 @@
         "when": "editorTextFocus"
       },
       {
-        "key": "shift+alt+enter",
+        "key": "alt+enter",
         "command": "vue-helper.funcEnhance",
         "when": "editorTextFocus"
       },
@@ -88,6 +113,14 @@
       "type": "object",
       "properties": {
         "vue-helper.use-vue-snippets": {
+          "type": "boolean",
+          "default": true
+        },
+        "vue-helper.show-new-after-upgrade": {
+          "type": "boolean",
+          "default": true
+        },
+        "vue-helper.config-auto-generate": {
           "type": "boolean",
           "default": true
         }
@@ -107,10 +140,11 @@
     "esbuild": "0.15.18",
     "execa": "^6.1.0",
     "find-chrome-bin": "^1.0.2",
+    "js-beautify": "^1.15.1",
     "jsonc-parser": "^3.2.0",
+    "jsonwebtoken": "^9.0.2",
     "mitt": "^3.0.0",
     "opn": "^6.0.0",
-    "param-case": "^4.0.0",
     "pretty": "^2.0.0",
     "puppeteer-core": "^19.7.0",
     "uuid": "^9.0.0",
