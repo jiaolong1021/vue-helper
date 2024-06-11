@@ -11,11 +11,11 @@
 ## 快速开始
 请查看文档 [vue-helper](http://vue-helper.80fight.cn/)!
 
-## version 3.2.0
-1. 跳转兼容vetur、Vue-Official
-2. 接口生成支持swagger admin
-3. 变量生成快捷键更换为 [alt + enter]，可自行更改
-4. 生成变量多次触按问题解决
+## version 3.5.0
+1. 表单生成器位置调整问题修复
+2. 表单生成器生成代码冲突问题解决
+3. alt + enter生成重复方法处理
+4. 增强api接口生成兼容性
 
 ## 功能特性
 ### 1、框架支持 element-ui、element-plus、ant-design-vue

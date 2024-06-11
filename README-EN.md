@@ -9,7 +9,7 @@ Enhance the VUE development experience. support framework <a class="m-link" href
 ## Getting Started
 Please follow the documentation at [vue-helper](http://vue-helper.80fight.cn/)!
 
-## version 3.2.0
+## version 3.5.0
 1. jump compatible vetur, Vue-Official
 2. api generate support swagger admin
 3. Variable generation shortcut key is replaced with[alt + enter], you can change it by yourself. [detail](http://vue-helper.80fight.cn/en/document/pro/mv.html)
