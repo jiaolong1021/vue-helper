@@ -146,7 +146,7 @@
     "mitt": "^3.0.0",
     "opn": "^6.0.0",
     "pretty": "^2.0.0",
-    "puppeteer-core": "^19.7.0",
+    "puppeteer-core": "^22.11.2",
     "uuid": "^9.0.0",
     "vsce": "latest"
   },
