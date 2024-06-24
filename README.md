@@ -11,11 +11,10 @@
 ## 快速开始
 请查看文档 [vue-helper](http://vue-helper.80fight.cn/)!
 
-## version 3.5.0
-1. 表单生成器位置调整问题修复
-2. 表单生成器生成代码冲突问题解决
-3. alt + enter生成重复方法处理
-4. 增强api接口生成兼容性
+## version 4.0.0
+1. 性能方面进行优化
+2. 本地组件相关功能开发
+3. 组件导入优化
 
 ## 功能特性
 ### 1、框架支持 element-ui、element-plus、ant-design-vue
