@@ -11,10 +11,13 @@
 ## 快速开始
 请查看文档 [vue-helper](http://vue-helper.80fight.cn/)!
 
-## version 4.0.0
-1. 性能方面进行优化
-2. 本地组件相关功能开发
+## version 4.1.0
+1. 自定义框架提示
+<img src="https://cdn.80fight.cn/helper/framework-support.png" />
+2. 打造个人知识库
+<img src="https://cdn.80fight.cn/helper/block-list.png" />
 3. 组件导入优化
+4. 性能优化
 
 ## 功能特性
 ### 1、框架支持 element-ui、element-plus、ant-design-vue

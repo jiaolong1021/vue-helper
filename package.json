@@ -1,7 +1,7 @@
 {
   "name": "vue-helper",
   "displayName": "vue-helper",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "vue enhance, extension for Element-UI, Element Plus, Ant Desigin Vue",
   "keywords": [
     "vue-helper",
@@ -66,8 +66,8 @@
         "title": "vue-helper: funcEnhance"
       },
       {
-        "command": "vue-helper.openPro",
-        "title": "vue-helper.openPro"
+        "command": "vue-helper.login",
+        "title": "vue-helper.login"
       },
       {
         "command": "vue-helper.generateConfig",
@@ -80,14 +80,96 @@
       {
         "command": "vue-helper.form",
         "title": "%extension.form%"
+      },
+      {
+        "command": "vue-helper.upload.block",
+        "title": "%extension.block%"
+      },
+      {
+        "command": "vue-helper.common.position",
+        "title": "%common.position%",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "vue-helper.common.link",
+        "title": "%common.link%",
+        "icon": "$(link)"
+      },
+      {
+        "command": "vue-helper.common.refresh",
+        "title": "%common.refresh%",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "vue-helper.add.component",
+        "title": "%add.component%"
+      },
+      {
+        "command": "vue-helper.upload.component",
+        "title": "%upload.component%"
+      },
+      {
+        "command": "vue-helper.add.file",
+        "title": "%add.file%"
       }
     ],
+    "views": {
+      "explorer": [
+        {
+          "id": "vue-helper.common",
+          "name": "%extension.common%",
+          "icon": "$(json)",
+          "visibility": "hidden",
+          "contextualTitle": "vue-helper",
+          "when": "vue-helper.pro"
+        }
+      ]
+    },
     "menus": {
       "editor/context": [
         {
           "command": "vue-helper.form",
-          "when": "!inOutput",
+          "when": "!inOutput && vue-helper.pro",
           "group": "navigation"
+        },
+        {
+          "command": "vue-helper.upload.block",
+          "when": "!inOutput && vue-helper.pro",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "vue-helper.common.position",
+          "group": "inline",
+          "when": "view == vue-helper.common && viewItem == vue-helper.common"
+        },
+        {
+          "command": "vue-helper.common.link",
+          "group": "inline",
+          "when": "view == vue-helper.common && viewItem == vue-helper.common"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "vue-helper.common.refresh",
+          "group": "navigation",
+          "when": "view == vue-helper.common"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "vue-helper.add.component",
+          "group": "0_vue-helper"
+        },
+        {
+          "command": "vue-helper.add.file",
+          "group": "0_vue-helper",
+          "when": "!explorerResourceIsFolder && vue-helper.self"
+        },
+        {
+          "command": "vue-helper.upload.component",
+          "group": "1_vue-helper"
         }
       ]
     },
@@ -123,36 +205,41 @@
         "vue-helper.config-auto-generate": {
           "type": "boolean",
           "default": true
+        },
+        "vue-helper.component-dir": {
+          "type": "string",
+          "default": ""
+        },
+        "vue-helper.hub": {
+          "type": "string",
+          "default": ""
+        },
+        "vue-helper.framework": {
+          "type": "string",
+          "default": ""
         }
       }
     }
   },
   "devDependencies": {
     "@types/node": "^20.12.2",
-    "@types/pg": "^8.11.4",
     "@types/uuid": "^9.0.0",
     "@types/vscode": "^1.74.0",
     "@vscode/l10n-dev": "^0.0.35",
     "axios": "^0.21.1",
     "camelcase": "^7.0.1",
     "concurrently": "^8.2.2",
-    "crypto-js": "^4.1.1",
     "esbuild": "0.15.18",
     "execa": "^6.1.0",
-    "find-chrome-bin": "^1.0.2",
     "js-beautify": "^1.15.1",
     "jsonc-parser": "^3.2.0",
     "jsonwebtoken": "^9.0.2",
-    "mitt": "^3.0.0",
     "opn": "^6.0.0",
-    "pretty": "^2.0.0",
-    "puppeteer-core": "^19.7.0",
     "uuid": "^9.0.0",
     "vsce": "latest"
   },
   "dependencies": {
     "@vscode/l10n": "^0.0.18",
-    "glob": "^10.3.12",
-    "minio": "^7.1.3"
+    "glob": "^10.3.12"
   }
 }
