@@ -1,7 +1,7 @@
 {
   "name": "vue-helper",
   "displayName": "vue-helper",
-  "version": "4.1.0",
+  "version": "4.2.2",
   "description": "vue enhance, extension for Element-UI, Element Plus, Ant Desigin Vue",
   "keywords": [
     "vue-helper",
@@ -105,6 +105,10 @@
         "title": "%add.component%"
       },
       {
+        "command": "vue-helper.add.page",
+        "title": "%add.page%"
+      },
+      {
         "command": "vue-helper.upload.component",
         "title": "%upload.component%"
       },
@@ -160,7 +164,13 @@
       "explorer/context": [
         {
           "command": "vue-helper.add.component",
-          "group": "0_vue-helper"
+          "group": "0_vue-helper",
+          "when": "vue-helper.pro"
+        },
+        {
+          "command": "vue-helper.add.page",
+          "group": "0_vue-helper",
+          "when": "explorerResourceIsFolder && vue-helper.pro"
         },
         {
           "command": "vue-helper.add.file",
@@ -169,7 +179,8 @@
         },
         {
           "command": "vue-helper.upload.component",
-          "group": "1_vue-helper"
+          "group": "1_vue-helper",
+          "when": "vue-helper.pro"
         }
       ]
     },
