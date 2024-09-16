@@ -171,6 +171,7 @@ export default class Assist {
     if (word.includes(')')) {
       type = '1'
     }
+    console.log('type' + type)
 
     switch (type) {
       default:

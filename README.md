@@ -8,16 +8,31 @@
 
 增强vue开发体验，支持 <a class="m-link" href="https://element.eleme.cn/" target="_blank">Element-UI</a>、<a class="m-link" href="https://element-plus.org/" target="_blank">Element-Plus</a>、<a class="m-link" href="https://www.antdv.com/" target="_blank">Ant Design Vue</a>。通过可视化、基础模板、丰富物料增强 vue 开发。
 
+## 好物推荐 ✨✨✨
+* AI 编码助手： [阿里-通义灵码](https://developer.aliyun.com/topic/lingma/september?taskCode=18486&recordId=1627dde5f632a75ff7177759fffb99a0)
+
+* 创意白板： [博思白板](https://boardmix.cn/invitation/invitee/?code=P6cgeIlptlVu)
+
+## vue-helper 能让你获得什么？
+vue-helper能让你的开发效率提高30%到100%。
+
+## 如何提高效率？
+vue-helper具有大量功能，所以想掌握好每个好用的功能，都必须实战才行。
+
+## 视频教程
+[bilibili地址](https://space.bilibili.com/179666728/channel/seriesdetail?sid=4376604&ctype=0)
+
 ## 快速开始
 请查看文档 [vue-helper](http://vue-helper.80fight.cn/)!
 
-## version 4.1.0
+## version 4.2.7
 1. 自定义框架提示
 <img src="https://cdn.80fight.cn/helper/framework-support.png" />
 2. 打造个人知识库
 <img src="https://cdn.80fight.cn/helper/block-list.png" />
 3. 组件导入优化
 4. 性能优化
+5. fixed: [101](https://github.com/jiaolong1021/vue-helper/issues/101)
 
 ## 功能特性
 ### 1、框架支持 element-ui、element-plus、ant-design-vue
