@@ -1,4 +1,4 @@
-# vue-helper
+*# vue-helper
 
 [English](https://github.com/jiaolong1021/vue-helper/blob/HEAD/README-EN.md)
 
@@ -10,7 +10,7 @@
 
 ## 好物推荐 ✨✨✨
 * AI 编码助手： [阿里-通义灵码](https://developer.aliyun.com/topic/lingma/september?taskCode=18486&recordId=1627dde5f632a75ff7177759fffb99a0)
-
+* 豆包助手： [字节跳动-MarsCode](https://www.marscode.cn/events/s/iSDf7sB6/)
 * 创意白板： [博思白板](https://boardmix.cn/invitation/invitee/?code=P6cgeIlptlVu)
 
 ## vue-helper 能让你获得什么？
@@ -54,4 +54,4 @@ vue-helper具有大量功能，所以想掌握好每个好用的功能，都必�
 <h4>5、增强 [alt + enter]</h4>
 <img src="https://common.xxpie.com/helper-key-value.gif" />
 **Enjoy it!**
- 
+ *
