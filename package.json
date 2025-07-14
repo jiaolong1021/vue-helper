@@ -198,7 +198,7 @@
       {
         "key": "backspace",
         "command": "vue-helper.backspace",
-        "when": "vue-helper.backspace && textInputFocus && editorLangId =~ /^vue$|^typescript$|^javascript$|^html$|^json$|^css$|^scss$/"
+        "when": "vue-helper.backspace && textInputFocus && editorLangId =~ /^vue$|^typescript$|^javascript$|^html$|^json$|^css$|^scss$/ && (config.notebook.multiCursor.enabled && isNotebookMultiSelect && activeEditor == 'workbench.editor.notebook' && notebookMultiSelectCursorState == '1' || config.notebook.multiCursor.enabled && isNotebookMultiSelect && activeEditor == 'workbench.editor.notebook' && notebookMultiSelectCursorState == '2')"
       }
     ],
     "configuration": {
